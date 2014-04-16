@@ -8,9 +8,6 @@
 
 #import "TMWActors.h"
 
-// TODO: Store API Key in a safer location
-#define API_KEY @"7c260fe35bdd98cd551919a4edd5dc59"
-
 @interface TMWActors ()
 
 @property (nonatomic) NSMutableArray *names;
@@ -49,9 +46,7 @@
 
 - (NSArray *)retrieveActorDataResultsForName:(NSString *)query
 {
-    NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/search/person?search_type=ngram&query=%@&api_key=%@", query, API_KEY] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    NSURL *url = [NSURL URLWithString:requestString];
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
+    NSURLRequest *req = [self setupURLRequestForActor:query];
     
     NSURLSessionDataTask *dataTask =
     [self.session dataTaskWithRequest:req
@@ -79,9 +74,6 @@
 - (NSArray *)retrieveActorNameResultsForName:(NSString *)query
 {
     NSURLRequest *req = [self setupURLRequestForActor:query];
-//    NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/search/person?search_type=ngram&query=%@&api_key=%@", query, API_KEY] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-//    NSURL *url = [NSURL URLWithString:requestString];
-//    NSURLRequest *req = [NSURLRequest requestWithURL:url];
     
     NSURLSessionDataTask *dataTask =
     [self.session dataTaskWithRequest:req
