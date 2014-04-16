@@ -10,9 +10,9 @@
 
 @interface TMWActors : NSObject
 
-- (NSArray *)retrieveActorDataResultsForName:(NSString *)query;
-- (NSArray *)retrieveActorNameResultsForName:(NSString *)query;
-- (UIImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath;
+- (NSArray *)retrieveActorDataResultsForQuery:(NSString *)query;
+- (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults
+- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults
 
 
 @end

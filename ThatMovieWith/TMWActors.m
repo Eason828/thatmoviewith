@@ -15,6 +15,7 @@
 @property (nonatomic, retain) NSArray *actorResults;
 @property (nonatomic) NSString *baseURL;
 @property (nonatomic) NSArray *logoSizes;
+@property (nonatomic) NSArray *actorImages;
 
 @end
 
@@ -59,7 +60,7 @@
     return self;
 }
 
-- (NSArray *)retrieveActorDataResultsForName:(NSString *)query
+- (NSArray *)retrieveActorDataResultsForQuery:(NSString *)query
 {
     NSURLRequest *req = [self setupURLRequestForActors:query];
     
@@ -72,7 +73,6 @@
                                                                       error:nil];
          
          dispatch_async(dispatch_get_main_queue(), ^{
-             [self.names removeAllObjects];
              
              int val = [[jsonObject objectForKey:@"total_results"] intValue];
              if (val != 0)
@@ -86,47 +86,31 @@
     return self.actorResults;
 }
 
-- (NSArray *)retrieveActorNameResultsForName:(NSString *)query
+- (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults
 {
-    NSURLRequest *req = [self setupURLRequestForActors:query];
+    NSMutableArray *names = [[NSMutableArray alloc] init];
+    // Create an array of the names for the UITableView
+    for (NSDictionary *person in dataResults) {
+     [self.names addObject:person[@"name"]];
+    }
+
+    return [NSArray arrayWithArray:names];
+}
+
+- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults
+{
+    NSMutableArray *images = [[NSMutableArray alloc] init];
+    for (NSDictionary *image in dataResults) {
+        NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:2], image[@"profile_path"]] 
+                stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+        [images addObject:imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
+    }
     
-    NSURLSessionDataTask *dataTask =
-    [self.session dataTaskWithRequest:req
-                    completionHandler:
-     ^(NSData *data, NSURLResponse *response, NSError *error) {
-         NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data
-                                                                    options:0
-                                                                      error:nil];
-         
-         dispatch_async(dispatch_get_main_queue(), ^{
-             [self.names removeAllObjects];
-             
-             int val = [[jsonObject objectForKey:@"total_results"] intValue];
-             if (val != 0)
-             {
-                 self.actorResults = [[NSArray alloc] initWithArray:jsonObject[@"results"]];
-                 
-                 // Create an array of the names for the UITableView
-                 for (NSDictionary *person in self.actorResults) {
-                     [self.names addObject:person[@"name"]];
-                 }
-             }
-         });
-         
-     }];
-    [dataTask resume];
-    return [NSArray arrayWithArray:self.names];
+    return [NSArray arrayWithArray:images];
 }
 
 
 #pragma mark - Private Methods -
-
-- (UIImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath
-{
-    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:2], profileImagePath] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    return [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
-
-}
 
 - (NSString *)retrieveAPIKey
 {
