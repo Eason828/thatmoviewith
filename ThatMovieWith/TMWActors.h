@@ -12,7 +12,7 @@
 
 - (NSArray *)retrieveActorDataResultsForName:(NSString *)query;
 - (NSArray *)retrieveActorNameResultsForName:(NSString *)query;
-- (NSImage *)retriveActorImageForName:(NSString *)query;
+- (UIImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath;
 
 
 @end

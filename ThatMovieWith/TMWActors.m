@@ -14,7 +14,7 @@
 @property (nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSArray *actorResults;
 @property (nonatomic) NSString *baseURL;
-@property (nonatomic) NSString *logoSizes;
+@property (nonatomic) NSArray *logoSizes;
 
 @end
 
@@ -121,19 +121,16 @@
 
 #pragma mark - Private Methods -
 
-- (NSImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath
+- (UIImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath
 {
-    NSString *APIKey = [self retrieveAPIKey];
-    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, self.logoSizes[2], profileImagePath] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    NSImage *profileImage = [[NSImage alloc] initWithContentsOfURL:requestString];
-    return profileImage;
+    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:2], profileImagePath] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    return [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
 
 }
 
 - (NSString *)retrieveAPIKey
 {
     NSString* filePath = [[NSBundle mainBundle] pathForResource:@"themoviedb" ofType:@""];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSString *contents = [NSString stringWithContentsOfFile:filePath
                                                    encoding:NSUTF8StringEncoding
@@ -147,7 +144,7 @@
 {
     NSString *contents = [self retrieveAPIKey];
 
-    NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/search/person?search_type=ngram&query=%@&api_key=%@", query, trimmedContents] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/search/person?search_type=ngram&query=%@&api_key=%@", query, contents] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     NSURL *url = [NSURL URLWithString:requestString];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
     return req;
