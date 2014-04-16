@@ -10,9 +10,9 @@
 
 @interface TMWActors : NSObject
 
-+ (instancetype)initializeActors;
-
 - (NSArray *)retrieveActorDataResultsForName:(NSString *)query;
 - (NSArray *)retrieveActorNameResultsForName:(NSString *)query;
+- (NSImage *)retriveActorImageForName:(NSString *)query;
+
 
 @end

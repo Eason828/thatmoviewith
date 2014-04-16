@@ -13,22 +13,14 @@
 @property (nonatomic) NSMutableArray *names;
 @property (nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSArray *actorResults;
+@property (nonatomic) NSString *baseURL;
+@property (nonatomic) NSString *logoSizes;
 
 @end
 
 @implementation TMWActors
 
-+ (instancetype)initializeActors
-{
-    static TMWActors *actors;
-    
-    // Do I need to create a session?
-    if (!actors) {
-        actors = [[self alloc] init];
-    }
-    
-    return actors;
-}
+#pragma mark - Public Methods -
 
 - (instancetype)init
 {
@@ -40,13 +32,36 @@
                                              delegate:nil
                                         delegateQueue:nil];
     self.names = [[NSMutableArray alloc] init];
+
+    // Get the base URL and the image sizes
+    NSString *apikey = [self retrieveAPIKey];
+    NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/configuration?api_key=%@", apikey] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    NSURL *url = [NSURL URLWithString:requestString];
+    NSURLRequest *req = [NSURLRequest requestWithURL:url];
+
+    NSURLSessionDataTask *dataTask =
+    [self.session dataTaskWithRequest:req
+                    completionHandler:
+     ^(NSData *data, NSURLResponse *response, NSError *error) {
+         NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data
+                                                                    options:0
+                                                                      error:nil];
+         
+         dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary *imagesObject = jsonObject[@"images"];
+            self.baseURL = imagesObject[@"base_url"];
+            self.logoSizes = imagesObject[@"logo_sizes"];
+         });
+         
+     }];
+    [dataTask resume];
     
     return self;
 }
 
 - (NSArray *)retrieveActorDataResultsForName:(NSString *)query
 {
-    NSURLRequest *req = [self setupURLRequestForActor:query];
+    NSURLRequest *req = [self setupURLRequestForActors:query];
     
     NSURLSessionDataTask *dataTask =
     [self.session dataTaskWithRequest:req
@@ -73,7 +88,7 @@
 
 - (NSArray *)retrieveActorNameResultsForName:(NSString *)query
 {
-    NSURLRequest *req = [self setupURLRequestForActor:query];
+    NSURLRequest *req = [self setupURLRequestForActors:query];
     
     NSURLSessionDataTask *dataTask =
     [self.session dataTaskWithRequest:req
@@ -90,7 +105,6 @@
              if (val != 0)
              {
                  self.actorResults = [[NSArray alloc] initWithArray:jsonObject[@"results"]];
-                 NSLog(@"%@", self.actorResults);
                  
                  // Create an array of the names for the UITableView
                  for (NSDictionary *person in self.actorResults) {
@@ -104,22 +118,35 @@
     return [NSArray arrayWithArray:self.names];
 }
 
-- (NSURLRequest *)setupURLRequestForActor:(NSString *)query
+
+#pragma mark - Private Methods -
+
+- (NSImage *)retriveActorImageForProfilePath:(NSString *)profileImagePath
+{
+    NSString *APIKey = [self retrieveAPIKey];
+    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, self.logoSizes[2], profileImagePath] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    NSImage *profileImage = [[NSImage alloc] initWithContentsOfURL:requestString];
+    return profileImage;
+
+}
+
+- (NSString *)retrieveAPIKey
 {
     NSString* filePath = [[NSBundle mainBundle] pathForResource:@"themoviedb" ofType:@""];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:filePath]) {
-        NSLog(@"file exist");
-    }
-    else {
-        NSLog(@"NO file exist");
-    }
-    NSString* contents = [NSString stringWithContentsOfFile:filePath
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:NULL];
+
+    NSString *contents = [NSString stringWithContentsOfFile:filePath
+                                                   encoding:NSUTF8StringEncoding
+                                                      error:NULL];
     // Remove whitespace surrounding API key
-    NSString *trimmedContents = [contents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
+    return [contents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+}
+
+- (NSURLRequest *)setupURLRequestForActors:(NSString *)query
+{
+    NSString *contents = [self retrieveAPIKey];
+
     NSString *requestString = [[NSString stringWithFormat:@"https://api.themoviedb.org/3/search/person?search_type=ngram&query=%@&api_key=%@", query, trimmedContents] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     NSURL *url = [NSURL URLWithString:requestString];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
