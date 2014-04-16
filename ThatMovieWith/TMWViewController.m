@@ -15,10 +15,12 @@
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
 @property (strong, nonatomic) TMWActors *actors;
 @property (nonatomic, retain) NSArray *actorNames;
-@property (nonatomic, retain) NSArray *actorImages;
+@property (nonatomic, retain) NSMutableArray *actorImages;
+
 @end
 
 @implementation TMWViewController
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,10 +36,14 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if([searchText length] != 0) {
+        self.actorImages = [[NSMutableArray alloc] init];
         NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
         self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
-        self.actorImages = [self.actors retriveActorImagesForActorDataResults:actorsObject];
-
+        for (NSDictionary *actor in actorsObject)
+        {
+            [self.actorImages addObject:[self.actors retriveActorImagesForActorDataResults:actor[@"profile_path"]]];
+        }
+        
         [[self.searchBarController searchResultsTableView] reloadData];
 
     }
@@ -69,9 +75,11 @@
     // Configure the cell...
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
     cell.imageView.image = [self.actorImages objectAtIndex:indexPath.row];
-
+    
     return cell;
 }
+
+
 
 
 @end

@@ -8,9 +8,10 @@
 
 #import "TMWActors.h"
 
+#define kAppIconSize 48
+
 @interface TMWActors ()
 
-@property (nonatomic) NSMutableArray *names;
 @property (nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSArray *actorResults;
 @property (nonatomic) NSString *baseURL;
@@ -32,7 +33,6 @@
     self.session = [NSURLSession sessionWithConfiguration:config
                                              delegate:nil
                                         delegateQueue:nil];
-    self.names = [[NSMutableArray alloc] init];
 
     // Get the base URL and the image sizes
     NSString *apikey = [self retrieveAPIKey];
@@ -91,22 +91,38 @@
     NSMutableArray *names = [[NSMutableArray alloc] init];
     // Create an array of the names for the UITableView
     for (NSDictionary *person in dataResults) {
-     [self.names addObject:person[@"name"]];
+     [names addObject:person[@"name"]];
     }
-
     return [NSArray arrayWithArray:names];
 }
 
-- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults
+- (UIImage *)retriveActorImagesForActorDataResults:(NSString *)profilePath
 {
-    NSMutableArray *images = [[NSMutableArray alloc] init];
-    for (NSDictionary *image in dataResults) {
-        NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:2], image[@"profile_path"]] 
+    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:1], profilePath]
                 stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-        [images addObject:imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
+    if (profilePath != (id)[NSNull null])
+    {
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
+        if (image.size.width != kAppIconSize || image.size.height != kAppIconSize)
+        {
+            CGSize itemSize = CGSizeMake(kAppIconSize, kAppIconSize);
+            UIGraphicsBeginImageContextWithOptions(itemSize, NO, 0.0f);
+            CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+            [image drawInRect:imageRect];
+            //self.appRecord.appIcon = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            return image;
+        }
+        else
+        {
+            return  image;
+        }
+    }
+    else
+    {
+        return [UIImage imageNamed:@"Placeholder.png"];
     }
     
-    return [NSArray arrayWithArray:images];
 }
 
 

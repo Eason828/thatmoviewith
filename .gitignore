@@ -1,2 +1,4 @@
 themoviedb
 ThatMovieWith.xcodeproj/project.xcworkspace/xcuserdata/johnhickey.xcuserdatad/UserInterfaceState.xcuserstate
+Pods/**
+*.lock

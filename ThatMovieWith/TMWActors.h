@@ -11,8 +11,7 @@
 @interface TMWActors : NSObject
 
 - (NSArray *)retrieveActorDataResultsForQuery:(NSString *)query;
-- (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults
-- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults
-
+- (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults;
+- (UIImage *)retriveActorImagesForActorDataResults:(NSString *)actor;
 
 @end
