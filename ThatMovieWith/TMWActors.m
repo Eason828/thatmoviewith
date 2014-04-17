@@ -8,8 +8,6 @@
 
 #import "TMWActors.h"
 
-#define kAppIconSize 48
-
 @interface TMWActors ()
 
 @property (nonatomic) NSURLSession *session;
@@ -96,32 +94,22 @@
     return [NSArray arrayWithArray:names];
 }
 
-- (UIImage *)retriveActorImagesForActorDataResults:(NSString *)profilePath
+- (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults
 {
-    NSString *requestString = [[NSString stringWithFormat:@"%@/%@/%@", self.baseURL, [self.logoSizes objectAtIndex:1], profilePath]
-                stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    if (profilePath != (id)[NSNull null])
+    NSMutableArray *URLArray = [[NSMutableArray alloc] init];
+    for (NSDictionary *actor in dataResults)
     {
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:requestString]]];
-        if (image.size.width != kAppIconSize || image.size.height != kAppIconSize)
+        if (actor[@"profile_path"] != (id)[NSNull null])
         {
-            CGSize itemSize = CGSizeMake(kAppIconSize, kAppIconSize);
-            UIGraphicsBeginImageContextWithOptions(itemSize, NO, 0.0f);
-            CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-            [image drawInRect:imageRect];
-            //self.appRecord.appIcon = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            return image;
+            NSString *requestString = [[NSString stringWithFormat:@"%@%@%@", self.baseURL, [self.logoSizes objectAtIndex:1], actor[@"profile_path"]]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+            [URLArray addObject:requestString];
         }
         else
         {
-            return  image;
+            [URLArray addObject:@"Placeholder.png"];
         }
     }
-    else
-    {
-        return [UIImage imageNamed:@"Placeholder.png"];
-    }
+    return [NSArray arrayWithArray:URLArray];
     
 }
 
