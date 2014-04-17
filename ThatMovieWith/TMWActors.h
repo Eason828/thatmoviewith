@@ -12,6 +12,6 @@
 
 - (NSArray *)retrieveActorDataResultsForQuery:(NSString *)query;
 - (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults;
-- (UIImage *)retriveActorImagesForActorDataResults:(NSString *)actor;
+- (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults;
 
 @end

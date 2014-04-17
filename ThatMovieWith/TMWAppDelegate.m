@@ -23,7 +23,7 @@
     // Override point for customization after application launch.
     TMWViewController *rootViewController = [[TMWViewController alloc] init];
     self.window.rootViewController = rootViewController;
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
     return YES;
