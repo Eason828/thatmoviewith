@@ -64,9 +64,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if([searchText length] != 0) {
         NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
-        NSLog(@"actorObject   :   %@",actorsObject);
         self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
-        NSLog(@"ActorNames   :   %@",self.actorNames);
         self.actorImageURLs = [self.actors retriveActorImageURLsForActorDataResults:actorsObject];
     }
 }
@@ -143,7 +141,8 @@
     
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                                 reuseIdentifier:CellIdentifier];
     }
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
     cell.imageView.layer.masksToBounds = YES;
@@ -155,8 +154,13 @@
     // Configure the cell...
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
+
+    UIImage *modifiedImage = [self imageByDrawingOnImage:[UIImage imageNamed:@"Placeholder.png"] 
+                                            withInitials:[self.actorNames objectAtIndex:indexPath.row]];
+
     // TODO: Create a method that returns a UIImage when passed a actor name (for the placeholder)
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Placeholder.png"]];
+    [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]] 
+                                        placeholderImage:modifiedImage];
     
     return cell;
 }
@@ -173,8 +177,10 @@
             self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
             // Animate the first actor image and name
-            [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] forKey:@"opacity"];
-            [self.firstActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] forKey:@"borderWidth"]; //
+            [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
+                                              forKey:@"opacity"];
+            [self.firstActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
+                                              forKey:@"borderWidth"]; //
             [self.secondActorImage.layer removeAllAnimations];
             [self.continueButton.layer removeAllAnimations];
             
@@ -187,8 +193,10 @@
             self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
             
             // Animate the second actor image and name
-            [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] forKey:@"opacity"];
-            [self.secondActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] forKey:@"borderWidth"]; //
+            [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
+                                               forKey:@"opacity"];
+            [self.secondActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
+                                               forKey:@"borderWidth"]; //
             [self.firstActorImage.layer removeAllAnimations];
             [self.continueButton.layer removeAllAnimations];
 
@@ -210,6 +218,55 @@
             NSLog(@"No tag");
         }
     }
+}
+
+#pragma mark Private methods
+
+- (UIImage *)imageByDrawingOnImage:(UIImage *)image withInitials:(NSString *)initials
+{
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContext(image.size);
+ 
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+ 
+    // get the context for CoreGraphics
+    UIGraphicsGetCurrentContext();
+
+    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
+    
+    if ([separatedNames count] > 0) {
+        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]]; 
+        if ([separatedNames count] > 1) {
+            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
+        }
+
+        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        textStyle.alignment = NSTextAlignmentCenter;
+        UIFont *textFont = [UIFont systemFontOfSize:16];
+
+        NSDictionary *attributes = @{NSFontAttributeName: textFont};
+        
+        // Create the CGRect to the size of the text box
+        CGSize size = [combinedInitials sizeWithAttributes:attributes];
+        if (size.width < image.size.width)
+        {
+            CGRect textRect = CGRectMake(0, 
+                              (image.size.height - size.height)/2, 
+                              image.size.width, 
+                              (image.size.height - size.height));
+
+            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
+        }
+    }
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+ 
+    // free the context
+    UIGraphicsEndImageContext();
+ 
+    return retImage;
 }
 
 @end
