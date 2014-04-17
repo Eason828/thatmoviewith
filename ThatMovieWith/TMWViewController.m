@@ -5,12 +5,14 @@
 //  Created by johnrhickey on 4/15/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
-#import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import "TMWViewController.h"
 #import "TMWActors.h"
 #import "TMWCustomCellTableViewCell.h"
+#import "TMWCustomAnimations.h"
+#import "UIColor+customColors.h"
+#import "CALayer+circleLayer.h"
 
 @interface TMWViewController ()
 
@@ -62,7 +64,9 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if([searchText length] != 0) {
         NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
+        NSLog(@"actorObject   :   %@",actorsObject);
         self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
+        NSLog(@"ActorNames   :   %@",self.actorNames);
         self.actorImageURLs = [self.actors retriveActorImageURLsForActorDataResults:actorsObject];
     }
 }
@@ -86,21 +90,25 @@
     if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
     {
         self.firstActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
-        self.firstActorImage.layer.cornerRadius = self.firstActorImage.frame.size.height/2;
-        self.firstActorImage.layer.masksToBounds = YES;
-        self.firstActorImage.layer.borderWidth = 0;
+
+        // Make the image a circle
+        [CALayer circleLayer:self.firstActorImage.layer];
         self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
         [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        
+        // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
     }
     else
     {
         self.secondActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
-        self.secondActorImage.layer.cornerRadius = self.secondActorImage.frame.size.height/2;
-        self.secondActorImage.layer.masksToBounds = YES;
-        self.secondActorImage.layer.borderWidth = 0;
+
+        // Make the image a circle
+        [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
         [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        
+        // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
     }
     
@@ -110,18 +118,8 @@
         self.secondActorButton.tag = 2;
         self.continueButton.tag = 3;
         [self.continueButton setHidden:NO];
-        
-        // TODO: Make this a function
-        CABasicAnimation *theAnimation;
-        
-        theAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-        theAnimation.duration=2.0;
-        theAnimation.repeatCount=HUGE_VALF;
-        theAnimation.autoreverses=YES;
-        theAnimation.fromValue=[NSNumber numberWithFloat:0.3];
-        theAnimation.toValue=[NSNumber numberWithFloat:1.0];
-        
-        [self.continueButton.layer addAnimation:theAnimation forKey:@"opacity"];
+                
+        [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
         [self.firstActorImage.layer removeAllAnimations];
         [self.secondActorImage.layer removeAllAnimations];
     }
@@ -163,91 +161,47 @@
     return cell;
 }
 
+#pragma mark UIButton methods
+
 -(IBAction)buttonPressed:(id)sender{
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
         case 1:
         {
-            NSLog(@"Tag 1: %d", [button tag]);
             self.selectedActor = 1;
-            self.firstActorImage.layer.borderWidth = 3.0f;
-            self.secondActorImage.layer.borderWidth = 0.0f;
-            self.firstActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
+            self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
-            if (self.firstActorImage.layer.borderWidth > 0.0f)
-            {
-                NSLog(@"Getting ready to animate");
-                
-                CABasicAnimation *theOpAnimation;
-                
-                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                theOpAnimation.duration=1.0;
-                theOpAnimation.repeatCount=HUGE_VALF;
-                theOpAnimation.autoreverses=YES;
-                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
-                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                
-                [self.firstActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
-                
-                CABasicAnimation *theAnimation;
-                
-                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
-                theAnimation.duration=1.0;
-                theAnimation.repeatCount=HUGE_VALF;
-                theAnimation.autoreverses=YES;
-                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
-                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
-                [self.firstActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
-                [self.secondActorImage.layer removeAllAnimations];
-                [self.continueButton.layer removeAllAnimations];
-            }
+            // Animate the first actor image and name
+            [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] forKey:@"opacity"];
+            [self.firstActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] forKey:@"borderWidth"]; //
+            [self.secondActorImage.layer removeAllAnimations];
+            [self.continueButton.layer removeAllAnimations];
+            
             break;
         }
             
         case 2:
         {
-            NSLog(@"Tag 2: %d", [button tag]);
             self.selectedActor = 2;
-            self.firstActorImage.layer.borderWidth = 0.0f;
-            self.secondActorImage.layer.borderWidth = 3.0f;
-            self.secondActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
-            if (self.secondActorImage.layer.borderWidth > 0.0f)
-            {
-                NSLog(@"Getting ready to animate");
-                CABasicAnimation *theOpAnimation;
-                
-                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                theOpAnimation.duration=1.0;
-                theOpAnimation.repeatCount=HUGE_VALF;
-                theOpAnimation.autoreverses=YES;
-                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
-                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                
-                [self.secondActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
-                
-                CABasicAnimation *theAnimation;
-                
-                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
-                theAnimation.duration=1.0;
-                theAnimation.repeatCount=HUGE_VALF;
-                theAnimation.autoreverses=YES;
-                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
-                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
-                [self.secondActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
-                [self.firstActorImage.layer removeAllAnimations];
-                [self.continueButton.layer removeAllAnimations];
-            }
+            self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
+            
+            // Animate the second actor image and name
+            [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] forKey:@"opacity"];
+            [self.secondActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] forKey:@"borderWidth"]; //
+            [self.firstActorImage.layer removeAllAnimations];
+            [self.continueButton.layer removeAllAnimations];
+
             break;
         }
         case 3:
         {
+            // Stop all animations when the continueButton is pressed
             [self.firstActorLabel.layer removeAllAnimations];
             [self.secondActorLabel.layer removeAllAnimations];
             [self.firstActorImage.layer removeAllAnimations];
             [self.secondActorImage.layer removeAllAnimations];
-            self.firstActorImage.layer.borderWidth = 0.0f;
-            self.secondActorImage.layer.borderWidth = 0.0f;
+
             break;
         }
             

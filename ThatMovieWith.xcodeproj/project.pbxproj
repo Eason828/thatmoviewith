@@ -11,8 +11,11 @@
 		E5019CDD18FE693400BE79DC /* themoviedb in Resources */ = {isa = PBXBuildFile; fileRef = E5019CDC18FE693400BE79DC /* themoviedb */; };
 		E5019CEB18FF379D00BE79DC /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = E5019CE618FF379D00BE79DC /* Placeholder.png */; };
 		E5019CEC18FF379D00BE79DC /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5019CE718FF379D00BE79DC /* Placeholder@2x.png */; };
+		E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E54C0891190023A10084E687 /* CALayer+circleLayer.m */; };
 		E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
+		E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699A19001625006CD7F0 /* TMWCustomAnimations.m */; };
+		E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699D19002110006CD7F0 /* UIColor+customColors.m */; };
 		E5994CF218FDE85100A5B79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF118FDE85100A5B79F /* Foundation.framework */; };
 		E5994CF418FDE85100A5B79F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF318FDE85100A5B79F /* CoreGraphics.framework */; };
 		E5994CF618FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
@@ -46,9 +49,15 @@
 		E5019CDC18FE693400BE79DC /* themoviedb */ = {isa = PBXFileReference; lastKnownFileType = text; path = themoviedb; sourceTree = "<group>"; };
 		E5019CE618FF379D00BE79DC /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
 		E5019CE718FF379D00BE79DC /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
+		E54C0890190023A10084E687 /* CALayer+circleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+circleLayer.h"; sourceTree = "<group>"; };
+		E54C0891190023A10084E687 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+circleLayer.m"; sourceTree = "<group>"; };
 		E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomCellTableViewCell.h; sourceTree = "<group>"; };
 		E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomCellTableViewCell.m; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E566699919001625006CD7F0 /* TMWCustomAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomAnimations.h; sourceTree = "<group>"; };
+		E566699A19001625006CD7F0 /* TMWCustomAnimations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomAnimations.m; sourceTree = "<group>"; };
+		E566699C19002110006CD7F0 /* UIColor+customColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+customColors.h"; sourceTree = "<group>"; };
+		E566699D19002110006CD7F0 /* UIColor+customColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+customColors.m"; sourceTree = "<group>"; };
 		E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThatMovieWith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994CF118FDE85100A5B79F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E5994CF318FDE85100A5B79F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -116,6 +125,17 @@
 			path = ../../Downloads/LazyTableImages/images;
 			sourceTree = "<group>";
 		};
+		E54C0893190023C60084E687 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				E566699D19002110006CD7F0 /* UIColor+customColors.m */,
+				E566699C19002110006CD7F0 /* UIColor+customColors.h */,
+				E54C0890190023A10084E687 /* CALayer+circleLayer.h */,
+				E54C0891190023A10084E687 /* CALayer+circleLayer.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		E5994CE518FDE85100A5B79F = {
 			isa = PBXGroup;
 			children = (
@@ -158,8 +178,11 @@
 				E5994D2E18FDF21C00A5B79F /* TMWViewController.m */,
 				E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */,
 				E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */,
+				E54C0893190023C60084E687 /* Categories */,
 				E5994D3418FE531600A5B79F /* TMWActors.h */,
 				E5994D3518FE531600A5B79F /* TMWActors.m */,
+				E566699919001625006CD7F0 /* TMWCustomAnimations.h */,
+				E566699A19001625006CD7F0 /* TMWCustomAnimations.m */,
 				E5994D2F18FDF21C00A5B79F /* TMWViewController.xib */,
 				E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */,
 				E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */,
@@ -336,7 +359,10 @@
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
 				E5994D3018FDF21C00A5B79F /* TMWViewController.m in Sources */,
 				E5994D3618FE531600A5B79F /* TMWActors.m in Sources */,
+				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
+				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
+				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
 				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

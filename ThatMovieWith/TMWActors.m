@@ -79,11 +79,11 @@
 
                  for (NSDictionary *actor in unfilteredActorResults)
                  {
-                     if (actor[@"profile_path"] != (id)[NSNull null] && actor[@"name"].length > 1)
+                     NSString *name = [[NSString alloc] initWithString:actor[@"name"]];
+                     if (actor[@"profile_path"] != (id)[NSNull null])
                      {
                          [filteredActorResults addObject:actor];
                      }
-                     
                  }
                  self.actorResults = filteredActorResults;
              }
