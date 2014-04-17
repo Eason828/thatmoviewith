@@ -12,8 +12,6 @@
 #import "TMWActors.h"
 #import "TMWCustomCellTableViewCell.h"
 
-#define TABLE_HEIGHT 66
-
 @interface TMWViewController ()
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -35,6 +33,8 @@
 @end
 
 @implementation TMWViewController
+
+#define TABLE_HEIGHT 66
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -157,6 +157,7 @@
     // Configure the cell...
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
+    // TODO: Create a method that returns a UIImage when passed a actor name (for the placeholder)
     [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Placeholder.png"]];
     
     return cell;

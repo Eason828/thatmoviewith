@@ -79,7 +79,7 @@
 
                  for (NSDictionary *actor in unfilteredActorResults)
                  {
-                     if (actor[@"profile_path"] != (id)[NSNull null])
+                     if (actor[@"profile_path"] != (id)[NSNull null] && actor[@"name"].length > 1)
                      {
                          [filteredActorResults addObject:actor];
                      }
