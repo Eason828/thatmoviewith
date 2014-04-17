@@ -11,10 +11,9 @@
 @interface TMWActors ()
 
 @property (nonatomic) NSURLSession *session;
-@property (nonatomic, retain) NSArray *actorResults;
 @property (nonatomic) NSString *baseURL;
 @property (nonatomic) NSArray *logoSizes;
-@property (nonatomic) NSArray *actorImages;
+@property (nonatomic, retain) NSArray *actorResults;
 
 @end
 
@@ -75,7 +74,18 @@
              int val = [[jsonObject objectForKey:@"total_results"] intValue];
              if (val != 0)
              {
-                 self.actorResults = [[NSArray alloc] initWithArray:jsonObject[@"results"]];
+                 NSArray *unfilteredActorResults = [[NSArray alloc] initWithArray:jsonObject[@"results"]];
+                 NSMutableArray *filteredActorResults = [[NSMutableArray alloc] initWithArray:unfilteredActorResults];
+
+                 for (NSDictionary *actor in unfilteredActorResults)
+                 {
+                     if (actor[@"profile_path"] != (id)[NSNull null])
+                     {
+                         [filteredActorResults addObject:actor];
+                     }
+                     
+                 }
+                 self.actorResults = filteredActorResults;
              }
          });
          
@@ -89,11 +99,12 @@
     NSMutableArray *names = [[NSMutableArray alloc] init];
     // Create an array of the names for the UITableView
     for (NSDictionary *person in dataResults) {
-     [names addObject:person[@"name"]];
+        [names addObject:person[@"name"]];
     }
     return [NSArray arrayWithArray:names];
 }
 
+// TODO: Configure image size as a parameter so that thumbs are smaller
 - (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults
 {
     NSMutableArray *URLArray = [[NSMutableArray alloc] init];
@@ -101,7 +112,7 @@
     {
         if (actor[@"profile_path"] != (id)[NSNull null])
         {
-            NSString *requestString = [[NSString stringWithFormat:@"%@%@%@", self.baseURL, [self.logoSizes objectAtIndex:1], actor[@"profile_path"]]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+            NSString *requestString = [[NSString stringWithFormat:@"%@%@%@", self.baseURL, [self.logoSizes objectAtIndex:4], actor[@"profile_path"]]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
             [URLArray addObject:requestString];
         }
         else
@@ -112,7 +123,6 @@
     return [NSArray arrayWithArray:URLArray];
     
 }
-
 
 #pragma mark - Private Methods -
 
