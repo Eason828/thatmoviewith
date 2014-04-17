@@ -5,7 +5,7 @@
 //  Created by johnrhickey on 4/15/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
-
+#import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import "TMWViewController.h"
@@ -30,6 +30,7 @@
 @property (strong, nonatomic) TMWActors *actors;
 @property (nonatomic, retain) NSArray *actorNames;
 @property (nonatomic, retain) NSArray *actorImageURLs;
+@property (nonatomic) NSInteger selectedActor;
 
 @end
 
@@ -45,14 +46,13 @@
         [self.firstActorLabel setHidden:YES];
         self.firstActorImage.frame = CGRectMake(0,0,20,20);
         self.firstActorButton.enabled = NO;
-        self.firstActorButton.tag = 1;
         
         [self.secondActorLabel setHidden:YES];
         self.secondActorImage.frame = CGRectMake(0,0,20,20);
         self.secondActorButton.enabled = NO;
-        self.firstActorButton.tag = 2;
         
-        [self.continueButton setHidden:YES];
+        
+        self.continueButton.hidden = YES;
     }
     return self;
 }
@@ -71,6 +71,8 @@
     NSLog(@"Cancel clicked");
 }
 
+// TODO: Add a method here to grab the first item from the search
+// and (if 2 actors have been chosen, perform the search
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSLog(@"Search Clicked");
 }
@@ -81,7 +83,7 @@
 {
     [self.searchDisplayController setActive:NO animated:YES];
     
-    if ([self.firstActorLabel.text isEqualToString:@""])
+    if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
     {
         self.firstActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
         self.firstActorImage.layer.cornerRadius = self.firstActorImage.frame.size.height/2;
@@ -102,9 +104,26 @@
         self.secondActorButton.enabled = YES;
     }
     
-    if ([self.firstActorLabel.text isEqualToString:@""] && [self.secondActorLabel.text isEqualToString:@""])
+    if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
     {
+        self.firstActorButton.tag = 1;
+        self.secondActorButton.tag = 2;
+        self.continueButton.tag = 3;
         [self.continueButton setHidden:NO];
+        
+        // TODO: Make this a function
+        CABasicAnimation *theAnimation;
+        
+        theAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+        theAnimation.duration=2.0;
+        theAnimation.repeatCount=HUGE_VALF;
+        theAnimation.autoreverses=YES;
+        theAnimation.fromValue=[NSNumber numberWithFloat:0.3];
+        theAnimation.toValue=[NSNumber numberWithFloat:1.0];
+        
+        [self.continueButton.layer addAnimation:theAnimation forKey:@"opacity"];
+        [self.firstActorImage.layer removeAllAnimations];
+        [self.secondActorImage.layer removeAllAnimations];
     }
 }
 
@@ -143,23 +162,99 @@
     return cell;
 }
 
-//- (IBAction)buttonPressed:(id)sender
-//{
-//    switch ( ((UIButton*)sender).tag ){
-//            
-//        case 1:
-//            NSLog(@"Button 1!");
-//            break;
-//        case 2:
-//            NSLog(@"Button 2!");
-//                break;
-//            
-//        default:
-//            NSLog(@"%ld", (long)((UIButton*)sender).tag);
-//    }
-//}
 -(IBAction)buttonPressed:(id)sender{
     UIButton *button = (UIButton *)sender;
-    NSLog(@"Tag: %d", [button tag]);
+    
+    switch ([button tag]) {
+        case 1:
+        {
+            NSLog(@"Tag 1: %d", [button tag]);
+            self.selectedActor = 1;
+            self.firstActorImage.layer.borderWidth = 3.0f;
+            self.secondActorImage.layer.borderWidth = 0.0f;
+            self.firstActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
+            
+            if (self.firstActorImage.layer.borderWidth > 0.0f)
+            {
+                NSLog(@"Getting ready to animate");
+                
+                CABasicAnimation *theOpAnimation;
+                
+                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                theOpAnimation.duration=1.0;
+                theOpAnimation.repeatCount=HUGE_VALF;
+                theOpAnimation.autoreverses=YES;
+                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
+                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                
+                [self.firstActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
+                
+                CABasicAnimation *theAnimation;
+                
+                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
+                theAnimation.duration=1.0;
+                theAnimation.repeatCount=HUGE_VALF;
+                theAnimation.autoreverses=YES;
+                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
+                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
+                [self.firstActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
+                [self.secondActorImage.layer removeAllAnimations];
+                [self.continueButton.layer removeAllAnimations];
+            }
+            break;
+        }
+            
+        case 2:
+        {
+            NSLog(@"Tag 2: %d", [button tag]);
+            self.selectedActor = 2;
+            self.firstActorImage.layer.borderWidth = 0.0f;
+            self.secondActorImage.layer.borderWidth = 3.0f;
+            self.secondActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
+            if (self.secondActorImage.layer.borderWidth > 0.0f)
+            {
+                NSLog(@"Getting ready to animate");
+                CABasicAnimation *theOpAnimation;
+                
+                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                theOpAnimation.duration=1.0;
+                theOpAnimation.repeatCount=HUGE_VALF;
+                theOpAnimation.autoreverses=YES;
+                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
+                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                
+                [self.secondActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
+                
+                CABasicAnimation *theAnimation;
+                
+                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
+                theAnimation.duration=1.0;
+                theAnimation.repeatCount=HUGE_VALF;
+                theAnimation.autoreverses=YES;
+                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
+                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
+                [self.secondActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
+                [self.firstActorImage.layer removeAllAnimations];
+                [self.continueButton.layer removeAllAnimations];
+            }
+            break;
+        }
+        case 3:
+        {
+            [self.firstActorLabel.layer removeAllAnimations];
+            [self.secondActorLabel.layer removeAllAnimations];
+            [self.firstActorImage.layer removeAllAnimations];
+            [self.secondActorImage.layer removeAllAnimations];
+            self.firstActorImage.layer.borderWidth = 0.0f;
+            self.secondActorImage.layer.borderWidth = 0.0f;
+            break;
+        }
+            
+        default:
+        {
+            NSLog(@"No tag");
+        }
+    }
 }
+
 @end

@@ -104,6 +104,7 @@
     return [NSArray arrayWithArray:names];
 }
 
+// TODO: Configure image size as a parameter so that thumbs are smaller
 - (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults
 {
     NSMutableArray *URLArray = [[NSMutableArray alloc] init];
@@ -111,7 +112,7 @@
     {
         if (actor[@"profile_path"] != (id)[NSNull null])
         {
-            NSString *requestString = [[NSString stringWithFormat:@"%@%@%@", self.baseURL, [self.logoSizes objectAtIndex:1], actor[@"profile_path"]]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+            NSString *requestString = [[NSString stringWithFormat:@"%@%@%@", self.baseURL, [self.logoSizes objectAtIndex:4], actor[@"profile_path"]]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
             [URLArray addObject:requestString];
         }
         else
