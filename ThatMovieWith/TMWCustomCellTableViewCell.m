@@ -8,7 +8,7 @@
 
 #import "TMWCustomCellTableViewCell.h"
 
-#define IMAGE_SIZE 50
+#define IMAGE_SIZE 45
 #define IMAGE_LEFT_OFFSET 10
 #define IMAGE_TOP_OFFSET 8
 #define IMAGE_TEXT_OFFSET 30
