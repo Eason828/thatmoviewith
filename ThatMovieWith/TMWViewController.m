@@ -29,7 +29,7 @@
 
 @property (strong, nonatomic) TMWActors *actors;
 @property (nonatomic, retain) NSArray *actorNames;
-@property (nonatomic, retain) NSArray *actorImageURLs;
+@property (nonatomic, retain) NSArray *actorImages;
 @property (nonatomic) NSInteger selectedActor;
 
 @end
@@ -65,7 +65,7 @@
     if([searchText length] != 0) {
         NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
         self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
-        self.actorImageURLs = [self.actors retriveActorImageURLsForActorDataResults:actorsObject];
+        self.actorImages = [self.actors retriveActorImagesForActorDataResults:actorsObject];
     }
 }
 
@@ -92,7 +92,7 @@
         // Make the image a circle
         [CALayer circleLayer:self.firstActorImage.layer];
         self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]]];
         
         // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
@@ -104,7 +104,7 @@
         // Make the image a circle
         [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]]];
         
         // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
@@ -134,6 +134,7 @@
     return TABLE_HEIGHT;
 }
 
+// Todo: add fade in animation to searching
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
@@ -155,12 +156,18 @@
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
 
-    UIImage *modifiedImage = [self imageByDrawingOnImage:[UIImage imageNamed:@"Placeholder.png"] 
-                                            withInitials:[self.actorNames objectAtIndex:indexPath.row]];
+    // If NSString, fetch the image, else use the generated UIImage
+    if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] 
+                                        placeholderImage:[UIImage imageNamed:@"Placeholder.png"]];
+    }
+    else {
+        [cell.imageView setImage:[self.actorImages objectAtIndex:indexPath.row]];
+    }
 
-    // TODO: Create a method that returns a UIImage when passed a actor name (for the placeholder)
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]] 
-                                        placeholderImage:modifiedImage];
+
+
+    
     
     return cell;
 }
@@ -218,55 +225,6 @@
             NSLog(@"No tag");
         }
     }
-}
-
-#pragma mark Private methods
-
-- (UIImage *)imageByDrawingOnImage:(UIImage *)image withInitials:(NSString *)initials
-{
-    // begin a graphics context of sufficient size
-    UIGraphicsBeginImageContext(image.size);
- 
-    // draw original image into the context
-    [image drawAtPoint:CGPointZero];
- 
-    // get the context for CoreGraphics
-    UIGraphicsGetCurrentContext();
-
-    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
-    
-    if ([separatedNames count] > 0) {
-        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]]; 
-        if ([separatedNames count] > 1) {
-            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
-        }
-
-        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
-        textStyle.alignment = NSTextAlignmentCenter;
-        UIFont *textFont = [UIFont systemFontOfSize:16];
-
-        NSDictionary *attributes = @{NSFontAttributeName: textFont};
-        
-        // Create the CGRect to the size of the text box
-        CGSize size = [combinedInitials sizeWithAttributes:attributes];
-        if (size.width < image.size.width)
-        {
-            CGRect textRect = CGRectMake(0, 
-                              (image.size.height - size.height)/2, 
-                              image.size.width, 
-                              (image.size.height - size.height));
-
-            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
-        }
-    }
-    // make image out of bitmap context
-    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
- 
-    // free the context
-    UIGraphicsEndImageContext();
- 
-    return retImage;
 }
 
 @end

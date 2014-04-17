@@ -79,7 +79,6 @@
 
                  for (NSDictionary *actor in unfilteredActorResults)
                  {
-                     NSString *name = [[NSString alloc] initWithString:actor[@"name"]];
                      if (actor[@"profile_path"] != (id)[NSNull null])
                      {
                          [filteredActorResults addObject:actor];
@@ -105,7 +104,8 @@
 }
 
 // TODO: Configure image size as a parameter so that thumbs are smaller
-- (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults
+// Note: this returns and array of NSStrings mixed with UIImages 
+- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults
 {
     NSMutableArray *URLArray = [[NSMutableArray alloc] init];
     for (NSDictionary *actor in dataResults)
@@ -117,7 +117,10 @@
         }
         else
         {
-            [URLArray addObject:@"Placeholder.png"];
+            // TODO: Make this a 1 px png or clear image
+            UIImage *defaultImage = [self imageByDrawingInitialsOnImage:[UIImage imageNamed:@"Placeholder.png"] 
+                                            withInitials:actor[@"name"]];
+            [URLArray addObject:defaultImage];
         }
     }
     return [NSArray arrayWithArray:URLArray];
@@ -146,6 +149,53 @@
     NSURL *url = [NSURL URLWithString:requestString];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
     return req;
+}
+
+- (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
+{
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContext(image.size);
+ 
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+ 
+    // get the context for CoreGraphics
+    UIGraphicsGetCurrentContext();
+
+    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
+    
+    if ([separatedNames count] > 0) {
+        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]]; 
+        if ([separatedNames count] > 1) {
+            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
+        }
+
+        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        textStyle.alignment = NSTextAlignmentCenter;
+        UIFont *textFont = [UIFont systemFontOfSize:16];
+
+        NSDictionary *attributes = @{NSFontAttributeName: textFont};
+        
+        // Create the CGRect to the size of the text box
+        CGSize size = [combinedInitials sizeWithAttributes:attributes];
+        if (size.width < image.size.width)
+        {
+            CGRect textRect = CGRectMake(0, 
+                              (image.size.height - size.height)/2, 
+                              image.size.width, 
+                              (image.size.height - size.height));
+
+            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
+        }
+    }
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+ 
+    // free the context
+    UIGraphicsEndImageContext();
+ 
+    return retImage;
 }
 
 @end
