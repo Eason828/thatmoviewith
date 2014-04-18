@@ -1,4 +1,4 @@
-themoviedb
+api/
 Pods/**
 *.lock
 xcuserdata

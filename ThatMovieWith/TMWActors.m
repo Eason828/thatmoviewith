@@ -130,7 +130,7 @@
 
 - (NSString *)retrieveAPIKey
 {
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"themoviedb" ofType:@""];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
 
     NSString *contents = [NSString stringWithContentsOfFile:filePath
                                                    encoding:NSUTF8StringEncoding
