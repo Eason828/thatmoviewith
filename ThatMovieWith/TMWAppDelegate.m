@@ -8,6 +8,7 @@
 
 #import "TMWAppDelegate.h"
 #import "TMWViewController.h"
+#import "HockeySDK.h"
 
 //@interface TMWAppDelegate () <UIView>
 //
@@ -26,6 +27,11 @@
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
+    // Hockey app needs to be the last 3rd party integration in this method
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"67090aada296623626dc4d261de96a29"];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+
     return YES;
 }
 
