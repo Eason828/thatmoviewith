@@ -11,7 +11,7 @@
 @implementation UIColor (customColors)
 
 + (UIColor *)ringBlueColor {
-    return [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0];
+    return [UIColor colorWithRed:0.0/255 green:122.0/255 blue:255/255 alpha:1.0];
 }
 
 @end
