@@ -117,7 +117,6 @@
         }
         else
         {
-            // TODO: Make this a 1 px png or clear image
             UIImage *defaultImage = [self imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackground.png"] 
                                             withInitials:actor[@"name"]];
             [URLArray addObject:defaultImage];

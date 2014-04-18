@@ -93,11 +93,13 @@
         [CALayer circleLayer:self.firstActorImage.layer];
         self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
         
+        // TODO: Make these their own methods
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
+            // TODO: Fix issue with image font being blurry when actor without a picture is chosen
             [self.firstActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
         }
         
