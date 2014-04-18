@@ -25,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
+@property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
 
 @property (strong, nonatomic) TMWActors *actors;
@@ -52,7 +53,6 @@
         [self.secondActorLabel setHidden:YES];
         self.secondActorImage.frame = CGRectMake(0,0,20,20);
         self.secondActorButton.enabled = NO;
-        
         
         self.continueButton.hidden = YES;
     }
@@ -92,7 +92,14 @@
         // Make the image a circle
         [CALayer circleLayer:self.firstActorImage.layer];
         self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]]];
+        
+        // If NSString, fetch the image, else use the generated UIImage
+        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+            [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        }
+        else {
+            [self.firstActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+        }
         
         // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
@@ -104,7 +111,14 @@
         // Make the image a circle
         [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]]];
+        
+        // If NSString, fetch the image, else use the generated UIImage
+        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+            [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        }
+        else {
+            [self.secondActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+        }
         
         // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
@@ -115,6 +129,7 @@
         self.firstActorButton.tag = 1;
         self.secondActorButton.tag = 2;
         self.continueButton.tag = 3;
+        self.backgroundButton.tag = 4;
         [self.continueButton setHidden:NO];
                 
         [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
@@ -144,6 +159,7 @@
     if (cell == nil) {
         cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                                  reuseIdentifier:CellIdentifier];
+        [cell layoutSubviews];
     }
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
     cell.imageView.layer.masksToBounds = YES;
@@ -158,17 +174,11 @@
 
     // If NSString, fetch the image, else use the generated UIImage
     if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-        [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] 
-                                        placeholderImage:[UIImage imageNamed:@"Placeholder.png"]];
+        [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
     else {
         [cell.imageView setImage:[self.actorImages objectAtIndex:indexPath.row]];
     }
-
-
-
-    
-    
     return cell;
 }
 
@@ -210,6 +220,7 @@
             break;
         }
         case 3:
+        case 4:
         {
             // Stop all animations when the continueButton is pressed
             [self.firstActorLabel.layer removeAllAnimations];
@@ -219,12 +230,18 @@
 
             break;
         }
-            
+//        case 4:
+//        {
+//            NSLog(@"Background touched!");
+//            break;
+//        }
+//            
         default:
         {
             NSLog(@"No tag");
         }
     }
 }
+
 
 @end
