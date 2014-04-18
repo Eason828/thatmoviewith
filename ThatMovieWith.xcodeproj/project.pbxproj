@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		E362CE1BB44647348FF7D152 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B616B934567416C996DB201 /* libPods.a */; };
-		E5019CDD18FE693400BE79DC /* themoviedb in Resources */ = {isa = PBXBuildFile; fileRef = E5019CDC18FE693400BE79DC /* themoviedb */; };
-		E5019CEB18FF379D00BE79DC /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = E5019CE618FF379D00BE79DC /* Placeholder.png */; };
-		E5019CEC18FF379D00BE79DC /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5019CE718FF379D00BE79DC /* Placeholder@2x.png */; };
+		E539DCF5190080F20027661C /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF3190080F20027661C /* Placeholder.png */; };
+		E539DCF6190080F20027661C /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF4190080F20027661C /* Placeholder@2x.png */; };
+		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
+		E539DCFC1900CD6E0027661C /* themoviedb in Resources */ = {isa = PBXBuildFile; fileRef = E539DCFB1900CD6E0027661C /* themoviedb */; };
+		E539DCFF1900CEEC0027661C /* InitialsBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCFD1900CEEC0027661C /* InitialsBackground.png */; };
+		E539DD001900CEEC0027661C /* InitialsBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCFE1900CEEC0027661C /* InitialsBackground@2x.png */; };
+		E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E54C0891190023A10084E687 /* CALayer+circleLayer.m */; };
 		E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
+		E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699A19001625006CD7F0 /* TMWCustomAnimations.m */; };
+		E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699D19002110006CD7F0 /* UIColor+customColors.m */; };
 		E5994CF218FDE85100A5B79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF118FDE85100A5B79F /* Foundation.framework */; };
 		E5994CF418FDE85100A5B79F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF318FDE85100A5B79F /* CoreGraphics.framework */; };
 		E5994CF618FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
@@ -43,12 +49,21 @@
 /* Begin PBXFileReference section */
 		7B616B934567416C996DB201 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A0F378FCD476DA5B74C48 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		E5019CDC18FE693400BE79DC /* themoviedb */ = {isa = PBXFileReference; lastKnownFileType = text; path = themoviedb; sourceTree = "<group>"; };
-		E5019CE618FF379D00BE79DC /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
-		E5019CE718FF379D00BE79DC /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
+		E539DCF3190080F20027661C /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
+		E539DCF4190080F20027661C /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
+		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
+		E539DCFB1900CD6E0027661C /* themoviedb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = themoviedb; sourceTree = "<group>"; };
+		E539DCFD1900CEEC0027661C /* InitialsBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackground.png; sourceTree = "<group>"; };
+		E539DCFE1900CEEC0027661C /* InitialsBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackground@2x.png"; sourceTree = "<group>"; };
+		E54C0890190023A10084E687 /* CALayer+circleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+circleLayer.h"; sourceTree = "<group>"; };
+		E54C0891190023A10084E687 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+circleLayer.m"; sourceTree = "<group>"; };
 		E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomCellTableViewCell.h; sourceTree = "<group>"; };
 		E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomCellTableViewCell.m; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E566699919001625006CD7F0 /* TMWCustomAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomAnimations.h; sourceTree = "<group>"; };
+		E566699A19001625006CD7F0 /* TMWCustomAnimations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomAnimations.m; sourceTree = "<group>"; };
+		E566699C19002110006CD7F0 /* UIColor+customColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+customColors.h"; sourceTree = "<group>"; };
+		E566699D19002110006CD7F0 /* UIColor+customColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+customColors.m"; sourceTree = "<group>"; };
 		E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThatMovieWith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994CF118FDE85100A5B79F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E5994CF318FDE85100A5B79F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -98,28 +113,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E5019CD218FE662800BE79DC /* api */ = {
+		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
-				E5019CDC18FE693400BE79DC /* themoviedb */,
+				E539DCFD1900CEEC0027661C /* InitialsBackground.png */,
+				E539DCFE1900CEEC0027661C /* InitialsBackground@2x.png */,
+				E539DCF81900CD640027661C /* Clear.png */,
+				E539DCF3190080F20027661C /* Placeholder.png */,
+				E539DCF4190080F20027661C /* Placeholder@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		E539DCFA1900CD6E0027661C /* api */ = {
+			isa = PBXGroup;
+			children = (
+				E539DCFB1900CD6E0027661C /* themoviedb */,
 			);
 			path = api;
 			sourceTree = "<group>";
 		};
-		E5019CE218FF379D00BE79DC /* images */ = {
+		E54C0893190023C60084E687 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E5019CE618FF379D00BE79DC /* Placeholder.png */,
-				E5019CE718FF379D00BE79DC /* Placeholder@2x.png */,
+				E566699D19002110006CD7F0 /* UIColor+customColors.m */,
+				E566699C19002110006CD7F0 /* UIColor+customColors.h */,
+				E54C0890190023A10084E687 /* CALayer+circleLayer.h */,
+				E54C0891190023A10084E687 /* CALayer+circleLayer.m */,
 			);
-			name = images;
-			path = ../../Downloads/LazyTableImages/images;
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		E5994CE518FDE85100A5B79F = {
 			isa = PBXGroup;
 			children = (
-				E5019CE218FF379D00BE79DC /* images */,
+				E539DCFA1900CD6E0027661C /* api */,
+				E539DC67190080F20027661C /* images */,
 				E5994CF718FDE85100A5B79F /* ThatMovieWith */,
 				E5994D1018FDE85100A5B79F /* ThatMovieWithTests */,
 				E5994CF018FDE85100A5B79F /* Frameworks */,
@@ -153,13 +182,15 @@
 		E5994CF718FDE85100A5B79F /* ThatMovieWith */ = {
 			isa = PBXGroup;
 			children = (
-				E5019CD218FE662800BE79DC /* api */,
 				E5994D2D18FDF21C00A5B79F /* TMWViewController.h */,
 				E5994D2E18FDF21C00A5B79F /* TMWViewController.m */,
 				E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */,
 				E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */,
+				E54C0893190023C60084E687 /* Categories */,
 				E5994D3418FE531600A5B79F /* TMWActors.h */,
 				E5994D3518FE531600A5B79F /* TMWActors.m */,
+				E566699919001625006CD7F0 /* TMWCustomAnimations.h */,
+				E566699A19001625006CD7F0 /* TMWCustomAnimations.m */,
 				E5994D2F18FDF21C00A5B79F /* TMWViewController.xib */,
 				E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */,
 				E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */,
@@ -210,6 +241,8 @@
 				E5994CEB18FDE85100A5B79F /* Frameworks */,
 				E5994CEC18FDE85100A5B79F /* Resources */,
 				B01580C361564DAC8F3622B4 /* Copy Pods Resources */,
+				E539DCF71900CAA60027661C /* ShellScript */,
+				E5F635001901781900E79332 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -276,11 +309,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5019CDD18FE693400BE79DC /* themoviedb in Resources */,
-				E5019CEC18FF379D00BE79DC /* Placeholder@2x.png in Resources */,
+				E539DCF5190080F20027661C /* Placeholder.png in Resources */,
+				E539DCF91900CD640027661C /* Clear.png in Resources */,
+				E539DCFC1900CD6E0027661C /* themoviedb in Resources */,
+				E539DCF6190080F20027661C /* Placeholder@2x.png in Resources */,
+				E539DD001900CEEC0027661C /* InitialsBackground@2x.png in Resources */,
 				E5994CFC18FDE85100A5B79F /* InfoPlist.strings in Resources */,
 				E5994D3118FDF21C00A5B79F /* TMWViewController.xib in Resources */,
-				E5019CEB18FF379D00BE79DC /* Placeholder.png in Resources */,
+				E539DCFF1900CEEC0027661C /* InitialsBackground.png in Resources */,
 				E5994D0418FDE85100A5B79F /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,6 +362,32 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		E539DCF71900CAA60027661C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
+		};
+		E5F635001901781900E79332 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#!/bin/bash\nif [ $CONFIGURATION == Release ]; then\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\nfi";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -336,7 +398,10 @@
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
 				E5994D3018FDF21C00A5B79F /* TMWViewController.m in Sources */,
 				E5994D3618FE531600A5B79F /* TMWActors.m in Sources */,
+				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
+				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
+				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
 				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,7 +498,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

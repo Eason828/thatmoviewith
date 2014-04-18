@@ -5,14 +5,14 @@
 //  Created by johnrhickey on 4/15/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
-#import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import "TMWViewController.h"
 #import "TMWActors.h"
 #import "TMWCustomCellTableViewCell.h"
-
-#define TABLE_HEIGHT 66
+#import "TMWCustomAnimations.h"
+#import "UIColor+customColors.h"
+#import "CALayer+circleLayer.h"
 
 @interface TMWViewController ()
 
@@ -25,16 +25,19 @@
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
+@property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
 
 @property (strong, nonatomic) TMWActors *actors;
 @property (nonatomic, retain) NSArray *actorNames;
-@property (nonatomic, retain) NSArray *actorImageURLs;
+@property (nonatomic, retain) NSArray *actorImages;
 @property (nonatomic) NSInteger selectedActor;
 
 @end
 
 @implementation TMWViewController
+
+#define TABLE_HEIGHT 66
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,7 +54,6 @@
         self.secondActorImage.frame = CGRectMake(0,0,20,20);
         self.secondActorButton.enabled = NO;
         
-        
         self.continueButton.hidden = YES;
     }
     return self;
@@ -63,7 +65,7 @@
     if([searchText length] != 0) {
         NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
         self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
-        self.actorImageURLs = [self.actors retriveActorImageURLsForActorDataResults:actorsObject];
+        self.actorImages = [self.actors retriveActorImagesForActorDataResults:actorsObject];
     }
 }
 
@@ -86,21 +88,41 @@
     if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
     {
         self.firstActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
-        self.firstActorImage.layer.cornerRadius = self.firstActorImage.frame.size.height/2;
-        self.firstActorImage.layer.masksToBounds = YES;
-        self.firstActorImage.layer.borderWidth = 0;
+
+        // Make the image a circle
+        [CALayer circleLayer:self.firstActorImage.layer];
         self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        
+        // TODO: Make these their own methods
+        // If NSString, fetch the image, else use the generated UIImage
+        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+            [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        }
+        else {
+            // TODO: Fix issue with image font being blurry when actor without a picture is chosen
+            [self.firstActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+        }
+        
+        // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
     }
     else
     {
         self.secondActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
-        self.secondActorImage.layer.cornerRadius = self.secondActorImage.frame.size.height/2;
-        self.secondActorImage.layer.masksToBounds = YES;
-        self.secondActorImage.layer.borderWidth = 0;
+
+        // Make the image a circle
+        [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]]];
+        
+        // If NSString, fetch the image, else use the generated UIImage
+        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+            [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        }
+        else {
+            [self.secondActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+        }
+        
+        // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
     }
     
@@ -109,19 +131,10 @@
         self.firstActorButton.tag = 1;
         self.secondActorButton.tag = 2;
         self.continueButton.tag = 3;
+        self.backgroundButton.tag = 4;
         [self.continueButton setHidden:NO];
-        
-        // TODO: Make this a function
-        CABasicAnimation *theAnimation;
-        
-        theAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-        theAnimation.duration=2.0;
-        theAnimation.repeatCount=HUGE_VALF;
-        theAnimation.autoreverses=YES;
-        theAnimation.fromValue=[NSNumber numberWithFloat:0.3];
-        theAnimation.toValue=[NSNumber numberWithFloat:1.0];
-        
-        [self.continueButton.layer addAnimation:theAnimation forKey:@"opacity"];
+                
+        [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
         [self.firstActorImage.layer removeAllAnimations];
         [self.secondActorImage.layer removeAllAnimations];
     }
@@ -138,14 +151,21 @@
     return TABLE_HEIGHT;
 }
 
+// Todo: add fade in animation to searching
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
+    //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_LEFT_OFFSET+IMAGE_TEXT_OFFSET, 0, 0)];
     
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                                 reuseIdentifier:CellIdentifier];
+        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+        tableView.showsVerticalScrollIndicator = YES;
+        [cell layoutSubviews];
     }
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
     cell.imageView.layer.masksToBounds = YES;
@@ -153,14 +173,21 @@
 //    cell.backgroundColor = [UIColor clearColor];
 //    tableView.backgroundColor = [UIColor clearColor];
 
-    
-    // Configure the cell...
+
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImageURLs objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Placeholder.png"]];
-    
+
+    // If NSString, fetch the image, else use the generated UIImage
+    if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+    }
+    else {
+        [cell.imageView setImage:[self.actorImages objectAtIndex:indexPath.row]];
+    }
     return cell;
 }
+
+#pragma mark UIButton methods
 
 -(IBAction)buttonPressed:(id)sender{
     UIButton *button = (UIButton *)sender;
@@ -168,93 +195,58 @@
     switch ([button tag]) {
         case 1:
         {
-            NSLog(@"Tag 1: %d", [button tag]);
             self.selectedActor = 1;
-            self.firstActorImage.layer.borderWidth = 3.0f;
-            self.secondActorImage.layer.borderWidth = 0.0f;
-            self.firstActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
+            self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
-            if (self.firstActorImage.layer.borderWidth > 0.0f)
-            {
-                NSLog(@"Getting ready to animate");
-                
-                CABasicAnimation *theOpAnimation;
-                
-                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                theOpAnimation.duration=1.0;
-                theOpAnimation.repeatCount=HUGE_VALF;
-                theOpAnimation.autoreverses=YES;
-                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
-                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                
-                [self.firstActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
-                
-                CABasicAnimation *theAnimation;
-                
-                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
-                theAnimation.duration=1.0;
-                theAnimation.repeatCount=HUGE_VALF;
-                theAnimation.autoreverses=YES;
-                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
-                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
-                [self.firstActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
-                [self.secondActorImage.layer removeAllAnimations];
-                [self.continueButton.layer removeAllAnimations];
-            }
+            // Animate the first actor image and name
+            [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
+                                              forKey:@"opacity"];
+            [self.firstActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
+                                              forKey:@"borderWidth"]; //
+            [self.secondActorImage.layer removeAllAnimations];
+            [self.continueButton.layer removeAllAnimations];
+            
             break;
         }
             
         case 2:
         {
-            NSLog(@"Tag 2: %d", [button tag]);
             self.selectedActor = 2;
-            self.firstActorImage.layer.borderWidth = 0.0f;
-            self.secondActorImage.layer.borderWidth = 3.0f;
-            self.secondActorImage.layer.borderColor = [UIColor colorWithRed:22.0/255 green:126.0/255 blue:230.0/255 alpha:1.0].CGColor;
-            if (self.secondActorImage.layer.borderWidth > 0.0f)
-            {
-                NSLog(@"Getting ready to animate");
-                CABasicAnimation *theOpAnimation;
-                
-                theOpAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                theOpAnimation.duration=1.0;
-                theOpAnimation.repeatCount=HUGE_VALF;
-                theOpAnimation.autoreverses=YES;
-                theOpAnimation.fromValue=[NSNumber numberWithFloat:0.5];
-                theOpAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                
-                [self.secondActorLabel.layer addAnimation:theOpAnimation forKey:@"opacity"];
-                
-                CABasicAnimation *theAnimation;
-                
-                theAnimation=[CABasicAnimation animationWithKeyPath:@"borderWidth"];
-                theAnimation.duration=1.0;
-                theAnimation.repeatCount=HUGE_VALF;
-                theAnimation.autoreverses=YES;
-                theAnimation.fromValue=[NSNumber numberWithFloat:1.5];
-                theAnimation.toValue=[NSNumber numberWithFloat:4.0];
-                [self.secondActorImage.layer addAnimation:theAnimation forKey:@"borderWidth"]; //
-                [self.firstActorImage.layer removeAllAnimations];
-                [self.continueButton.layer removeAllAnimations];
-            }
+            self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
+            
+            // Animate the second actor image and name
+            [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
+                                               forKey:@"opacity"];
+            [self.secondActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
+                                               forKey:@"borderWidth"]; //
+            [self.firstActorImage.layer removeAllAnimations];
+            [self.continueButton.layer removeAllAnimations];
+
             break;
         }
         case 3:
+        case 4:
         {
+            // Stop all animations when the continueButton is pressed
             [self.firstActorLabel.layer removeAllAnimations];
             [self.secondActorLabel.layer removeAllAnimations];
             [self.firstActorImage.layer removeAllAnimations];
             [self.secondActorImage.layer removeAllAnimations];
-            self.firstActorImage.layer.borderWidth = 0.0f;
-            self.secondActorImage.layer.borderWidth = 0.0f;
+
             break;
         }
-            
+//        case 4:
+//        {
+//            NSLog(@"Background touched!");
+//            break;
+//        }
+//            
         default:
         {
             NSLog(@"No tag");
         }
     }
 }
+
 
 @end

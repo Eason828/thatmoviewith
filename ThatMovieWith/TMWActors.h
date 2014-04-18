@@ -10,8 +10,10 @@
 
 @interface TMWActors : NSObject
 
+// TODO: Name these methods based on their return types. 
+// see "imageByDrawingOnImage"
 - (NSArray *)retrieveActorDataResultsForQuery:(NSString *)query;
 - (NSArray *)retrieveActorNamesForActorDataResults:(NSArray *)dataResults;
-- (NSArray *)retriveActorImageURLsForActorDataResults:(NSArray *)dataResults;
+- (NSArray *)retriveActorImagesForActorDataResults:(NSArray *)dataResults;
 
 @end
