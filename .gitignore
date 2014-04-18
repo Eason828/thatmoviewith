@@ -6,3 +6,4 @@ xcuserdata
 *.swp
 build/
 *.pbxuser
+.DS_Store
