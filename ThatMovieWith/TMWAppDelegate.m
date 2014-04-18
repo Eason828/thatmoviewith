@@ -28,9 +28,10 @@
     [self.window makeKeyAndVisible];
     
     // Hockey app needs to be the last 3rd party integration in this method
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"67090aada296623626dc4d261de96a29"];
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+
 
     return YES;
 }

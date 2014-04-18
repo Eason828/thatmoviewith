@@ -155,12 +155,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
+    //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_LEFT_OFFSET+IMAGE_TEXT_OFFSET, 0, 0)];
     
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
+        
         cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                                  reuseIdentifier:CellIdentifier];
+        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+        tableView.showsVerticalScrollIndicator = YES;
         [cell layoutSubviews];
     }
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
@@ -169,8 +173,7 @@
 //    cell.backgroundColor = [UIColor clearColor];
 //    tableView.backgroundColor = [UIColor clearColor];
 
-    
-    // Configure the cell...
+
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
 

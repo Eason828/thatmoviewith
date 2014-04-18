@@ -10,4 +10,9 @@
 
 @interface TMWCustomCellTableViewCell : UITableViewCell
 
+#define IMAGE_SIZE 46
+#define IMAGE_LEFT_OFFSET 10
+#define IMAGE_TOP_OFFSET 10
+#define IMAGE_TEXT_OFFSET 30
+
 @end
