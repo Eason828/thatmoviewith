@@ -9,7 +9,8 @@
 #import <JLTMDbClient.h>
 #import "HockeySDK.h"
 #import "TMWAppDelegate.h"
-#import "TMWRootViewController.h"
+#import "TMWActorViewController.h"
+#import "TMWMoviesViewController.h"
 
 //@interface TMWAppDelegate () <UIView>
 //
@@ -23,10 +24,14 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TMWRootViewController *rootViewController = [[TMWRootViewController alloc] init];
-    self.window.rootViewController = rootViewController;
+    TMWActorViewController *actorViewController = [[TMWActorViewController alloc] init];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:actorViewController];
+    
+    self.window.rootViewController = navController;
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
+    
     
     // Hockey app needs to be the last 3rd party integration in this method
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];

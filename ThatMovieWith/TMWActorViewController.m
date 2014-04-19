@@ -9,7 +9,8 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 
-#import "TMWRootViewController.h"
+#import "TMWActorViewController.h"
+#import "TMWMoviesViewController.h"
 #import "TMWCustomCellTableViewCell.h"
 #import "TMWCustomAnimations.h"
 #import "TMWActorModel.h"
@@ -17,7 +18,12 @@
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
 
-@interface TMWRootViewController ()
+@interface TMWActorViewController () {
+    NSInteger selectedActor;
+    NSString *imagesBaseUrlString;
+    NSArray *backdropSizes;
+    NSArray *responseArray;
+}
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
@@ -31,15 +37,10 @@
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
 @property (strong, nonatomic) TMWActorModel *actor;
-@property (nonatomic) NSInteger selectedActor;
-@property (copy, nonatomic) NSString *imagesBaseUrlString;
-@property (nonatomic, strong) NSArray *backdropSizes;
-@property (nonatomic, strong) NSArray *responseArray;
-
 
 @end
 
-@implementation TMWRootViewController
+@implementation TMWActorViewController
 
 #define TABLE_HEIGHT 66
 
@@ -47,6 +48,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+
         NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
         
         NSString *APIKeyValue = [NSString stringWithContentsOfFile:APIKeyPath
@@ -65,7 +67,11 @@
         
         self.continueButton.hidden = YES;
     }
+    
     return self;
+}
+-(void)viewDidLayoutSubviews{
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidLoad {
@@ -82,7 +88,7 @@
     if([searchText length] != 0) {
         
         // Search for people
-        [self refreshResponseWithJLTMDBcall:kJLTMDbSearchPerson withParameters:@{@"search_type":@"ngram",@"query":searchText}];
+        [self refreshActorResponseWithJLTMDBcall:kJLTMDbSearchPerson withParameters:@{@"search_type":@"ngram",@"query":searchText}];
     }
 }
 
@@ -102,7 +108,17 @@
 {
     [self.searchDisplayController setActive:NO animated:YES];
     
-    if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
+    // Remove the actor if both of the actors have been chosen
+    if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
+    {
+        NSLog(@"Removing actor");
+        [self.actor removeChosenActor:self.actor.chosenActors[selectedActor - 1]];
+    }
+
+    // Add the chosen actor to the array of chosen actors
+    [self.actor addChosenActor:[self.actor.actorsArray objectAtIndex:indexPath.row]];
+    
+    if ([self.firstActorLabel.text isEqualToString:@""]||(selectedActor == 1))
     {
         self.firstActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
 
@@ -114,7 +130,7 @@
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
 
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
@@ -137,7 +153,7 @@
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
@@ -147,6 +163,9 @@
         
         // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
+        
+        // The second actor is the default selection for being replaced.
+        selectedActor = 2;
     }
     
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
@@ -203,7 +222,7 @@
     // If NSString, fetch the image, else use the generated UIImage
     if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+        NSString *urlstring = [imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
         
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
@@ -221,7 +240,7 @@
     switch ([button tag]) {
         case 1:
         {
-            self.selectedActor = 1;
+            selectedActor = 1;
             self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
             // Animate the first actor image and name
@@ -237,7 +256,7 @@
             
         case 2:
         {
-            self.selectedActor = 2;
+            selectedActor = 2;
             self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
             
             // Animate the second actor image and name
@@ -250,14 +269,22 @@
 
             break;
         }
-        case 3:
-        case 4:
+        case 3: // Continum button
+        case 4: // Background button
         {
+            NSLog(@"%ld", (long)[button tag]);
             // Stop all animations when the continueButton is pressed
             [self.firstActorLabel.layer removeAllAnimations];
             [self.secondActorLabel.layer removeAllAnimations];
             [self.firstActorImage.layer removeAllAnimations];
             [self.secondActorImage.layer removeAllAnimations];
+            
+            if ([button tag] == 3) {
+                
+                TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+                [self.navigationController pushViewController:moviesViewController animated:YES];
+                [self.navigationController setNavigationBarHidden:NO animated:NO];
+            }
 
             break;
         }
@@ -280,8 +307,8 @@
     [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
 
         if (!error) {
-            self.backdropSizes = response[@"images"][@"logo_sizes"];
-            self.imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:self.backdropSizes[1]];
+            backdropSizes = response[@"images"][@"logo_sizes"];
+            imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:backdropSizes[1]];
         }
         else {
             [errorAlertView show];
@@ -289,7 +316,7 @@
     }];
 }
 
-- (void) refreshResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+- (void) refreshActorResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
 {
     
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];

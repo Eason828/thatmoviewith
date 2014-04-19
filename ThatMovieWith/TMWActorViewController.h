@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TMWRootViewController : UIViewController
+@interface TMWActorViewController : UIViewController
 
 @end

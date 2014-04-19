@@ -7,8 +7,14 @@
 //
 
 #import "TMWActorModel.h"
+#import <UIImageView+AFNetworking.h>
+#import <JLTMDbClient.h>
 
-@implementation TMWActorModel
+@implementation TMWActorModel {
+    NSMutableArray *mutableActors;
+}
+
+#pragma mark Getter Methods
 
 - (NSArray *)actorNames {
     // Create an array of the names for the UITableView
@@ -33,9 +39,38 @@
             [mutableImagesArray addObject:defaultImage];
         }
     }
-    NSLog(@"%@", mutableImagesArray);
     return mutableImagesArray;
 }
+
+- (NSArray *)chosenActors
+{
+    _chosenActors = mutableActors;
+    NSLog(@"ChosenActors: %@", _chosenActors);
+    return _chosenActors;
+}
+
+#pragma mark Instance Methods
+
+- (void)addChosenActor:(NSDictionary *)actor {
+    if (!mutableActors) {
+        mutableActors = [[NSMutableArray alloc] init];
+    }
+    [mutableActors addObject:actor];
+    NSLog(@"MutableActors: %@", mutableActors);
+}
+
+- (void)removeChosenActor:(NSDictionary *)actor
+{
+    if ([mutableActors containsObject:actor]) {
+        NSLog(@"Removing actor: %@", actor[@"name"]);
+        NSLog(@"%d", [mutableActors indexOfObject:actor[@"name"]]);
+        [mutableActors removeObject:actor];
+    } else {
+        NSLog(@"%@ is not present in the array", actor[@"name"]);
+    }
+}
+
+#pragma mark Private Methods
 
 - (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
 {
