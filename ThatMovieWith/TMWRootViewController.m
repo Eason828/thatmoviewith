@@ -12,6 +12,8 @@
 #import "TMWRootViewController.h"
 #import "TMWCustomCellTableViewCell.h"
 #import "TMWCustomAnimations.h"
+#import "TMWActorModel.h"
+
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
 
@@ -28,13 +30,11 @@
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
-@property (nonatomic, retain) NSArray *actorNames;
-@property (nonatomic, retain) NSArray *actorImages;
+@property (strong, nonatomic) TMWActorModel *actor;
 @property (nonatomic) NSInteger selectedActor;
 @property (copy, nonatomic) NSString *imagesBaseUrlString;
 @property (nonatomic, strong) NSArray *backdropSizes;
 @property (nonatomic, strong) NSArray *responseArray;
-@property (nonatomic, strong) NSArray *actorsArray;
 
 
 @end
@@ -47,7 +47,13 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //[[JLTMDbClient sharedAPIInstance] setAPIKey:@"7c260fe35bdd98cd551919a4edd5dc59"];
+        NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
+        
+        NSString *APIKeyValue = [NSString stringWithContentsOfFile:APIKeyPath
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:NULL];
+        
+        [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
         
         [self.firstActorLabel setHidden:YES];
         self.firstActorImage.frame = CGRectMake(0,0,20,20);
@@ -65,6 +71,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.actor = [[TMWActorModel alloc] init];
+    
     [self loadImageConfiguration];
 }
 
@@ -75,30 +83,6 @@
         
         // Search for people
         [self refreshResponseWithJLTMDBcall:kJLTMDbSearchPerson withParameters:@{@"search_type":@"ngram",@"query":searchText}];
-        self.actorsArray = self.responseArray;
-        
-        // Create an array of the names for the UITableView
-        NSMutableArray *mutableNamesArray = [[NSMutableArray alloc] init];
-        for (NSDictionary *dict in self.actorsArray) {
-            [mutableNamesArray addObject:dict[@"name"]];
-        }
-        self.actorNames = mutableNamesArray;
-        
-        // Create an array of the images for the UITableView
-        NSMutableArray *mutableImagesArray = [[NSMutableArray alloc] init];
-        for (NSDictionary *dict in self.actorsArray)
-        {
-            if (dict[@"profile_path"] != (id)[NSNull null])
-            {
-                [mutableImagesArray addObject:dict[@"profile_path"]];
-            }
-            else
-            {
-                UIImage *defaultImage = [self imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackground.png"] withInitials:dict[@"name"]];
-                [mutableImagesArray addObject:defaultImage];
-            }
-        }
-        self.actorImages = mutableImagesArray;
     }
 }
 
@@ -120,7 +104,7 @@
     
     if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
     {
-        self.firstActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
+        self.firstActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
 
         // Make the image a circle
         [CALayer circleLayer:self.firstActorImage.layer];
@@ -128,15 +112,15 @@
         
         // TODO: Make these their own methods
         // If NSString, fetch the image, else use the generated UIImage
-        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
 
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
             // TODO: Fix issue with image font being blurry when actor without a picture is chosen
-            [self.firstActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+            [self.firstActorImage setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
         }
         
         // Enable tapping on the actor image
@@ -144,23 +128,21 @@
     }
     else
     {
-        self.secondActorLabel.text = [self.actorNames objectAtIndex:indexPath.row];
+        self.secondActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
 
         // Make the image a circle
         [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
         
         // If NSString, fetch the image, else use the generated UIImage
-        if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
-            
-            NSLog(@"URL: %@", urlstring);
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
-            [self.secondActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
+            [self.secondActorImage setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
         }
         
         // Enable tapping on the actor image
@@ -183,7 +165,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.actorNames count];
+    return [self.actor.actorNames count];
 }
 
 //Change the Height of the Cell [Default is 44]:
@@ -216,17 +198,17 @@
 
 
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
-    cell.textLabel.text = [self.actorNames objectAtIndex:indexPath.row];
+    cell.textLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
 
     // If NSString, fetch the image, else use the generated UIImage
-    if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
+        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
         
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
     else {
-        [cell.imageView setImage:[self.actorImages objectAtIndex:indexPath.row]];
+        [cell.imageView setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
     }
     return cell;
 }
@@ -315,7 +297,7 @@
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
         if (!error) {
-            self.responseArray = response[@"results"];
+            self.actor.actorsArray = response[@"results"];
             [[self.searchBarController searchResultsTableView] reloadData];
         }
         else {
@@ -325,52 +307,7 @@
 }
 
 
-- (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
-{
-    // begin a graphics context of sufficient size
-    UIGraphicsBeginImageContext(image.size);
-    
-    // draw original image into the context
-    [image drawAtPoint:CGPointZero];
-    
-    // get the context for CoreGraphics
-    UIGraphicsGetCurrentContext();
-    
-    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
-    
-    if ([separatedNames count] > 0) {
-        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]];
-        if ([separatedNames count] > 1) {
-            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
-        }
-        
-        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
-        textStyle.alignment = NSTextAlignmentCenter;
-        UIFont *textFont = [UIFont systemFontOfSize:16];
-        
-        NSDictionary *attributes = @{NSFontAttributeName: textFont};
-        
-        // Create the CGRect to the size of the text box
-        CGSize size = [combinedInitials sizeWithAttributes:attributes];
-        if (size.width < image.size.width)
-        {
-            CGRect textRect = CGRectMake(0,
-                                         (image.size.height - size.height)/2,
-                                         image.size.width,
-                                         (image.size.height - size.height));
-            
-            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
-        }
-    }
-    // make image out of bitmap context
-    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // free the context
-    UIGraphicsEndImageContext();
-    
-    return retImage;
-}
+
 
 
 

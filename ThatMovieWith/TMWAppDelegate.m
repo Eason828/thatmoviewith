@@ -28,12 +28,6 @@
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
-    NSString* api_key = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
-    NSLog(@"%@", api_key);
-    //[[JLTMDbClient sharedAPIInstance] setAPIKey:api_key];
-    [[JLTMDbClient sharedAPIInstance] setAPIKey:@"7c260fe35bdd98cd551919a4edd5dc59"];
-
-    
     // Hockey app needs to be the last 3rd party integration in this method
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
     [[BITHockeyManager sharedHockeyManager] startManager];
