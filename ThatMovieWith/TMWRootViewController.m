@@ -5,16 +5,17 @@
 //  Created by johnrhickey on 4/15/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
-#import <SDWebImage/UIImageView+WebCache.h>
 
-#import "TMWViewController.h"
-#import "TMWActors.h"
+#import <UIImageView+AFNetworking.h>
+#import <JLTMDbClient.h>
+
+#import "TMWRootViewController.h"
 #import "TMWCustomCellTableViewCell.h"
 #import "TMWCustomAnimations.h"
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
 
-@interface TMWViewController ()
+@interface TMWRootViewController ()
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
@@ -27,15 +28,18 @@
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
-
-@property (strong, nonatomic) TMWActors *actors;
 @property (nonatomic, retain) NSArray *actorNames;
 @property (nonatomic, retain) NSArray *actorImages;
 @property (nonatomic) NSInteger selectedActor;
+@property (copy, nonatomic) NSString *imagesBaseUrlString;
+@property (nonatomic, strong) NSArray *backdropSizes;
+@property (nonatomic, strong) NSArray *responseArray;
+@property (nonatomic, strong) NSArray *actorsArray;
+
 
 @end
 
-@implementation TMWViewController
+@implementation TMWRootViewController
 
 #define TABLE_HEIGHT 66
 
@@ -43,8 +47,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
-        self.actors = [[TMWActors alloc] init];
+        //[[JLTMDbClient sharedAPIInstance] setAPIKey:@"7c260fe35bdd98cd551919a4edd5dc59"];
         
         [self.firstActorLabel setHidden:YES];
         self.firstActorImage.frame = CGRectMake(0,0,20,20);
@@ -59,13 +62,43 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self loadImageConfiguration];
+}
+
 #pragma mark UISearchBar methods
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if([searchText length] != 0) {
-        NSArray *actorsObject = [self.actors retrieveActorDataResultsForQuery:searchText];
-        self.actorNames = [self.actors retrieveActorNamesForActorDataResults:actorsObject];
-        self.actorImages = [self.actors retriveActorImagesForActorDataResults:actorsObject];
+        
+        // Search for people
+        [self refreshResponseWithJLTMDBcall:kJLTMDbSearchPerson withParameters:@{@"search_type":@"ngram",@"query":searchText}];
+        self.actorsArray = self.responseArray;
+        
+        // Create an array of the names for the UITableView
+        NSMutableArray *mutableNamesArray = [[NSMutableArray alloc] init];
+        for (NSDictionary *dict in self.actorsArray) {
+            [mutableNamesArray addObject:dict[@"name"]];
+        }
+        self.actorNames = mutableNamesArray;
+        
+        // Create an array of the images for the UITableView
+        NSMutableArray *mutableImagesArray = [[NSMutableArray alloc] init];
+        for (NSDictionary *dict in self.actorsArray)
+        {
+            if (dict[@"profile_path"] != (id)[NSNull null])
+            {
+                [mutableImagesArray addObject:dict[@"profile_path"]];
+            }
+            else
+            {
+                UIImage *defaultImage = [self imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackground.png"] withInitials:dict[@"name"]];
+                [mutableImagesArray addObject:defaultImage];
+            }
+        }
+        self.actorImages = mutableImagesArray;
     }
 }
 
@@ -96,7 +129,10 @@
         // TODO: Make these their own methods
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-            [self.firstActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
+            
+            [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
             // TODO: Fix issue with image font being blurry when actor without a picture is chosen
@@ -116,7 +152,12 @@
         
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-            [self.secondActorImage setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+            
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
+            
+            NSLog(@"URL: %@", urlstring);
+            
+            [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
             [self.secondActorImage setImage:[self.actorImages objectAtIndex:indexPath.row]];
@@ -179,7 +220,10 @@
 
     // If NSString, fetch the image, else use the generated UIImage
     if ([[self.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-        [cell.imageView setImageWithURL:[NSURL URLWithString:[self.actorImages objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        
+        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[self.actorImages objectAtIndex:indexPath.row]];
+        
+        [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
     else {
         [cell.imageView setImage:[self.actorImages objectAtIndex:indexPath.row]];
@@ -235,18 +279,99 @@
 
             break;
         }
-//        case 4:
-//        {
-//            NSLog(@"Background touched!");
-//            break;
-//        }
-//            
+            
         default:
         {
             NSLog(@"No tag");
         }
     }
 }
+
+
+#pragma mark Private Methods
+
+- (void) loadImageConfiguration
+{
+    
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
+
+        if (!error) {
+            self.backdropSizes = response[@"images"][@"logo_sizes"];
+            self.imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:self.backdropSizes[1]];
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
+
+- (void) refreshResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+{
+    
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        
+        if (!error) {
+            self.responseArray = response[@"results"];
+            [[self.searchBarController searchResultsTableView] reloadData];
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
+
+
+- (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
+{
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContext(image.size);
+    
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+    
+    // get the context for CoreGraphics
+    UIGraphicsGetCurrentContext();
+    
+    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
+    
+    if ([separatedNames count] > 0) {
+        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]];
+        if ([separatedNames count] > 1) {
+            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
+        }
+        
+        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        textStyle.alignment = NSTextAlignmentCenter;
+        UIFont *textFont = [UIFont systemFontOfSize:16];
+        
+        NSDictionary *attributes = @{NSFontAttributeName: textFont};
+        
+        // Create the CGRect to the size of the text box
+        CGSize size = [combinedInitials sizeWithAttributes:attributes];
+        if (size.width < image.size.width)
+        {
+            CGRect textRect = CGRectMake(0,
+                                         (image.size.height - size.height)/2,
+                                         image.size.width,
+                                         (image.size.height - size.height));
+            
+            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
+        }
+    }
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // free the context
+    UIGraphicsEndImageContext();
+    
+    return retImage;
+}
+
 
 
 @end

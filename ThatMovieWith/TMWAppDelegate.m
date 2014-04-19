@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
-#import "TMWAppDelegate.h"
-#import "TMWViewController.h"
+#import <JLTMDbClient.h>
 #import "HockeySDK.h"
+#import "TMWAppDelegate.h"
+#import "TMWRootViewController.h"
 
 //@interface TMWAppDelegate () <UIView>
 //
@@ -22,10 +23,16 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TMWViewController *rootViewController = [[TMWViewController alloc] init];
+    TMWRootViewController *rootViewController = [[TMWRootViewController alloc] init];
     self.window.rootViewController = rootViewController;
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
+    
+    NSString* api_key = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
+    NSLog(@"%@", api_key);
+    //[[JLTMDbClient sharedAPIInstance] setAPIKey:api_key];
+    [[JLTMDbClient sharedAPIInstance] setAPIKey:@"7c260fe35bdd98cd551919a4edd5dc59"];
+
     
     // Hockey app needs to be the last 3rd party integration in this method
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
