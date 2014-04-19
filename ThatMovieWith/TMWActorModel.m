@@ -16,18 +16,18 @@
 
 #pragma mark Getter Methods
 
-- (NSArray *)actorNames {
+- (NSArray *)actorSearchResultNames {
     // Create an array of the names for the UITableView
     NSMutableArray *mutableNamesArray = [[NSMutableArray alloc] init];
-    for (NSDictionary *dict in self.actorsArray) {
+    for (NSDictionary *dict in self.actorSearchResults) {
         [mutableNamesArray addObject:dict[@"name"]];
     }
     return mutableNamesArray;
 }
 
-- (NSArray *)actorImages {
+- (NSArray *)actorSearchResultImages {
     NSMutableArray *mutableImagesArray = [[NSMutableArray alloc] init];
-    for (NSDictionary *dict in self.actorsArray)
+    for (NSDictionary *dict in self.actorSearchResults)
     {
         if (dict[@"profile_path"] != (id)[NSNull null])
         {
@@ -44,9 +44,25 @@
 
 - (NSArray *)chosenActors
 {
-    _chosenActors = mutableActors;
-    NSLog(@"ChosenActors: %@", _chosenActors);
-    return _chosenActors;
+    return mutableActors;
+}
+
+- (NSArray *)chosenActorsIDs
+{
+    NSMutableArray *mutableIDs = [NSMutableArray array];
+    for (NSDictionary *actor in self.chosenActors) {
+        [mutableIDs addObject:actor[@"id"]];
+    }
+    return [NSArray arrayWithArray:mutableIDs];
+}
+
+- (NSArray *)chosenActorsSameMovies
+{
+    NSMutableArray *mutableMovies = [NSMutableArray array];
+    for (NSDictionary *movie in self.chosenActorMovies) {
+        [mutableMovies addObject:movie[@"original_title"]];
+    }
+    return [NSArray arrayWithArray:mutableMovies];
 }
 
 #pragma mark Instance Methods
@@ -56,7 +72,6 @@
         mutableActors = [[NSMutableArray alloc] init];
     }
     [mutableActors addObject:actor];
-    NSLog(@"MutableActors: %@", mutableActors);
 }
 
 - (void)removeChosenActor:(NSDictionary *)actor

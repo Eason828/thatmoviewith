@@ -116,11 +116,11 @@
     }
 
     // Add the chosen actor to the array of chosen actors
-    [self.actor addChosenActor:[self.actor.actorsArray objectAtIndex:indexPath.row]];
+    [self.actor addChosenActor:[self.actor.actorSearchResults objectAtIndex:indexPath.row]];
     
     if ([self.firstActorLabel.text isEqualToString:@""]||(selectedActor == 1))
     {
-        self.firstActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
+        self.firstActorLabel.text = [self.actor.actorSearchResultNames objectAtIndex:indexPath.row];
 
         // Make the image a circle
         [CALayer circleLayer:self.firstActorImage.layer];
@@ -128,15 +128,15 @@
         
         // TODO: Make these their own methods
         // If NSString, fetch the image, else use the generated UIImage
-        if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        if ([[self.actor.actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
 
-            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
             
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
             // TODO: Fix issue with image font being blurry when actor without a picture is chosen
-            [self.firstActorImage setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            [self.firstActorImage setImage:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
         }
         
         // Enable tapping on the actor image
@@ -144,21 +144,21 @@
     }
     else
     {
-        self.secondActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
+        self.secondActorLabel.text = [self.actor.actorSearchResultNames objectAtIndex:indexPath.row];
 
         // Make the image a circle
         [CALayer circleLayer:self.secondActorImage.layer];
         self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
         
         // If NSString, fetch the image, else use the generated UIImage
-        if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        if ([[self.actor.actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             
-            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
             
             [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
         else {
-            [self.secondActorImage setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            [self.secondActorImage setImage:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
         }
         
         // Enable tapping on the actor image
@@ -184,7 +184,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.actor.actorNames count];
+    return [self.actor.actorSearchResultNames count];
 }
 
 //Change the Height of the Cell [Default is 44]:
@@ -217,17 +217,17 @@
 
 
     //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
-    cell.textLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
+    cell.textLabel.text = [self.actor.actorSearchResultNames objectAtIndex:indexPath.row];
 
     // If NSString, fetch the image, else use the generated UIImage
-    if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    if ([[self.actor.actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+        NSString *urlstring = [imagesBaseUrlString stringByAppendingString:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
         
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
     else {
-        [cell.imageView setImage:[self.actor.actorImages objectAtIndex:indexPath.row]];
+        [cell.imageView setImage:[self.actor.actorSearchResultImages objectAtIndex:indexPath.row]];
     }
     return cell;
 }
@@ -324,7 +324,7 @@
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
         if (!error) {
-            self.actor.actorsArray = response[@"results"];
+            self.actor.actorSearchResults = response[@"results"];
             [[self.searchBarController searchResultsTableView] reloadData];
         }
         else {
