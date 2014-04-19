@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
-#import "TMWAppDelegate.h"
-#import "TMWViewController.h"
+#import <JLTMDbClient.h>
 #import "HockeySDK.h"
+#import "TMWAppDelegate.h"
+#import "TMWRootViewController.h"
 
 //@interface TMWAppDelegate () <UIView>
 //
@@ -22,7 +23,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TMWViewController *rootViewController = [[TMWViewController alloc] init];
+    TMWRootViewController *rootViewController = [[TMWRootViewController alloc] init];
     self.window.rootViewController = rootViewController;
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];

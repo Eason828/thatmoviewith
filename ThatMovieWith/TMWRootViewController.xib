@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TMWViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TMWRootViewController">
             <connections>
                 <outlet property="backgroundButton" destination="zIh-QV-UkZ" id="Hgs-2O-NJi"/>
                 <outlet property="continueButton" destination="TcH-RB-otG" id="D5t-zX-c08"/>
