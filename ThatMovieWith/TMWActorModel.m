@@ -10,6 +10,8 @@
 
 @implementation TMWActorModel
 
+#pragma mark Getter Methods
+
 - (NSArray *)actorNames {
     // Create an array of the names for the UITableView
     NSMutableArray *mutableNamesArray = [[NSMutableArray alloc] init];
@@ -36,6 +38,8 @@
     NSLog(@"%@", mutableImagesArray);
     return mutableImagesArray;
 }
+
+#pragma mark Private Methods
 
 - (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
 {
