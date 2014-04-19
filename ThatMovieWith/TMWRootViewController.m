@@ -17,12 +17,7 @@
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
 
-@interface TMWRootViewController () {
-    NSInteger selectedActor;
-    NSString *imagesBaseUrlString;
-    NSArray *backdropSizes;
-    NSArray *responseArray;
-}
+@interface TMWRootViewController ()
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
@@ -36,6 +31,10 @@
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 
 @property (strong, nonatomic) TMWActorModel *actor;
+@property (nonatomic) NSInteger selectedActor;
+@property (copy, nonatomic) NSString *imagesBaseUrlString;
+@property (nonatomic, strong) NSArray *backdropSizes;
+@property (nonatomic, strong) NSArray *responseArray;
 
 
 @end
@@ -103,7 +102,7 @@
 {
     [self.searchDisplayController setActive:NO animated:YES];
     
-    if ([self.firstActorLabel.text isEqualToString:@""]||(selectedActor == 1))
+    if ([self.firstActorLabel.text isEqualToString:@""]||(self.selectedActor == 1))
     {
         self.firstActorLabel.text = [self.actor.actorNames objectAtIndex:indexPath.row];
 
@@ -115,7 +114,7 @@
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
 
-            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
@@ -138,7 +137,7 @@
         // If NSString, fetch the image, else use the generated UIImage
         if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             
-            NSString *urlstring = [[imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:self.backdropSizes[1] withString:self.backdropSizes[3]] stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
             
             [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
@@ -204,7 +203,7 @@
     // If NSString, fetch the image, else use the generated UIImage
     if ([[self.actor.actorImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
+        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[self.actor.actorImages objectAtIndex:indexPath.row]];
         
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
@@ -222,7 +221,7 @@
     switch ([button tag]) {
         case 1:
         {
-            selectedActor = 1;
+            self.selectedActor = 1;
             self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
             // Animate the first actor image and name
@@ -238,7 +237,7 @@
             
         case 2:
         {
-            selectedActor = 2;
+            self.selectedActor = 2;
             self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
             
             // Animate the second actor image and name
@@ -281,8 +280,8 @@
     [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
 
         if (!error) {
-            backdropSizes = response[@"images"][@"logo_sizes"];
-            imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:backdropSizes[1]];
+            self.backdropSizes = response[@"images"][@"logo_sizes"];
+            self.imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:self.backdropSizes[1]];
         }
         else {
             [errorAlertView show];
