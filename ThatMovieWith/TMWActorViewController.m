@@ -18,11 +18,7 @@
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
 
-@interface TMWActorViewController () {
-    NSInteger selectedActor;
-    NSArray *backdropSizes;
-    NSArray *responseArray;
-}
+@interface TMWActorViewController ()
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
@@ -34,10 +30,17 @@
 @property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
+@property (strong, nonatomic) IBOutlet UILabel *startLabel;
 
 @end
 
 @implementation TMWActorViewController
+
+NSInteger selectedActor;
+NSArray *backdropSizes;
+NSArray *responseArray;
+BOOL firstFlipped;
+BOOL secondFlipped;
 
 #define TABLE_HEIGHT 66
 
@@ -71,10 +74,101 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self loadImageConfiguration];
+    
+    UILongPressGestureRecognizer *longPressOne = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressOne:)];
+    longPressOne.minimumPressDuration = 1.0;
+    [self.firstActorButton addGestureRecognizer:longPressOne];
+    UILongPressGestureRecognizer *longPressTwo = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTwo:)];
+    longPressTwo.minimumPressDuration = 1.0;
+    [self.secondActorButton addGestureRecognizer:longPressTwo];
+}
+
+
+
+- (void)longPressOne:(UILongPressGestureRecognizer*)gesture {
+    NSLog(@"Long Press 1");
+    
+    int num = 1;
+    [self removeActor:&num];
+    
+    
+}
+
+- (void)longPressTwo:(UILongPressGestureRecognizer*)gesture {
+    NSLog(@"Long Press 2");
+    
+    int num = 2;
+    [self removeActor:&num];
+
+}
+
+// Remove the actor and all the ne
+- (void)removeActor:(int *)actorNumber {
+    
+    [self.continueButton setHidden: YES];
+    [self.firstActorLabel.layer removeAllAnimations];
+    [self.secondActorLabel.layer removeAllAnimations];
+    [self.firstActorImage.layer removeAllAnimations];
+    [self.secondActorImage.layer removeAllAnimations];
+    
+    if ([self.firstActorLabel.text isEqualToString:@""] && [self.secondActorLabel.text isEqualToString:@""])
+    {
+        [self.startLabel setHidden:NO];
+    }
+    
+    switch (*actorNumber) {
+        
+        case 1:
+        {
+            NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
+            
+            for (NSDictionary *dict in chosenCopy)
+            {
+                if ([dict[@"name"] isEqualToString: self.firstActorLabel.text])
+                {
+                    [[TMWActorModel actorModel] removeChosenActor:dict];
+                    break;
+                }
+            }
+            
+            self.firstActorButton.enabled = NO;
+            [self.firstActorImage setImage: nil];
+            self.firstActorLabel.text = @"";
+            
+            break;
+        }
+        case 2:
+        {
+            NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
+            
+            for (NSDictionary *dict in chosenCopy)
+            {
+                if ([dict[@"name"] isEqualToString: self.secondActorLabel.text])
+                {
+                    [[TMWActorModel actorModel] removeChosenActor:dict];
+                    break;
+                }
+            }
+            
+            self.secondActorButton.enabled = NO;
+            [self.secondActorImage setImage: nil];
+            self.secondActorLabel.text = @"";
+            
+            break;
+        }
+            
+        default:
+        {
+            //
+        }
+    }
+    
+    
 }
 
 #pragma mark UISearchBar methods
@@ -101,13 +195,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.startLabel setHidden:YES];
+    
     [self.searchDisplayController setActive:NO animated:YES];
     
     // Remove the actor if both of the actors have been chosen
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
     {
         NSLog(@"Removing actor");
-        [[TMWActorModel actorModel] removeChosenActor:[TMWActorModel actorModel].chosenActors[selectedActor - 1]];
+        NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
+        for (NSDictionary *dict in chosenCopy)
+        {
+            if ((selectedActor == 1 && [dict[@"name"] isEqualToString: self.firstActorLabel.text]) || (selectedActor == 2 && [dict[@"name"] isEqualToString: self.secondActorLabel.text]))
+            {
+                [[TMWActorModel actorModel] removeChosenActor:dict];
+                break;
+            }
+        }
+
     }
 
     // Add the chosen actor to the array of chosen actors
@@ -127,7 +232,7 @@
 
             NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
             
-            [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+            [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:nil];
         }
         else {
             // TODO: Fix issue with image font being blurry when actor without a picture is chosen
@@ -174,6 +279,13 @@
         [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
         [self.firstActorImage.layer removeAllAnimations];
         [self.secondActorImage.layer removeAllAnimations];
+        
+        [[TMWActorModel actorModel] removeAllActorMovies];
+        for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
+        {
+            [self refreshMovieResponseWithJLTMDBcall:kJLTMDbPersonCredits
+                                      withParameters:@{@"id":actorID}];
+        }
     }
 }
 
@@ -229,7 +341,62 @@
 
 #pragma mark UIButton methods
 
+// For flipping over the actor images
 -(IBAction)buttonPressed:(id)sender{
+    UIButton *button = (UIButton *)sender;
+    
+    switch ([button tag]) {
+        case 1:
+        {
+
+//            [UIView transitionWithView:self.firstActorImage duration:1.5
+//                               options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+//                                   self.firstActorImage.image = self.secondActorImage.image;
+//                               } completion:nil];
+            break;
+        }
+            
+        case 2:
+        {
+//            if (firstFlipped == NO) {
+//                [UIView transitionWithView:self.secondActorImage duration:1.5
+//                                   options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+//                                       self.secondActorImage.image = self.firstActorImage.image;
+//                                   } completion:nil];
+//                firstFlipped = YES;
+//            }
+//            else {
+//                [UIView transitionWithView:self.secondActorImage duration:1.5
+//                                   options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+//                                       self.firstActorImage.image = self.secondActorImage.image;
+//                                   } completion:nil];
+//                firstFlipped = NO;
+//            }
+            break;
+        }
+
+        case 3: // Continue button
+        case 4: // Background button
+        {
+            // Stop all animations when the continueButton is pressed
+            [self.firstActorLabel.layer removeAllAnimations];
+            [self.secondActorLabel.layer removeAllAnimations];
+            [self.firstActorImage.layer removeAllAnimations];
+            [self.secondActorImage.layer removeAllAnimations];
+            
+            // Show the Movies View if the continue button is pressed
+            if ([button tag] == 3) {
+                
+                TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+                [self.navigationController pushViewController:moviesViewController animated:YES];
+                [self.navigationController setNavigationBarHidden:NO animated:NO];
+            }
+            break;
+        }
+    }
+}
+
+-(IBAction)buttonDown:(id)sender{
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
@@ -261,26 +428,12 @@
                                                forKey:@"borderWidth"]; //
             [self.firstActorImage.layer removeAllAnimations];
             [self.continueButton.layer removeAllAnimations];
-
+            
             break;
         }
-        case 3: // Continum button
+        case 3: // Continue button
         case 4: // Background button
         {
-            NSLog(@"%ld", (long)[button tag]);
-            // Stop all animations when the continueButton is pressed
-            [self.firstActorLabel.layer removeAllAnimations];
-            [self.secondActorLabel.layer removeAllAnimations];
-            [self.firstActorImage.layer removeAllAnimations];
-            [self.secondActorImage.layer removeAllAnimations];
-            
-            if ([button tag] == 3) {
-                
-                TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
-                [self.navigationController pushViewController:moviesViewController animated:YES];
-                [self.navigationController setNavigationBarHidden:NO animated:NO];
-            }
-
             break;
         }
             
@@ -328,9 +481,20 @@
     }];
 }
 
-
-
-
-
+- (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+{
+    
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        
+        if (!error) {
+            [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
 
 @end

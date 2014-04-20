@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TMWActorViewController">
             <connections>
+                <outlet property="StartLabel" destination="R8K-wV-0cn" id="NY0-RE-RZR"/>
                 <outlet property="backgroundButton" destination="zIh-QV-UkZ" id="Hgs-2O-NJi"/>
                 <outlet property="continueButton" destination="TcH-RB-otG" id="D5t-zX-c08"/>
                 <outlet property="firstActorButton" destination="qUY-0K-WF5" id="IZE-dj-z6s"/>
@@ -66,7 +67,7 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="UfU-Lp-KcC"/>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="ESJ-lm-dCq"/>
                     </connections>
                 </button>
                 <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Search Actors" translatesAutoresizingMaskIntoConstraints="NO" id="on5-mN-szY" propertyAccessControl="none">
@@ -86,7 +87,8 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="IiT-kS-Dhh"/>
+                        <action selector="buttonDown:" destination="-1" eventType="touchDown" id="aua-1v-tPw"/>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="ZrR-zf-5us"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="750" fixedFrame="YES" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8px-sA-HtG" userLabel="Second Actor Button">
@@ -96,9 +98,17 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="z3u-HB-w2S"/>
+                        <action selector="buttonDown:" destination="-1" eventType="touchDown" id="jZ2-aK-ptf"/>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="aZ1-fL-hgL"/>
                     </connections>
                 </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start searching to add actors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="R8K-wV-0cn">
+                    <rect key="frame" x="20" y="220" width="280" height="81"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

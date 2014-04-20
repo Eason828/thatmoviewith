@@ -10,9 +10,10 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 
-@implementation TMWActorModel {
-    NSMutableArray *mutableActors;
-}
+@implementation TMWActorModel
+
+NSMutableArray *mutableActors;
+NSMutableArray *mutableActorsMovies;
 
 static TMWActorModel *actorModel;
 
@@ -63,6 +64,7 @@ static TMWActorModel *actorModel;
 
 - (NSArray *)chosenActors
 {
+    NSLog(@"Chosen actors: %@", mutableActors);
     return mutableActors;
 }
 
@@ -77,11 +79,17 @@ static TMWActorModel *actorModel;
 
 - (NSArray *)chosenActorsSameMovies
 {
-    NSMutableArray *mutableMovies = [NSMutableArray array];
-    for (NSDictionary *movie in self.chosenActorMovies) {
-        [mutableMovies addObject:movie[@"original_title"]];
+    NSSet *previousMoviesSet = [[NSSet alloc] init];
+
+    for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"original_title"]) {
+        NSMutableSet *currentMoviesSet = [NSMutableSet setWithArray:individualActorMovies];
+
+        if (![previousMoviesSet count] == 0) {
+            [currentMoviesSet intersectSet:previousMoviesSet];
+        }
+        previousMoviesSet = currentMoviesSet;
     }
-    return [NSArray arrayWithArray:mutableMovies];
+    return [previousMoviesSet allObjects];
 }
 
 #pragma mark Instance Methods
@@ -90,19 +98,33 @@ static TMWActorModel *actorModel;
     if (!mutableActors) {
         mutableActors = [[NSMutableArray alloc] init];
     }
+    
     [mutableActors addObject:actor];
 }
 
 - (void)removeChosenActor:(NSDictionary *)actor
 {
     if ([mutableActors containsObject:actor]) {
-        NSLog(@"Removing actor: %@", actor[@"name"]);
-        NSLog(@"%d", [mutableActors indexOfObject:actor[@"name"]]);
         [mutableActors removeObject:actor];
-    } else {
+    }
+    else {
         NSLog(@"%@ is not present in the array", actor[@"name"]);
     }
 }
+
+- (void)addActorMovies:(NSArray *)movies
+{
+    if (!mutableActorsMovies) {
+        mutableActorsMovies = [[NSMutableArray alloc] init];
+    }
+    [mutableActorsMovies addObject:movies];
+}
+
+- (void)removeAllActorMovies
+{
+    [mutableActorsMovies removeAllObjects];
+}
+
 
 #pragma mark Private Methods
 
