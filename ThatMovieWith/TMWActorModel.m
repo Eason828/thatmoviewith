@@ -14,6 +14,25 @@
     NSMutableArray *mutableActors;
 }
 
+static TMWActorModel *actorModel;
+
+// Singleton for accessing the same instance in multiple view controllers
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if(!initialized)
+    {
+        initialized = YES;
+        actorModel = [[TMWActorModel alloc] init];
+    }
+}
+
++(TMWActorModel *)actorModel
+{
+    [self initialize];
+    return actorModel;
+}
+
 #pragma mark Getter Methods
 
 - (NSArray *)actorSearchResultNames {

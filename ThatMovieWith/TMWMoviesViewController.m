@@ -9,8 +9,12 @@
 #import <JLTMDbClient.h>
 
 #import "TMWMoviesViewController.h"
+#import "TMWActorViewController.h"
+#import "TMWActorModel.h"
 
 @interface TMWMoviesViewController ()
+
+@property (strong, nonatomic) TMWActorModel *actor;
 
 @end
 
@@ -25,6 +29,12 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.actor = [[TMWActorModel alloc] init];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -35,14 +45,7 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-}
-
-
-
+//
 //- (void) refreshActorResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
 //{
 //    

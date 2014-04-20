@@ -19,7 +19,10 @@
 @property (nonatomic, strong) NSArray *chosenActorMovies;
 @property (nonatomic, strong, readonly) NSArray *chosenActorsSameMovies;
 
++ (TMWActorModel *)actorModel;
+
 - (void)addChosenActor:(NSDictionary *)actor;
 - (void)removeChosenActor:(NSDictionary *)actor;
+
 
 @end

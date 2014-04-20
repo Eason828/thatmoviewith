@@ -82,8 +82,8 @@
 		E5994CFB18FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994CFD18FDE85100A5B79F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E5994CFF18FDE85100A5B79F /* ThatMovieWith-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ThatMovieWith-Prefix.pch"; sourceTree = "<group>"; };
-		E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMWAppDelegate.h; sourceTree = "<group>"; };
-		E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMWAppDelegate.m; sourceTree = "<group>"; };
+		E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TMWAppDelegate.h; path = ThatMovieWith/TMWAppDelegate.h; sourceTree = "<group>"; };
+		E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TMWAppDelegate.m; path = ThatMovieWith/TMWAppDelegate.m; sourceTree = "<group>"; };
 		E5994D0318FDE85100A5B79F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E5994D0918FDE85100A5B79F /* ThatMovieWithTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThatMovieWithTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994D0A18FDE85100A5B79F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -205,6 +205,8 @@
 			isa = PBXGroup;
 			children = (
 				E5994CF718FDE85100A5B79F /* ThatMovieWith */,
+				E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */,
+				E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */,
 				E5994D1018FDE85100A5B79F /* ThatMovieWithTests */,
 				E5994CF018FDE85100A5B79F /* Frameworks */,
 				E5994CEF18FDE85100A5B79F /* Products */,
@@ -237,8 +239,6 @@
 		E5994CF718FDE85100A5B79F /* ThatMovieWith */ = {
 			isa = PBXGroup;
 			children = (
-				E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */,
-				E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */,
 				E569FF351902F075002928AF /* Models */,
 				E569FF361902F084002928AF /* View Controllers */,
 				E569FF371902F097002928AF /* Views */,
