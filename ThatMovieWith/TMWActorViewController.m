@@ -129,7 +129,7 @@ BOOL secondFlipped;
     {
         [self.startLabel setHidden:NO];
         [self.startSecondaryLabel setHidden:NO];
-        [self.startArrow setImage: nil];
+        [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
     }
     
     switch (*actorNumber) {
@@ -148,7 +148,7 @@ BOOL secondFlipped;
             }
             
             self.firstActorButton.enabled = NO;
-            [self.firstActorImage setImage: nil];
+            [self hideImage:self.firstActorImage];
             self.firstActorLabel.text = @"";
             
             break;
@@ -167,7 +167,7 @@ BOOL secondFlipped;
             }
             
             self.secondActorButton.enabled = NO;
-            [self.secondActorImage setImage: nil];
+            [self hideImage:self.secondActorImage];
             self.secondActorLabel.text = @"";
             
             break;
@@ -180,6 +180,34 @@ BOOL secondFlipped;
     }
     
     
+}
+
+-(IBAction)hideImage:(UIImageView*)image
+{
+    image.hidden = NO;
+    image.alpha = 1.0f;
+    // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        image.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        image.hidden = YES;
+    }];
+}
+
+-(IBAction)showImage:(UIImageView*)image
+{
+    image.hidden = YES;
+    image.alpha = 0.0f;
+    // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        image.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        image.hidden = NO;
+    }];
 }
 
 #pragma mark UISearchBar methods
@@ -276,7 +304,7 @@ BOOL secondFlipped;
         else {
             [self.secondActorImage setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
         }
-        
+
         // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
         
@@ -347,7 +375,12 @@ BOOL secondFlipped;
         
         NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
         
+        // Show the network activity icon
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }
     else {
         [cell.imageView setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
