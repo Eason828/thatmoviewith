@@ -31,6 +31,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 @property (strong, nonatomic) IBOutlet UILabel *startLabel;
+@property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *startArrow;
 
 @end
 
@@ -123,6 +125,8 @@ BOOL secondFlipped;
     if ([self.firstActorLabel.text isEqualToString:@""] && [self.secondActorLabel.text isEqualToString:@""])
     {
         [self.startLabel setHidden:NO];
+        [self.startSecondaryLabel setHidden:NO];
+        [self.startArrow setImage: nil];
     }
     
     switch (*actorNumber) {
@@ -200,6 +204,8 @@ BOOL secondFlipped;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.startLabel setHidden:YES];
+    [self.startSecondaryLabel setHidden:YES];
+    [self.startArrow setImage:nil];
     
     [self.searchDisplayController setActive:NO animated:YES];
     
@@ -245,6 +251,9 @@ BOOL secondFlipped;
         
         // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
+        
+        // The second actor is the default selection for being replaced.
+        selectedActor = 2;
     }
     else
     {
@@ -477,7 +486,9 @@ BOOL secondFlipped;
         
         if (!error) {
             [TMWActorModel actorModel].actorSearchResults = response[@"results"];
-            [[self.searchBarController searchResultsTableView] reloadData];
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] reloadData];
+            });
         }
         else {
             [errorAlertView show];

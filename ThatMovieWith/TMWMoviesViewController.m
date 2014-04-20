@@ -63,7 +63,7 @@ NSArray *sameMovies;
     static NSString *simpleTableIdentifier = @"MoviesTable";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
