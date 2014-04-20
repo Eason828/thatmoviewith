@@ -50,6 +50,9 @@ BOOL secondFlipped;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        UINavigationItem *navItem = self.navigationItem;
+        navItem.title = @"Actors";
+
 
         NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
         
@@ -460,6 +463,20 @@ BOOL secondFlipped;
 
 #pragma mark Private Methods
 
+- (NSArray *)organizeSearchResultsByImageWithArray:(NSArray *)results
+{
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    for (NSDictionary *person in results)
+    {
+        if (person[@"profile_path"] == (id)[NSNull null])
+        {
+            [mutableResults removeObject:person];
+            [mutableResults addObject:person];
+        }
+    }
+    return [NSArray arrayWithArray:mutableResults];
+}
+
 - (void) loadImageConfiguration
 {
     
@@ -479,15 +496,18 @@ BOOL secondFlipped;
 
 - (void) refreshActorResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
         if (!error) {
-            [TMWActorModel actorModel].actorSearchResults = response[@"results"];
+            [TMWActorModel actorModel].actorSearchResults = [self organizeSearchResultsByImageWithArray:response[@"results"]];
+            
             dispatch_async(dispatch_get_main_queue(),^{
                 [[self.searchBarController searchResultsTableView] reloadData];
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             });
         }
         else {
