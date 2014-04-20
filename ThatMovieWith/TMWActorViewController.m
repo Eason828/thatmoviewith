@@ -51,9 +51,13 @@ BOOL secondFlipped;
 
         NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
         
-        NSString *APIKeyValue = [NSString stringWithContentsOfFile:APIKeyPath
+        NSString *APIKeyValueDirty = [NSString stringWithContentsOfFile:APIKeyPath
                                                        encoding:NSUTF8StringEncoding
                                                           error:NULL];
+
+        // Strip whitespace to clean the API key stdin
+        NSString *APIKeyValue = [APIKeyValueDirty stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
         
