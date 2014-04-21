@@ -12,12 +12,6 @@
 #import "TMWActorViewController.h"
 #import "TMWMoviesViewController.h"
 
-//@interface TMWAppDelegate () <UIView>
-//
-//@property (nonatomic, strong) TMWRootViewController *rootView;
-//
-//@end
-
 @implementation TMWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

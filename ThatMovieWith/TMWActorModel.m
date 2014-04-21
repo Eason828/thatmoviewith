@@ -111,6 +111,11 @@ static TMWActorModel *actorModel;
     return [[intersection set] allObjects];
 }
 
+- (void)setActorSearchResults:(NSArray *)searchResults
+{
+    _actorSearchResults = [self organizeSearchResultsByImageWithArray:searchResults];
+}
+
 #pragma mark Instance Methods
 
 - (void)addChosenActor:(NSDictionary *)actor {
@@ -142,6 +147,20 @@ static TMWActorModel *actorModel;
 - (void)removeAllActorMovies
 {
     [mutableActorsMovies removeAllObjects];
+}
+
+- (NSArray *)organizeSearchResultsByImageWithArray:(NSArray *)results
+{
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    for (NSDictionary *person in results)
+    {
+        if (person[@"profile_path"] == (id)[NSNull null])
+        {
+            [mutableResults removeObject:person];
+            [mutableResults addObject:person];
+        }
+    }
+    return [NSArray arrayWithArray:mutableResults];
 }
 
 

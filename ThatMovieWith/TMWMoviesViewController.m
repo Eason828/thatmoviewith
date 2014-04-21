@@ -23,6 +23,7 @@
 NSArray *tableData;
 NSArray *sameMovies;
 NSArray *movieResponseWithJLTMDBcall;
+UIRefreshControl *refreshControl;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,27 +36,35 @@ NSArray *movieResponseWithJLTMDBcall;
 }
 
 - (void)viewDidLoad {
-    NSLog(@"view loaded");
     [super viewDidLoad];
     
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
+    {
+        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
+            
+            if (!error) {
+                [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
+                sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
+                [self.moviesTableView reloadData];
+            }
+            else {
+                [errorAlertView show];
+                [refreshControl endRefreshing];
+            }
+        }];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     NSLog(@"appeared");
+    [self.moviesTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"view will appear");
-//    [self.navigationController setNavigationBarHidden:NO animated:NO];
-//    UINavigationItem *navItem = self.navigationItem;
-//    navItem.title = @"Movies";
-    
-    sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-    
     [super viewWillAppear:animated];
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -88,6 +97,7 @@ NSArray *movieResponseWithJLTMDBcall;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
                               withParameters:@{@"id":[[TMWActorModel actorModel].chosenActorsSameMoviesIDs objectAtIndex:indexPath.row]}];

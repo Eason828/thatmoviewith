@@ -119,6 +119,7 @@ BOOL secondFlipped;
 // Remove the actor
 - (void)removeActor:(int *)actorNumber
 {
+    NSLog(@"%ld", (long)selectedActor);
     [self.continueButton setHidden: YES];
     [self.firstActorLabel.layer removeAllAnimations];
     [self.secondActorLabel.layer removeAllAnimations];
@@ -324,12 +325,6 @@ BOOL secondFlipped;
         [self.secondActorImage.layer removeAllAnimations];
         
         [[TMWActorModel actorModel] removeAllActorMovies];
-        for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
-        {
-            [self refreshMovieResponseWithJLTMDBcall:kJLTMDbPersonCredits
-                                      withParameters:@{@"id":actorID}];
-        }
-        
     }
 }
 
@@ -339,7 +334,7 @@ BOOL secondFlipped;
     return [[TMWActorModel actorModel].actorSearchResultNames count];
 }
 
-//Change the Height of the Cell [Default is 44]:
+// Change the Height of the Cell [Default is 44]:
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     return TABLE_HEIGHT;
@@ -350,10 +345,7 @@ BOOL secondFlipped;
 {
     static NSString *CellIdentifier = @"Cell";
     
-    //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_TEXT_OFFSET+IMAGE_SIZE, 0, 0)];
     [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
-//    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
-    //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_LEFT_OFFSET+IMAGE_TEXT_OFFSET, 0, 0)];
     
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -367,11 +359,7 @@ BOOL secondFlipped;
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
     cell.imageView.layer.masksToBounds = YES;
     cell.imageView.layer.borderWidth = 0;
-//    cell.backgroundColor = [UIColor clearColor];
-//    tableView.backgroundColor = [UIColor clearColor];
 
-
-    //cell.textLabel.font = [UIFont systemFontOfSize:UIFont.systemFontSize];
     cell.textLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
 
     // If NSString, fetch the image, else use the generated UIImage
@@ -524,20 +512,6 @@ BOOL secondFlipped;
 
 #pragma mark Private Methods
 
-- (NSArray *)organizeSearchResultsByImageWithArray:(NSArray *)results
-{
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    for (NSDictionary *person in results)
-    {
-        if (person[@"profile_path"] == (id)[NSNull null])
-        {
-            [mutableResults removeObject:person];
-            [mutableResults addObject:person];
-        }
-    }
-    return [NSArray arrayWithArray:mutableResults];
-}
-
 - (void) loadImageConfiguration
 {
     
@@ -566,27 +540,12 @@ BOOL secondFlipped;
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
         if (!error) {
-            [TMWActorModel actorModel].actorSearchResults = [self organizeSearchResultsByImageWithArray:response[@"results"]];
+            [TMWActorModel actorModel].actorSearchResults = response[@"results"];
             
             dispatch_async(dispatch_get_main_queue(),^{
                 [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             });
-        }
-        else {
-            [errorAlertView show];
-        }
-    }];
-}
-
-- (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
-{
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
-    
-    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
-        
-        if (!error) {
-            [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
         }
         else {
             [errorAlertView show];
