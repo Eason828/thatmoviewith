@@ -539,7 +539,7 @@ BOOL secondFlipped;
             [TMWActorModel actorModel].actorSearchResults = [self organizeSearchResultsByImageWithArray:response[@"results"]];
             
             dispatch_async(dispatch_get_main_queue(),^{
-                [[self.searchBarController searchResultsTableView] reloadData];
+                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             });
         }
