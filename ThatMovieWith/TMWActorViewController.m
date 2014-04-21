@@ -79,9 +79,9 @@ BOOL secondFlipped;
     
     return self;
 }
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)viewDidLoad
@@ -116,7 +116,7 @@ BOOL secondFlipped;
     [self removeActor:&num];
 }
 
-// Remove the actor and all the ne
+// Remove the actor
 - (void)removeActor:(int *)actorNumber
 {
     [self.continueButton setHidden: YES];
@@ -276,6 +276,7 @@ BOOL secondFlipped;
             // TODO: Fix issue with image font being blurry when actor without a picture is chosen
             [self.firstActorImage setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
         }
+        [self showImage:self.firstActorImage];
         
         // Enable tapping on the actor image
         self.firstActorButton.enabled = YES;
@@ -301,7 +302,8 @@ BOOL secondFlipped;
         else {
             [self.secondActorImage setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
         }
-
+        [self showImage:self.secondActorImage];
+        
         // Enable tapping on the actor image
         self.secondActorButton.enabled = YES;
         
@@ -327,6 +329,7 @@ BOOL secondFlipped;
             [self refreshMovieResponseWithJLTMDBcall:kJLTMDbPersonCredits
                                       withParameters:@{@"id":actorID}];
         }
+        
     }
 }
 
