@@ -213,22 +213,19 @@ BOOL secondFlipped;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if([searchText length] != 0) {
+        float delay = 0.8;
         
-        // Search for people
-        [self refreshActorResponseWithJLTMDBcall:kJLTMDbSearchPerson withParameters:@{@"search_type":@"ngram",@"query":searchText}];
+        if (searchText.length > 3) {
+            delay = 0.5;
+        }
+        
+        // Clear any previously queued text changes
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        
+        [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
+                   withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
+                   afterDelay:delay];
     }
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    NSLog(@"Cancel clicked");
-}
-
-// TODO: Add a method here to grab the first item from the search
-// and (if 2 actors have been chosen, perform the search
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    NSLog(@"Search Clicked");
 }
 
 #pragma mark UITableView methods
@@ -271,7 +268,7 @@ BOOL secondFlipped;
         // If NSString, fetch the image, else use the generated UIImage
         if ([[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
 
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
             
             [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:nil];
         }
@@ -297,7 +294,7 @@ BOOL secondFlipped;
         // If NSString, fetch the image, else use the generated UIImage
         if ([[[[TMWActorModel actorModel] actorSearchResultImages] objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
             
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[3]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
+            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
             
             [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         }
@@ -350,7 +347,9 @@ BOOL secondFlipped;
 {
     static NSString *CellIdentifier = @"Cell";
     
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
+    //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_TEXT_OFFSET+IMAGE_SIZE, 0, 0)];
+    [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
+//    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
     //[tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_LEFT_OFFSET+IMAGE_TEXT_OFFSET, 0, 0)];
     
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -553,8 +552,10 @@ BOOL secondFlipped;
     }];
 }
 
-- (void) refreshActorResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+- (void) refreshActorResponseWithJLTMDBcall:(NSDictionary *)call
 {
+    NSString *JLTMDBCall = call[@"JLTMDBCall"];
+    NSDictionary *parameters = call[@"parameters"];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -575,7 +576,7 @@ BOOL secondFlipped;
     }];
 }
 
-- (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+- (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
 {
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
