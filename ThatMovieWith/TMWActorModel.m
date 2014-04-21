@@ -77,19 +77,38 @@ static TMWActorModel *actorModel;
     return [NSArray arrayWithArray:mutableIDs];
 }
 
-- (NSArray *)chosenActorsSameMovies
+- (NSArray *)chosenActorsSameMoviesNames
 {
-    NSSet *previousMoviesSet = [[NSSet alloc] init];
+    NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
 
     for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"original_title"]) {
-        NSMutableSet *currentMoviesSet = [NSMutableSet setWithArray:individualActorMovies];
 
-        if (![previousMoviesSet count] == 0) {
-            [currentMoviesSet intersectSet:previousMoviesSet];
+        if (![intersection count] == 0) {
+            [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
         }
-        previousMoviesSet = currentMoviesSet;
+        else {
+            [intersection addObjectsFromArray:individualActorMovies];
+        }
     }
-    return [previousMoviesSet allObjects];
+    
+    return [[intersection set] allObjects];
+}
+
+- (NSArray *)chosenActorsSameMoviesIDs
+{
+    NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
+    
+    for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"id"]) {
+        
+        if (![intersection count] == 0) {
+            [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
+        }
+        else {
+            [intersection addObjectsFromArray:individualActorMovies];
+        }
+    }
+    
+    return [[intersection set] allObjects];
 }
 
 #pragma mark Instance Methods

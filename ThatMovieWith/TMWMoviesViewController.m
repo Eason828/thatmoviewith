@@ -7,6 +7,7 @@
 //
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
+#import <SVWebViewController.h>
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorModel.h"
@@ -21,6 +22,7 @@
 
 NSArray *tableData;
 NSArray *sameMovies;
+NSArray *movieResponseWithJLTMDBcall;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,7 +44,7 @@ NSArray *sameMovies;
 {
     [super viewWillAppear:animated];
 
-    sameMovies = [TMWActorModel actorModel].chosenActorsSameMovies;
+    sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
     
 }
 
@@ -73,6 +75,46 @@ NSArray *sameMovies;
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Get the information about the selected movie
+    [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
+                              withParameters:@{@"id":[[TMWActorModel actorModel].chosenActorsSameMoviesIDs objectAtIndex:indexPath.row]}];
+    
+}
+
+
+- (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
+{
+    
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        
+        if (!error) {
+            [TMWActorModel actorModel].movieInfo = response;
+            
+            // If possible, open the movie in the IMDB app
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"imdb:///"]])
+            {
+                //NSString *info= [TMWActorModel actorModel].movieInfo[];
+                NSString *imdbURL = [@"imdb:///title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]];
+                
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:imdbURL]];
+            }
+            // If not, open in the SVWebViewController
+            else
+            {
+                SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:[@"http://www.imdb.com/title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]]];
+                //SVModalWebViewControllerwebViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                [self presentViewController:webViewController animated:YES completion:NULL];
+            }
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
 
 
 

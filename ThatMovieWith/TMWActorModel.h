@@ -16,7 +16,10 @@
 
 @property (nonatomic, strong, readonly) NSArray *chosenActors;
 @property (nonatomic, strong, readonly) NSArray *chosenActorsIDs;
-@property (nonatomic, strong, readonly) NSArray *chosenActorsSameMovies;
+@property (nonatomic, strong, readonly) NSArray *chosenActorsSameMoviesIDs;
+@property (nonatomic, strong, readonly) NSArray *chosenActorsSameMoviesNames;
+
+@property (nonatomic, strong) NSDictionary *movieInfo;
 
 + (TMWActorModel *)actorModel;
 
