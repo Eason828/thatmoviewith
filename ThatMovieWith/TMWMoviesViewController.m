@@ -35,16 +35,26 @@ NSArray *movieResponseWithJLTMDBcall;
 }
 
 - (void)viewDidLoad {
-    
+    NSLog(@"view loaded");
     [super viewDidLoad];
     
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"appeared");
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-
+    NSLog(@"view will appear");
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
+//    UINavigationItem *navItem = self.navigationItem;
+//    navItem.title = @"Movies";
+    
     sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
+    
+    [super viewWillAppear:animated];
     
 }
 
@@ -77,6 +87,7 @@ NSArray *movieResponseWithJLTMDBcall;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
                               withParameters:@{@"id":[[TMWActorModel actorModel].chosenActorsSameMoviesIDs objectAtIndex:indexPath.row]}];
@@ -88,6 +99,8 @@ NSArray *movieResponseWithJLTMDBcall;
 {
     
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
@@ -105,8 +118,10 @@ NSArray *movieResponseWithJLTMDBcall;
             // If not, open in the SVWebViewController
             else
             {
-                SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:[@"http://www.imdb.com/title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]]];
-                //SVModalWebViewControllerwebViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]];
+            NSLog(@"%@", webURL);
+                SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
+                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
         }

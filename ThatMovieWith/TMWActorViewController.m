@@ -79,12 +79,13 @@ BOOL secondFlipped;
     
     return self;
 }
--(void)viewDidLayoutSubviews{
+-(void)viewDidAppear:(BOOL)animated
+{
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
-
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self loadImageConfiguration];
@@ -99,26 +100,25 @@ BOOL secondFlipped;
 
 
 
-- (void)longPressOne:(UILongPressGestureRecognizer*)gesture {
+- (void)longPressOne:(UILongPressGestureRecognizer*)gesture
+{
     NSLog(@"Long Press 1");
     
     int num = 1;
     [self removeActor:&num];
-    
-    
 }
 
-- (void)longPressTwo:(UILongPressGestureRecognizer*)gesture {
+- (void)longPressTwo:(UILongPressGestureRecognizer*)gesture
+{
     NSLog(@"Long Press 2");
     
     int num = 2;
     [self removeActor:&num];
-
 }
 
 // Remove the actor and all the ne
-- (void)removeActor:(int *)actorNumber {
-    
+- (void)removeActor:(int *)actorNumber
+{
     [self.continueButton setHidden: YES];
     [self.firstActorLabel.layer removeAllAnimations];
     [self.secondActorLabel.layer removeAllAnimations];
@@ -178,8 +178,6 @@ BOOL secondFlipped;
             //
         }
     }
-    
-    
 }
 
 -(IBAction)hideImage:(UIImageView*)image
@@ -212,7 +210,8 @@ BOOL secondFlipped;
 
 #pragma mark UISearchBar methods
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
     if([searchText length] != 0) {
         
         // Search for people
@@ -220,13 +219,15 @@ BOOL secondFlipped;
     }
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
     NSLog(@"Cancel clicked");
 }
 
 // TODO: Add a method here to grab the first item from the search
 // and (if 2 actors have been chosen, perform the search
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
     NSLog(@"Search Clicked");
 }
 
@@ -253,7 +254,6 @@ BOOL secondFlipped;
                 break;
             }
         }
-
     }
 
     // Add the chosen actor to the array of chosen actors
@@ -333,7 +333,8 @@ BOOL secondFlipped;
     }
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     // Return the number of rows in the section.
     return [[TMWActorModel actorModel].actorSearchResultNames count];
 }
@@ -345,7 +346,8 @@ BOOL secondFlipped;
 }
 
 // Todo: add fade in animation to searching
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString *CellIdentifier = @"Cell";
     
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];    // Configure the cell...
@@ -388,10 +390,33 @@ BOOL secondFlipped;
     return cell;
 }
 
+#pragma mark UISearchDisplayController methods
+
+// Added to fix UITableView bottom bounds in UISearchDisplayController
+- (void)searchDisplayController:(UISearchDisplayController *)controller didHideSearchResultsTableView:(UITableView *)tableView
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+}
+
+
+- (void) keyboardWillHide
+{
+    UITableView *tableView = [[self searchDisplayController] searchResultsTableView];
+    [tableView setContentInset:UIEdgeInsetsZero];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+}
+
 #pragma mark UIButton methods
 
 // For flipping over the actor images
--(IBAction)buttonPressed:(id)sender{
+-(IBAction)buttonPressed:(id)sender
+{
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
@@ -445,7 +470,8 @@ BOOL secondFlipped;
     }
 }
 
--(IBAction)buttonDown:(id)sender{
+-(IBAction)buttonDown:(id)sender
+{
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
@@ -529,9 +555,9 @@ BOOL secondFlipped;
 
 - (void) refreshActorResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
@@ -551,7 +577,6 @@ BOOL secondFlipped;
 
 - (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *) parameters
 {
-    
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
