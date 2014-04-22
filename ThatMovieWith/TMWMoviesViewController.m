@@ -8,6 +8,7 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <SVWebViewController.h>
+#import <SVProgressHUD.h>
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorModel.h"
@@ -38,6 +39,11 @@ UIRefreshControl *refreshControl;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [SVProgressHUD show];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
     {
@@ -46,7 +52,10 @@ UIRefreshControl *refreshControl;
             if (!error) {
                 [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
                 sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-                [self.moviesTableView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.moviesTableView reloadData];
+                    [SVProgressHUD dismiss];
+                });
             }
             else {
                 [errorAlertView show];
@@ -56,15 +65,10 @@ UIRefreshControl *refreshControl;
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"appeared");
-    [self.moviesTableView reloadData];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    sameMovies = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated

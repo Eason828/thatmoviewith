@@ -214,10 +214,10 @@ BOOL secondFlipped;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if([searchText length] != 0) {
-        float delay = 0.8;
+        float delay = 0.6;
         
         if (searchText.length > 3) {
-            delay = 0.5;
+            delay = 0.3;
         }
         
         // Clear any previously queued text changes
