@@ -34,6 +34,16 @@
 @property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *startArrow;
 
+@property UIPanGestureRecognizer *firstPanGesture;
+@property UIPanGestureRecognizer *secondtPanGesture;
+
+// Animation stuff
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIAttachmentBehavior *attachmentBehavior;
+@property (strong, nonatomic) UIPushBehavior *pushBehavior;
+@property (strong, nonatomic) UISnapBehavior *snapBehavior;
+@property (strong, nonatomic) UICollisionBehavior *collisionBehavior;
+
 @end
 
 @implementation TMWActorViewController
@@ -67,7 +77,7 @@ BOOL secondFlipped;
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
         
         [self.firstActorLabel setHidden:YES];
-        self.firstActorImage.frame = CGRectMake(0,0,20,20);
+        //self.firstActorImage.frame = CGRectMake(0,0,20,20);
         self.firstActorButton.enabled = NO;
         
         [self.secondActorLabel setHidden:YES];
@@ -90,12 +100,12 @@ BOOL secondFlipped;
     
     [self loadImageConfiguration];
     
-    UILongPressGestureRecognizer *longPressOne = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressOne:)];
-    longPressOne.minimumPressDuration = 1.0;
-    [self.firstActorButton addGestureRecognizer:longPressOne];
-    UILongPressGestureRecognizer *longPressTwo = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTwo:)];
-    longPressTwo.minimumPressDuration = 1.0;
-    [self.secondActorButton addGestureRecognizer:longPressTwo];
+    // UILongPressGestureRecognizer *longPressOne = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressOne:)];
+    // longPressOne.minimumPressDuration = 1.0;
+    // [self.firstActorButton addGestureRecognizer:longPressOne];
+    // UILongPressGestureRecognizer *longPressTwo = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTwo:)];
+    // longPressTwo.minimumPressDuration = 1.0;
+    // [self.secondActorButton addGestureRecognizer:longPressTwo];
 }
 
 
@@ -284,6 +294,12 @@ BOOL secondFlipped;
         
         // The second actor is the default selection for being replaced.
         selectedActor = 2;
+
+        self.firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+        [self.firstActorImage addGestureRecognizer:self.firstPanGesture];
+        self.firstActorImage.userInteractionEnabled = YES;
+        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+        [self.view bringSubviewToFront:self.firstActorImage];
     }
     else
     {
@@ -310,6 +326,13 @@ BOOL secondFlipped;
         
         // The second actor is the default selection for being replaced.
         selectedActor = 2;
+
+        self.secondtPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+        [self.secondActorImage addGestureRecognizer:self.secondtPanGesture];
+        self.secondActorImage.userInteractionEnabled = YES;
+        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+        [self.view bringSubviewToFront:self.secondActorImage];
+
     }
     
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
@@ -323,9 +346,11 @@ BOOL secondFlipped;
         [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
         [self.firstActorImage.layer removeAllAnimations];
         [self.secondActorImage.layer removeAllAnimations];
+        [self.view bringSubviewToFront:self.firstActorImage];
         
         [[TMWActorModel actorModel] removeAllActorMovies];
     }
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -551,6 +576,112 @@ BOOL secondFlipped;
             [errorAlertView show];
         }
     }];
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)gesture
+{
+    NSLog(@"Dragging....");
+    static UIAttachmentBehavior *attachment;
+    static CGPoint               startCenter;
+
+    // variables for calculating angular velocity
+
+    static CFAbsoluteTime        lastTime;
+    static CGFloat               lastAngle;
+    static CGFloat               angularVelocity;
+
+    if (gesture.state == UIGestureRecognizerStateBegan)
+    {
+        [self.animator removeAllBehaviors];
+
+        startCenter = gesture.view.center;
+
+        // calculate the center offset and anchor point
+
+        CGPoint pointWithinAnimatedView = [gesture locationInView:gesture.view];
+
+        UIOffset offset = UIOffsetMake(pointWithinAnimatedView.x - gesture.view.bounds.size.width / 2.0,
+                                       pointWithinAnimatedView.y - gesture.view.bounds.size.height / 2.0);
+
+        CGPoint anchor = [gesture locationInView:gesture.view.superview];
+
+        // create attachment behavior
+
+        attachment = [[UIAttachmentBehavior alloc] initWithItem:gesture.view
+                                               offsetFromCenter:offset
+                                               attachedToAnchor:anchor];
+
+        // code to calculate angular velocity (seems curious that I have to calculate this myself, but I can if I have to)
+
+        lastTime = CFAbsoluteTimeGetCurrent();
+        lastAngle = [self angleOfView:gesture.view];
+
+        attachment.action = ^{
+            CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+            CGFloat angle = [self angleOfView:gesture.view];
+            if (time > lastTime) {
+                angularVelocity = (angle - lastAngle) / (time - lastTime);
+                lastTime = time;
+                lastAngle = angle;
+            }
+        };
+
+        // add attachment behavior
+
+        [self.animator addBehavior:attachment];
+    }
+    else if (gesture.state == UIGestureRecognizerStateChanged)
+    {
+        // as user makes gesture, update attachment behavior's anchor point, achieving drag 'n' rotate
+
+        CGPoint anchor = [gesture locationInView:gesture.view.superview];
+        attachment.anchorPoint = anchor;
+    }
+    else if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        [self.animator removeAllBehaviors];
+
+        CGPoint velocity = [gesture velocityInView:gesture.view.superview];
+
+        // if we aren't dragging it down, just snap it back and quit
+
+        if (fabs(atan2(velocity.y, velocity.x) - M_PI_2) > M_PI_4) {
+            UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
+            [self.animator addBehavior:snap];
+
+            return;
+        }
+
+        // otherwise, create UIDynamicItemBehavior that carries on animation from where the gesture left off (notably linear and angular velocity)
+
+        UIDynamicItemBehavior *dynamic = [[UIDynamicItemBehavior alloc] initWithItems:@[gesture.view]];
+        [dynamic addLinearVelocity:velocity forItem:gesture.view];
+        [dynamic addAngularVelocity:angularVelocity forItem:gesture.view];
+        [dynamic setAngularResistance:2];
+
+        // when the view no longer intersects with its superview, go ahead and remove it
+
+        dynamic.action = ^{
+            if (!CGRectIntersectsRect(gesture.view.superview.bounds, gesture.view.frame)) {
+                [self.animator removeAllBehaviors];
+                [gesture.view removeFromSuperview];
+
+                [[[UIAlertView alloc] initWithTitle:nil message:@"View is gone!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            }
+        };
+        [self.animator addBehavior:dynamic];
+
+        // add a little gravity so it accelerates off the screen (in case user gesture was slow)
+
+        UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
+        gravity.magnitude = 0.7;
+        [self.animator addBehavior:gravity];
+    }
+}
+
+- (CGFloat)angleOfView:(UIView *)view
+{
+    return atan2(view.transform.b, view.transform.a);
 }
 
 @end
