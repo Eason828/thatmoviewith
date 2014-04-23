@@ -335,6 +335,9 @@ BOOL secondFlipped;
 
     }
     
+    self.firstActorImage.hidden = NO;
+    self.secondActorImage.hidden = NO;
+    
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
     {
         self.firstActorButton.tag = 1;
@@ -493,7 +496,6 @@ BOOL secondFlipped;
         case 1:
         {
             selectedActor = 1;
-            self.firstActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;
             
             // Animate the first actor image and name
             [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
@@ -509,7 +511,6 @@ BOOL secondFlipped;
         case 2:
         {
             selectedActor = 2;
-            self.secondActorImage.layer.borderColor = [UIColor ringBlueColor].CGColor;             
             
             // Animate the second actor image and name
             [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
@@ -580,7 +581,6 @@ BOOL secondFlipped;
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture
 {
-    NSLog(@"Dragging....");
     static UIAttachmentBehavior *attachment;
     static CGPoint               startCenter;
 
@@ -641,11 +641,11 @@ BOOL secondFlipped;
     {
         [self.animator removeAllBehaviors];
 
-        CGPoint velocity = [gesture velocityInView:gesture.view.superview];
-
         // if we aren't dragging it down, just snap it back and quit
-
-        if (fabs(atan2(velocity.y, velocity.x) - M_PI_2) > M_PI_4) {
+        CGPoint velocity = [gesture velocityInView:self.view];
+        CGFloat velocityMagnitude = hypot(velocity.x, velocity.y);
+        CGFloat triggerVelocity = 500;
+        if (velocityMagnitude<triggerVelocity) {
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
             [self.animator addBehavior:snap];
 
@@ -664,9 +664,10 @@ BOOL secondFlipped;
         dynamic.action = ^{
             if (!CGRectIntersectsRect(gesture.view.superview.bounds, gesture.view.frame)) {
                 [self.animator removeAllBehaviors];
-                [gesture.view removeFromSuperview];
-
-                [[[UIAlertView alloc] initWithTitle:nil message:@"View is gone!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                gesture.view.hidden = YES;
+                UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
+                [self.animator addBehavior:snap];
+                self.firstActorImage = nil;
             }
         };
         [self.animator addBehavior:dynamic];
@@ -674,7 +675,7 @@ BOOL secondFlipped;
         // add a little gravity so it accelerates off the screen (in case user gesture was slow)
 
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
-        gravity.magnitude = 0.7;
+        gravity.magnitude = 0.1;
         [self.animator addBehavior:gravity];
     }
 }
