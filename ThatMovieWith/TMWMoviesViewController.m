@@ -57,12 +57,12 @@ NSArray *movieResponseWithJLTMDBcall;
                 sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
                 
                 // Only refresh once all actor data has been retrieved
-                if (i == (actorIDs - 1)) {
+                //if (i == (actorIDs - 1)) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.moviesTableView reloadData];
                         [SVProgressHUD dismiss];
                     });
-                }
+                //}
             }
             else {
                 [errorAlertView show];
@@ -71,7 +71,7 @@ NSArray *movieResponseWithJLTMDBcall;
         }];
         i++;
     }
-    [SVProgressHUD dismiss];
+    //[SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,8 +102,9 @@ NSArray *movieResponseWithJLTMDBcall;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    
-    cell.textLabel.text = [sameMovies objectAtIndex:indexPath.row];
+    if ([sameMovies objectAtIndex:indexPath.row] != nil) {
+        cell.textLabel.text = [sameMovies objectAtIndex:indexPath.row];
+    }
     return cell;
 }
 
@@ -127,6 +128,11 @@ NSArray *movieResponseWithJLTMDBcall;
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        });
+        
+        
         if (!error) {
             [TMWActorModel actorModel].movieInfo = response;
             
@@ -147,6 +153,7 @@ NSArray *movieResponseWithJLTMDBcall;
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
+            
         }
         else {
             [errorAlertView show];

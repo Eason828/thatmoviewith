@@ -27,6 +27,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *firstActorImage;
 @property (strong, nonatomic) IBOutlet UILabel *secondActorLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
+@property (strong, nonatomic) IBOutlet UIView *firstActorDropShadow;
+@property (strong, nonatomic) IBOutlet UIView *secondActorDropShadow;
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 @property (strong, nonatomic) IBOutlet UILabel *startLabel;
@@ -69,10 +71,6 @@ BOOL secondFlipped;
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
-        
-        self.firstActorLabel.hidden = YES;
-        self.secondActorLabel.hidden = YES;
-        self.continueButton.hidden = YES;
     }
     
     return self;
@@ -134,7 +132,7 @@ BOOL secondFlipped;
     }
 }
 
--(void)showImage:(UIImageView*)image
+-(void)showImage:(UIView*)image
 {
     image.hidden = YES;
     image.alpha = 0.0f;
@@ -178,15 +176,15 @@ BOOL secondFlipped;
     
     [self.searchDisplayController setActive:NO animated:YES];
     
-    // Remove the actor if both of the actors have been chosen
+    // Remove the bottom (second) actor if both of the actors have been chosen
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
     {
-        NSLog(@"Removing actor");
         NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
         for (NSDictionary *dict in chosenCopy)
         {
-            if ([dict[@"name"] isEqualToString: self.firstActorLabel.text] || [dict[@"name"] isEqualToString: self.secondActorLabel.text])
+            if ([dict[@"name"] isEqualToString: self.secondActorLabel.text])
             {
+                NSLog(@"Removing actor %@", dict[@"name"]);
                 [[TMWActorModel actorModel] removeChosenActor:dict];
                 break;
             }
@@ -199,16 +197,16 @@ BOOL secondFlipped;
     if ([self.firstActorLabel.text isEqualToString:@""])
     {
         // The second actor is the default selection for being replaced.
-        self.firstActorImage.tag = 1;
-        [self configureActorImageVisibility:self.firstActorImage
+        self.firstActorDropShadow.tag = 1;
+        [self configureActorImageVisibility:self.firstActorImage and:self.firstActorDropShadow
                               withTextLabel:self.firstActorLabel
                                 atIndexPath:indexPath];
     }
     else
     {
         // The second actor is the default selection for being replaced.
-        self.secondActorImage.tag = 2;
-        [self configureActorImageVisibility:self.secondActorImage
+        self.secondActorDropShadow.tag = 2;
+        [self configureActorImageVisibility:self.secondActorImage and:self.secondActorDropShadow
                               withTextLabel:self.secondActorLabel
                                 atIndexPath:indexPath];
     }
@@ -227,7 +225,7 @@ BOOL secondFlipped;
 
 
 // Set the actor image and all of it's necessary properties
-- (void)configureActorImageVisibility:(UIImageView *)actorImage
+- (void)configureActorImageVisibility:(UIImageView *)actorImage and:(UIView *)dropShadow
                    withTextLabel:(UILabel *)textLabel
                      atIndexPath:(NSIndexPath *)indexPath
 {
@@ -238,6 +236,13 @@ BOOL secondFlipped;
     // Make the image a circle
     [CALayer circleLayer:actorImage.layer];
     actorImage.contentMode = UIViewContentModeScaleAspectFill;
+    actorImage.layer.cornerRadius = actorImage.frame.size.height/2;
+    actorImage.layer.masksToBounds = YES;
+    
+
+    [dropShadow addSubview:actorImage];
+    actorImage.frame = CGRectMake(dropShadow.frame.origin.x-40, dropShadow.frame.origin.y-40, actorImage.frame.size.width, actorImage.frame.size.height);
+    dropShadow.clipsToBounds = NO;
     
     // If NSString, fetch the image, else use the generated UIImage
     if ([[[[TMWActorModel actorModel] actorSearchResultImagesHiRes] objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
@@ -250,18 +255,19 @@ BOOL secondFlipped;
         [actorImage setImage:[[TMWActorModel actorModel].actorSearchResultImagesHiRes objectAtIndex:indexPath.row]];
     }
     [self showImage:actorImage];
+    [self showImage:dropShadow];
     
     // Setup for dragging the image around
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [actorImage addGestureRecognizer:panGesture];
+    [dropShadow addGestureRecognizer:panGesture];
     
     //Setup for tapping on the image
     UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [actorImage addGestureRecognizer:longPressOne];
+    [dropShadow addGestureRecognizer:longPressOne];
     
-    actorImage.userInteractionEnabled = YES;
+    dropShadow.userInteractionEnabled = YES;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    [self.view bringSubviewToFront:actorImage];
+    [self.view bringSubviewToFront:dropShadow];
 }
 
 
@@ -405,13 +411,16 @@ BOOL secondFlipped;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        // Turn off the network activity in the status bar
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        });
         
         if (!error) {
             [TMWActorModel actorModel].actorSearchResults = response[@"results"];
             
             dispatch_async(dispatch_get_main_queue(),^{
                 [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             });
         }
         else {
@@ -424,6 +433,15 @@ BOOL secondFlipped;
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture
 {
+    // Add the drop shadow effect to the view
+    gesture.view.layer.cornerRadius = gesture.view.frame.size.height/2;
+    gesture.view.layer.shadowColor = [[UIColor blackColor] CGColor];
+    gesture.view.layer.shadowOpacity = 1.0;
+    gesture.view.layer.shadowRadius = 5.0;
+    gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+
+    [gesture.view setNeedsDisplay];
+    NSLog(@"%ld", (long)gesture.view.tag);
 
     static UIAttachmentBehavior *attachment;
     static CGPoint               startCenter;
@@ -508,6 +526,9 @@ BOOL secondFlipped;
     }
     else if (gesture.state == UIGestureRecognizerStateEnded)
     {
+        // Remove the drop shadow effect from the view
+        gesture.view.layer.shadowOpacity = 0.0;
+        
         [self.animator removeAllBehaviors];
 
         // if we aren't dragging it down, just snap it back and quit
@@ -556,6 +577,10 @@ BOOL secondFlipped;
         dynamic.action = ^{
             if (!CGRectIntersectsRect(gesture.view.superview.bounds, gesture.view.frame)) {
                 [self.animator removeAllBehaviors];
+                for (UIView *view in gesture.view.subviews)
+                {
+                    view.hidden = YES;
+                }
                 gesture.view.hidden = YES;
                 UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
                 [self.animator addBehavior:snap];
