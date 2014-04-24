@@ -9,7 +9,6 @@
 #import <JLTMDbClient.h>
 
 #import "TMWActorModel.h"
-
 #import "UIImage+DrawInitialsOnImage.h"
 
 @implementation TMWActorModel
