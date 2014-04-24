@@ -123,12 +123,11 @@ BOOL secondFlipped;
             self.secondActorLabel.text = @"";
             break;
         }
-        
-        // Only hide the continue button if there are not actors
-        if ([TMWActorModel actorModel].chosenActors == nil)
-        {
-            self.continueButton.hidden = YES;
-        }
+    }
+    // Only hide the continue button if there are not actors
+    if ([TMWActorModel actorModel].chosenActors.count == 0)
+    {
+        self.continueButton.hidden = YES;
     }
 }
 
@@ -441,7 +440,6 @@ BOOL secondFlipped;
     gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
 
     [gesture.view setNeedsDisplay];
-    NSLog(@"%ld", (long)gesture.view.tag);
 
     static UIAttachmentBehavior *attachment;
     static CGPoint               startCenter;
