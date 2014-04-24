@@ -8,13 +8,11 @@
             <connections>
                 <outlet property="backgroundButton" destination="zIh-QV-UkZ" id="Hgs-2O-NJi"/>
                 <outlet property="continueButton" destination="TcH-RB-otG" id="D5t-zX-c08"/>
-                <outlet property="firstActorButton" destination="qUY-0K-WF5" id="IZE-dj-z6s"/>
                 <outlet property="firstActorImage" destination="17O-NN-qn3" id="OmH-gT-CdY"/>
                 <outlet property="firstActorLabel" destination="eVl-6o-eb4" id="9Ij-aC-IU4"/>
                 <outlet property="searchBar" destination="on5-mN-szY" id="gf2-Tg-fNp"/>
                 <outlet property="searchBarController" destination="aZt-um-9EG" id="5F2-i5-ks0"/>
                 <outlet property="searchDisplayController" destination="aZt-um-9EG" id="PSy-oF-VuH"/>
-                <outlet property="secondActorButton" destination="8px-sA-HtG" id="D6Q-ju-ZYB"/>
                 <outlet property="secondActorImage" destination="IJI-es-uex" id="BVy-Do-MYx"/>
                 <outlet property="secondActorLabel" destination="Qhe-VX-VaG" id="k1k-gD-Ozd"/>
                 <outlet property="startArrow" destination="bD0-Oe-8vu" id="hdu-NI-B5W"/>
@@ -81,29 +79,6 @@
                         <outlet property="delegate" destination="-1" id="rKZ-Q7-FON"/>
                     </connections>
                 </searchBar>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qUY-0K-WF5" userLabel="First Actor Button">
-                    <rect key="frame" x="85" y="92" width="150" height="150"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonDown:" destination="-1" eventType="touchDown" id="aua-1v-tPw"/>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="ZrR-zf-5us"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="750" fixedFrame="YES" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8px-sA-HtG" userLabel="Second Actor Button">
-                    <rect key="frame" x="85" y="306" width="150" height="150"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonDown:" destination="-1" eventType="touchDown" id="jZ2-aK-ptf"/>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="aZ1-fL-hgL"/>
-                    </connections>
-                </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start searching to add actors." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="101" translatesAutoresizingMaskIntoConstraints="NO" id="R8K-wV-0cn">
                     <rect key="frame" x="20" y="71" width="101" height="81"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -111,7 +86,7 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap and hold on actors to remove them." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Jkg-Pm-WM4">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Drag actors off the screen to remove them." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Jkg-Pm-WM4">
                     <rect key="frame" x="20" y="116" width="280" height="126"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

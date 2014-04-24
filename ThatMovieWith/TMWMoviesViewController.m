@@ -24,7 +24,6 @@
 NSArray *tableData;
 NSArray *sameMovies;
 NSArray *movieResponseWithJLTMDBcall;
-UIRefreshControl *refreshControl;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,6 +44,10 @@ UIRefreshControl *refreshControl;
 {
     [SVProgressHUD show];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    int actorIDs = [[TMWActorModel actorModel].chosenActorsIDs count];
+    int i = 0;
+    
     for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
     {
         [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
@@ -52,17 +55,23 @@ UIRefreshControl *refreshControl;
             if (!error) {
                 [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
                 sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.moviesTableView reloadData];
-                    [SVProgressHUD dismiss];
-                });
+                
+                // Only refresh once all actor data has been retrieved
+                if (i == (actorIDs - 1)) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.moviesTableView reloadData];
+                        [SVProgressHUD dismiss];
+                    });
+                }
             }
             else {
                 [errorAlertView show];
-                [refreshControl endRefreshing];
+                [SVProgressHUD dismiss];
             }
         }];
+        i++;
     }
+    [SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,7 +117,7 @@ UIRefreshControl *refreshControl;
     
 }
 
-
+// Gets the movies each actor has been in, along with the urls
 - (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
 {
     

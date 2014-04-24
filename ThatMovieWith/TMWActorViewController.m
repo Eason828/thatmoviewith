@@ -17,6 +17,7 @@
 
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
+#import "UIImage+DrawInitialsOnImage.h"
 
 @interface TMWActorViewController ()
 
@@ -27,15 +28,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *secondActorLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
-@property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
-@property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 @property (strong, nonatomic) IBOutlet UILabel *startLabel;
 @property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *startArrow;
-
-@property UIPanGestureRecognizer *firstPanGesture;
-@property UIPanGestureRecognizer *secondtPanGesture;
 
 // Animation stuff
 @property (strong, nonatomic) UIDynamicAnimator *animator;
@@ -48,7 +44,6 @@
 
 @implementation TMWActorViewController
 
-NSInteger selectedActor;
 NSArray *backdropSizes;
 NSArray *responseArray;
 BOOL firstFlipped;
@@ -63,7 +58,6 @@ BOOL secondFlipped;
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
 
-
         NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
         
         NSString *APIKeyValueDirty = [NSString stringWithContentsOfFile:APIKeyPath
@@ -76,14 +70,8 @@ BOOL secondFlipped;
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
         
-        [self.firstActorLabel setHidden:YES];
-        //self.firstActorImage.frame = CGRectMake(0,0,20,20);
-        self.firstActorButton.enabled = NO;
-        
-        [self.secondActorLabel setHidden:YES];
-        self.secondActorImage.frame = CGRectMake(0,0,20,20);
-        self.secondActorButton.enabled = NO;
-        
+        self.firstActorLabel.hidden = YES;
+        self.secondActorLabel.hidden = YES;
         self.continueButton.hidden = YES;
     }
     
@@ -99,113 +87,54 @@ BOOL secondFlipped;
     [super viewDidLoad];
     
     [self loadImageConfiguration];
-    
-    // UILongPressGestureRecognizer *longPressOne = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressOne:)];
-    // longPressOne.minimumPressDuration = 1.0;
-    // [self.firstActorButton addGestureRecognizer:longPressOne];
-    // UILongPressGestureRecognizer *longPressTwo = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTwo:)];
-    // longPressTwo.minimumPressDuration = 1.0;
-    // [self.secondActorButton addGestureRecognizer:longPressTwo];
 }
 
-
-
-- (void)longPressOne:(UILongPressGestureRecognizer*)gesture
-{
-    NSLog(@"Long Press 1");
-    
-    int num = 1;
-    [self removeActor:&num];
-}
-
-- (void)longPressTwo:(UILongPressGestureRecognizer*)gesture
-{
-    NSLog(@"Long Press 2");
-    
-    int num = 2;
-    [self removeActor:&num];
-}
 
 // Remove the actor
-- (void)removeActor:(int *)actorNumber
+- (void)removeActor:(int)actorNum
 {
-    NSLog(@"%ld", (long)selectedActor);
-    [self.continueButton setHidden: YES];
-    [self.firstActorLabel.layer removeAllAnimations];
-    [self.secondActorLabel.layer removeAllAnimations];
-    [self.firstActorImage.layer removeAllAnimations];
-    [self.secondActorImage.layer removeAllAnimations];
-    
     if ([self.firstActorLabel.text isEqualToString:@""] && [self.secondActorLabel.text isEqualToString:@""])
     {
-        [self.startLabel setHidden:NO];
-        [self.startSecondaryLabel setHidden:NO];
+        self.startLabel.hidden = NO;
+        self.startSecondaryLabel.hidden = NO;
         [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
     }
-    
-    switch (*actorNumber) {
+    switch (actorNum) {
         
         case 1:
         {
             NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
-            
-            for (NSDictionary *dict in chosenCopy)
-            {
-                if ([dict[@"name"] isEqualToString: self.firstActorLabel.text])
-                {
+            for (NSDictionary *dict in chosenCopy) {
+                if ([dict[@"name"] isEqualToString:self.firstActorLabel.text]) {
                     [[TMWActorModel actorModel] removeChosenActor:dict];
                     break;
                 }
             }
-            
-            self.firstActorButton.enabled = NO;
-            [self hideImage:self.firstActorImage];
             self.firstActorLabel.text = @"";
-            
             break;
         }
         case 2:
         {
             NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
-            
-            for (NSDictionary *dict in chosenCopy)
-            {
-                if ([dict[@"name"] isEqualToString: self.secondActorLabel.text])
-                {
+            for (NSDictionary *dict in chosenCopy) {
+                if ([dict[@"name"] isEqualToString:self.secondActorLabel.text]) {
                     [[TMWActorModel actorModel] removeChosenActor:dict];
                     break;
                 }
             }
-            
-            self.secondActorButton.enabled = NO;
-            [self hideImage:self.secondActorImage];
             self.secondActorLabel.text = @"";
-            
             break;
         }
-            
-        default:
+        
+        // Only hide the continue button if there are not actors
+        if ([TMWActorModel actorModel].chosenActors == nil)
         {
-            //
+            self.continueButton.hidden = YES;
         }
     }
 }
 
--(IBAction)hideImage:(UIImageView*)image
-{
-    image.hidden = NO;
-    image.alpha = 1.0f;
-    // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
-    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-        // Animate the alpha value of your imageView from 1.0 to 0.0 here
-        image.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        image.hidden = YES;
-    }];
-}
-
--(IBAction)showImage:(UIImageView*)image
+-(void)showImage:(UIImageView*)image
 {
     image.hidden = YES;
     image.alpha = 0.0f;
@@ -243,8 +172,8 @@ BOOL secondFlipped;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.startLabel setHidden:YES];
-    [self.startSecondaryLabel setHidden:YES];
+    self.startLabel.hidden = YES;
+    self.startSecondaryLabel.hidden = YES;
     [self.startArrow setImage:nil];
     
     [self.searchDisplayController setActive:NO animated:YES];
@@ -256,7 +185,7 @@ BOOL secondFlipped;
         NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
         for (NSDictionary *dict in chosenCopy)
         {
-            if ((selectedActor == 1 && [dict[@"name"] isEqualToString: self.firstActorLabel.text]) || (selectedActor == 2 && [dict[@"name"] isEqualToString: self.secondActorLabel.text]))
+            if ([dict[@"name"] isEqualToString: self.firstActorLabel.text] || [dict[@"name"] isEqualToString: self.secondActorLabel.text])
             {
                 [[TMWActorModel actorModel] removeChosenActor:dict];
                 break;
@@ -267,94 +196,74 @@ BOOL secondFlipped;
     // Add the chosen actor to the array of chosen actors
     [[TMWActorModel actorModel] addChosenActor:[[TMWActorModel actorModel].actorSearchResults objectAtIndex:indexPath.row]];
     
-    if ([self.firstActorLabel.text isEqualToString:@""]||(selectedActor == 1))
+    if ([self.firstActorLabel.text isEqualToString:@""])
     {
-        self.firstActorLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
-
-        // Make the image a circle
-        [CALayer circleLayer:self.firstActorImage.layer];
-        self.firstActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        
-        // TODO: Make these their own methods
-        // If NSString, fetch the image, else use the generated UIImage
-        if ([[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
-            
-            [self.firstActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:nil];
-        }
-        else {
-            // TODO: Fix issue with image font being blurry when actor without a picture is chosen
-            [self.firstActorImage setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
-        }
-        [self showImage:self.firstActorImage];
-        
-        // Enable tapping on the actor image
-        self.firstActorButton.enabled = YES;
-        
         // The second actor is the default selection for being replaced.
-        selectedActor = 2;
-
-        self.firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        [self.firstActorImage addGestureRecognizer:self.firstPanGesture];
-        self.firstActorImage.userInteractionEnabled = YES;
-        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-        [self.view bringSubviewToFront:self.firstActorImage];
+        self.firstActorImage.tag = 1;
+        [self configureActorImageVisibility:self.firstActorImage
+                              withTextLabel:self.firstActorLabel
+                                atIndexPath:indexPath];
     }
     else
     {
-        self.secondActorLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
-
-        // Make the image a circle
-        [CALayer circleLayer:self.secondActorImage.layer];
-        self.secondActorImage.contentMode = UIViewContentModeScaleAspectFill;
-        
-        // If NSString, fetch the image, else use the generated UIImage
-        if ([[[[TMWActorModel actorModel] actorSearchResultImages] objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-            
-            NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
-            
-            [self.secondActorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
-        }
-        else {
-            [self.secondActorImage setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
-        }
-        [self showImage:self.secondActorImage];
-        
-        // Enable tapping on the actor image
-        self.secondActorButton.enabled = YES;
-        
         // The second actor is the default selection for being replaced.
-        selectedActor = 2;
-
-        self.secondtPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        [self.secondActorImage addGestureRecognizer:self.secondtPanGesture];
-        self.secondActorImage.userInteractionEnabled = YES;
-        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-        [self.view bringSubviewToFront:self.secondActorImage];
-
+        self.secondActorImage.tag = 2;
+        [self configureActorImageVisibility:self.secondActorImage
+                              withTextLabel:self.secondActorLabel
+                                atIndexPath:indexPath];
     }
     
-    self.firstActorImage.hidden = NO;
-    self.secondActorImage.hidden = NO;
-    
-    if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
+    if (![self.firstActorLabel.text isEqualToString:@""] || ![self.secondActorLabel.text isEqualToString:@""])
     {
-        self.firstActorButton.tag = 1;
-        self.secondActorButton.tag = 2;
         self.continueButton.tag = 3;
         self.backgroundButton.tag = 4;
-        [self.continueButton setHidden:NO];
+        self.continueButton.hidden = NO;
                 
         [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
-        [self.firstActorImage.layer removeAllAnimations];
-        [self.secondActorImage.layer removeAllAnimations];
-        [self.view bringSubviewToFront:self.firstActorImage];
-        
         [[TMWActorModel actorModel] removeAllActorMovies];
     }
 
 }
+
+
+// Set the actor image and all of it's necessary properties
+- (void)configureActorImageVisibility:(UIImageView *)actorImage
+                   withTextLabel:(UILabel *)textLabel
+                     atIndexPath:(NSIndexPath *)indexPath
+{
+    textLabel.hidden = NO;
+    textLabel.alpha = 1.0;
+    textLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
+    
+    // Make the image a circle
+    [CALayer circleLayer:actorImage.layer];
+    actorImage.contentMode = UIViewContentModeScaleAspectFill;
+    
+    // If NSString, fetch the image, else use the generated UIImage
+    if ([[[[TMWActorModel actorModel] actorSearchResultImagesHiRes] objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        
+        NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImagesHiRes objectAtIndex:indexPath.row]];
+        
+        [actorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+    }
+    else {
+        [actorImage setImage:[[TMWActorModel actorModel].actorSearchResultImagesHiRes objectAtIndex:indexPath.row]];
+    }
+    [self showImage:actorImage];
+    
+    // Setup for dragging the image around
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [actorImage addGestureRecognizer:panGesture];
+    
+    //Setup for tapping on the image
+    UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [actorImage addGestureRecognizer:longPressOne];
+    
+    actorImage.userInteractionEnabled = YES;
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    [self.view bringSubviewToFront:actorImage];
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -391,19 +300,21 @@ BOOL secondFlipped;
     cell.textLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
 
     // If NSString, fetch the image, else use the generated UIImage
-    if ([[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    if ([[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
+        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row]];
         
         // Show the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
+        // Get the image from the URL and set it
         [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
         
+        // Hide the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }
     else {
-        [cell.imageView setImage:[[TMWActorModel actorModel].actorSearchResultImages objectAtIndex:indexPath.row]];
+        [cell.imageView setImage:[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row]];
     }
     return cell;
 }
@@ -416,13 +327,16 @@ BOOL secondFlipped;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-
+// Added to fix UITableView bottom bounds in UISearchDisplayController
 - (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+
+    // If you scroll down in the search table view, this puts it back to the top next time you search
+    [self.searchDisplayController.searchResultsTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
-
+// Added to fix UITableView bottom bounds in UISearchDisplayController
 - (void) keyboardWillHide
 {
     UITableView *tableView = [[self searchDisplayController] searchResultsTableView];
@@ -432,50 +346,14 @@ BOOL secondFlipped;
 
 #pragma mark UIButton methods
 
-// For flipping over the actor images
+// For showing the
 -(IBAction)buttonPressed:(id)sender
 {
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
-        case 1:
-        {
-
-//            [UIView transitionWithView:self.firstActorImage duration:1.5
-//                               options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
-//                                   self.firstActorImage.image = self.secondActorImage.image;
-//                               } completion:nil];
-            break;
-        }
-            
-        case 2:
-        {
-//            if (firstFlipped == NO) {
-//                [UIView transitionWithView:self.secondActorImage duration:1.5
-//                                   options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
-//                                       self.secondActorImage.image = self.firstActorImage.image;
-//                                   } completion:nil];
-//                firstFlipped = YES;
-//            }
-//            else {
-//                [UIView transitionWithView:self.secondActorImage duration:1.5
-//                                   options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
-//                                       self.firstActorImage.image = self.secondActorImage.image;
-//                                   } completion:nil];
-//                firstFlipped = NO;
-//            }
-            break;
-        }
-
         case 3: // Continue button
-        case 4: // Background button
         {
-            // Stop all animations when the continueButton is pressed
-            [self.firstActorLabel.layer removeAllAnimations];
-            [self.secondActorLabel.layer removeAllAnimations];
-            [self.firstActorImage.layer removeAllAnimations];
-            [self.secondActorImage.layer removeAllAnimations];
-            
             // Show the Movies View if the continue button is pressed
             if ([button tag] == 3) {
                 
@@ -485,54 +363,17 @@ BOOL secondFlipped;
             }
             break;
         }
+        case 4: // Background button
+        {
+            break; // flip the image back over
+        }
     }
 }
 
--(IBAction)buttonDown:(id)sender
+- (void)handleTapGesture:(UITapGestureRecognizer *)tap
 {
-    UIButton *button = (UIButton *)sender;
-    
-    switch ([button tag]) {
-        case 1:
-        {
-            selectedActor = 1;
-            
-            // Animate the first actor image and name
-            [self.firstActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
-                                              forKey:@"opacity"];
-            [self.firstActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
-                                              forKey:@"borderWidth"]; //
-            [self.secondActorImage.layer removeAllAnimations];
-            [self.continueButton.layer removeAllAnimations];
-            
-            break;
-        }
-            
-        case 2:
-        {
-            selectedActor = 2;
-            
-            // Animate the second actor image and name
-            [self.secondActorLabel.layer addAnimation:[TMWCustomAnimations actorOpacityAnimation] 
-                                               forKey:@"opacity"];
-            [self.secondActorImage.layer addAnimation:[TMWCustomAnimations ringBorderWidthAnimation] 
-                                               forKey:@"borderWidth"]; //
-            [self.firstActorImage.layer removeAllAnimations];
-            [self.continueButton.layer removeAllAnimations];
-            
-            break;
-        }
-        case 3: // Continue button
-        case 4: // Background button
-        {
-            break;
-        }
-            
-        default:
-        {
-            NSLog(@"No tag");
-        }
-    }
+    NSLog(@"%ld", (long)tap.view.tag);
+    // Perform flipping here
 }
 
 
@@ -579,8 +420,11 @@ BOOL secondFlipped;
     }];
 }
 
+#pragma mark UIPanGestureRecognizer Methods
+
 - (void)handlePan:(UIPanGestureRecognizer *)gesture
 {
+
     static UIAttachmentBehavior *attachment;
     static CGPoint               startCenter;
 
@@ -589,9 +433,34 @@ BOOL secondFlipped;
     static CFAbsoluteTime        lastTime;
     static CGFloat               lastAngle;
     static CGFloat               angularVelocity;
+    
+    [self.view bringSubviewToFront:gesture.view];
 
     if (gesture.state == UIGestureRecognizerStateBegan)
     {
+        // Hide the actor label
+        if (gesture.view.tag == 1) {
+            self.firstActorLabel.alpha = 1.0f;
+            // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+            [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                // Animate the alpha value of your imageView from 1.0 to 0.0 here
+                self.firstActorLabel.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+            }];
+        }
+        
+        if (gesture.view.tag == 2) {
+            self.secondActorLabel.alpha = 1.0f;
+            // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+            [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                // Animate the alpha value of your imageView from 1.0 to 0.0 here
+                self.secondActorLabel.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+            }];
+        }
+        
         [self.animator removeAllBehaviors];
 
         startCenter = gesture.view.center;
@@ -648,6 +517,29 @@ BOOL secondFlipped;
         if (velocityMagnitude<triggerVelocity) {
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
             [self.animator addBehavior:snap];
+            
+            // Show the actor label
+            if (gesture.view.tag == 1) {
+                self.firstActorLabel.alpha = 0.0f;
+                // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                    // Animate the alpha value of your imageView from 1.0 to 0.0 here
+                    self.firstActorLabel.alpha = 1.0f;
+                } completion:^(BOOL finished) {
+                    // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+                }];
+            }
+            
+            if (gesture.view.tag == 2) {
+                self.secondActorLabel.alpha = 0.0f;
+                // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
+                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                    // Animate the alpha value of your imageView from 1.0 to 0.0 here
+                    self.secondActorLabel.alpha = 1.0f;
+                } completion:^(BOOL finished) {
+                    // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+                }];
+            }
 
             return;
         }
@@ -667,7 +559,7 @@ BOOL secondFlipped;
                 gesture.view.hidden = YES;
                 UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
                 [self.animator addBehavior:snap];
-                self.firstActorImage = nil;
+                [self removeActor:gesture.view.tag];
             }
         };
         [self.animator addBehavior:dynamic];
@@ -677,6 +569,7 @@ BOOL secondFlipped;
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
         gravity.magnitude = 0.1;
         [self.animator addBehavior:gravity];
+        
     }
 }
 

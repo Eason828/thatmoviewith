@@ -5,10 +5,12 @@
 //  Created by johnrhickey on 4/18/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
-
-#import "TMWActorModel.h"
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
+
+#import "TMWActorModel.h"
+
+#import "UIImage+DrawInitialsOnImage.h"
 
 @implementation TMWActorModel
 
@@ -45,7 +47,8 @@ static TMWActorModel *actorModel;
     return mutableNamesArray;
 }
 
-- (NSArray *)actorSearchResultImages {
+// Get the full size actor image
+- (NSArray *)actorSearchResultImagesLowRes {
     NSMutableArray *mutableImagesArray = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in self.actorSearchResults)
     {
@@ -55,7 +58,24 @@ static TMWActorModel *actorModel;
         }
         else
         {
-            UIImage *defaultImage = [self imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackground.png"] withInitials:dict[@"name"]];
+            UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:dict[@"name"] withFontSize:16];
+            [mutableImagesArray addObject:defaultImage];
+        }
+    }
+    return mutableImagesArray;
+}
+
+- (NSArray *)actorSearchResultImagesHiRes {
+    NSMutableArray *mutableImagesArray = [[NSMutableArray alloc] init];
+    for (NSDictionary *dict in self.actorSearchResults)
+    {
+        if (dict[@"profile_path"] != (id)[NSNull null])
+        {
+            [mutableImagesArray addObject:dict[@"profile_path"]];
+        }
+        else
+        {
+            UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundHiRes.png"] withInitials:dict[@"name"] withFontSize:48];
             [mutableImagesArray addObject:defaultImage];
         }
     }
@@ -161,56 +181,6 @@ static TMWActorModel *actorModel;
         }
     }
     return [NSArray arrayWithArray:mutableResults];
-}
-
-
-#pragma mark Private Methods
-
-- (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials
-{
-    // begin a graphics context of sufficient size
-    UIGraphicsBeginImageContext(image.size);
-    
-    // draw original image into the context
-    [image drawAtPoint:CGPointZero];
-    
-    // get the context for CoreGraphics
-    UIGraphicsGetCurrentContext();
-    
-    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
-    
-    if ([separatedNames count] > 0) {
-        NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]];
-        if ([separatedNames count] > 1) {
-            [combinedInitials appendString:[separatedNames[1] substringToIndex:1]];
-        }
-        
-        NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-        textStyle.lineBreakMode = NSLineBreakByWordWrapping;
-        textStyle.alignment = NSTextAlignmentCenter;
-        UIFont *textFont = [UIFont systemFontOfSize:16];
-        
-        NSDictionary *attributes = @{NSFontAttributeName: textFont};
-        
-        // Create the CGRect to the size of the text box
-        CGSize size = [combinedInitials sizeWithAttributes:attributes];
-        if (size.width < image.size.width)
-        {
-            CGRect textRect = CGRectMake(0,
-                                         (image.size.height - size.height)/2,
-                                         image.size.width,
-                                         (image.size.height - size.height));
-            
-            [combinedInitials drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle}];
-        }
-    }
-    // make image out of bitmap context
-    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // free the context
-    UIGraphicsEndImageContext();
-    
-    return retImage;
 }
 
 @end
