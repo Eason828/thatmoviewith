@@ -45,7 +45,7 @@ NSArray *movieResponseWithJLTMDBcall;
     [SVProgressHUD show];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
-    int numActorIDs = [[TMWActorModel actorModel].chosenActorsIDs count];
+    int numActorIDs = (int)[[TMWActorModel actorModel].chosenActorsIDs count];
     int i = 0;
     for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
     {
