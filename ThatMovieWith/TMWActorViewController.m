@@ -584,7 +584,7 @@ BOOL secondFlipped;
                 gesture.view.hidden = YES;
                 UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
                 [self.animator addBehavior:snap];
-                [self removeActor:gesture.view.tag];
+                [self removeActor:(int)gesture.view.tag];
             }
         };
         [self.animator addBehavior:dynamic];
