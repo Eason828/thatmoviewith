@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		E362CE1BB44647348FF7D152 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B616B934567416C996DB201 /* libPods.a */; };
-		E5227AD4190888680094D471 /* UIImage+DrawInitialsOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5227AD3190888680094D471 /* UIImage+DrawInitialsOnImage.m */; };
 		E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */; };
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
 		E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */; };
+		E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */; };
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E54C0891190023A10084E687 /* CALayer+circleLayer.m */; };
 		E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */; };
@@ -53,12 +53,12 @@
 /* Begin PBXFileReference section */
 		7B616B934567416C996DB201 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A0F378FCD476DA5B74C48 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		E5227AD2190888680094D471 /* UIImage+DrawInitialsOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawInitialsOnImage.h"; path = "../../../.Trash/UIImage+DrawInitialsOnImage.h"; sourceTree = "<group>"; };
-		E5227AD3190888680094D471 /* UIImage+DrawInitialsOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawInitialsOnImage.m"; path = "../../../.Trash/UIImage+DrawInitialsOnImage.m"; sourceTree = "<group>"; };
 		E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundHiRes.png; sourceTree = "<group>"; };
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
 		E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundLowRes@2x.png"; sourceTree = "<group>"; };
+		E5227AE1190890E10094D471 /* UIImage+DrawInitialsOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+DrawInitialsOnImage.h"; sourceTree = "<group>"; };
+		E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+DrawInitialsOnImage.m"; sourceTree = "<group>"; };
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E54C0890190023A10084E687 /* CALayer+circleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+circleLayer.h"; sourceTree = "<group>"; };
 		E54C0891190023A10084E687 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+circleLayer.m"; sourceTree = "<group>"; };
@@ -149,8 +149,8 @@
 		E54C0893190023C60084E687 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E5227AD2190888680094D471 /* UIImage+DrawInitialsOnImage.h */,
-				E5227AD3190888680094D471 /* UIImage+DrawInitialsOnImage.m */,
+				E5227AE1190890E10094D471 /* UIImage+DrawInitialsOnImage.h */,
+				E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */,
 				E566699D19002110006CD7F0 /* UIColor+customColors.m */,
 				E566699C19002110006CD7F0 /* UIColor+customColors.h */,
 				E54C0890190023A10084E687 /* CALayer+circleLayer.h */,
@@ -458,9 +458,9 @@
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
 				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
 				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
+				E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
 				E571EA5619020FA700CB3B31 /* TMWActorModel.m in Sources */,
-				E5227AD4190888680094D471 /* UIImage+DrawInitialsOnImage.m in Sources */,
 				E571EA4C1901FD5800CB3B31 /* TMWActorViewController.m in Sources */,
 				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
 				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
