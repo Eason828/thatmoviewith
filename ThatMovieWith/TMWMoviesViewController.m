@@ -24,7 +24,6 @@
 NSArray *tableData;
 NSArray *sameMovies;
 NSArray *movieResponseWithJLTMDBcall;
-UIRefreshControl *refreshControl;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,24 +44,32 @@ UIRefreshControl *refreshControl;
 {
     [SVProgressHUD show];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    int numActorIDs = (int)[[TMWActorModel actorModel].chosenActorsIDs count];
+    int i = 0;
     for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
     {
         [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
             
             if (!error) {
                 [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
-                sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.moviesTableView reloadData];
-                    [SVProgressHUD dismiss];
-                });
+                // Only refresh once all actor data has been retrieved
+                if (i == (numActorIDs - 1)) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
+                        [self.moviesTableView reloadData];
+                        [SVProgressHUD dismiss];
+                    });
+                }
             }
             else {
                 [errorAlertView show];
-                [refreshControl endRefreshing];
+                [SVProgressHUD dismiss];
             }
         }];
+        i++;
     }
+    //[SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,8 +100,9 @@ UIRefreshControl *refreshControl;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    
-    cell.textLabel.text = [sameMovies objectAtIndex:indexPath.row];
+    if ([sameMovies objectAtIndex:indexPath.row] != nil) {
+        cell.textLabel.text = [sameMovies objectAtIndex:indexPath.row];
+    }
     return cell;
 }
 
@@ -108,7 +116,7 @@ UIRefreshControl *refreshControl;
     
 }
 
-
+// Gets the movies each actor has been in, along with the urls
 - (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
 {
     
@@ -117,6 +125,11 @@ UIRefreshControl *refreshControl;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        });
+        
         
         if (!error) {
             [TMWActorModel actorModel].movieInfo = response;
@@ -138,6 +151,7 @@ UIRefreshControl *refreshControl;
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
+            
         }
         else {
             [errorAlertView show];

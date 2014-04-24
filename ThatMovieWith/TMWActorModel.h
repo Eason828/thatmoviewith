@@ -12,7 +12,8 @@
 
 @property (nonatomic, strong) NSArray *actorSearchResults;
 @property (nonatomic, strong, readonly) NSArray *actorSearchResultNames;
-@property (nonatomic, strong, readonly) NSArray *actorSearchResultImages;
+@property (nonatomic, strong, readonly) NSArray *actorSearchResultImagesHiRes;
+@property (nonatomic, strong, readonly) NSArray *actorSearchResultImagesLowRes;
 
 @property (nonatomic, strong, readonly) NSArray *chosenActors;
 @property (nonatomic, strong, readonly) NSArray *chosenActorsIDs;
