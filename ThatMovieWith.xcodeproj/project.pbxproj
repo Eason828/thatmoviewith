@@ -25,7 +25,6 @@
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
 		E571EA4C1901FD5800CB3B31 /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */; };
 		E571EA4D1901FD5800CB3B31 /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */; };
-		E571EA5619020FA700CB3B31 /* TMWActorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E571EA5519020FA700CB3B31 /* TMWActorModel.m */; };
 		E5994CF218FDE85100A5B79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF118FDE85100A5B79F /* Foundation.framework */; };
 		E5994CF418FDE85100A5B79F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF318FDE85100A5B79F /* CoreGraphics.framework */; };
 		E5994CF618FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
@@ -38,6 +37,9 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
+		E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */; };
+		E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4001909B3B50032F82B /* TMWActor.m */; };
+		E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4051909B8220032F82B /* TMWActorContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,8 +79,6 @@
 		E571EA491901FD5800CB3B31 /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorViewController.h; sourceTree = "<group>"; };
 		E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorViewController.m; sourceTree = "<group>"; };
 		E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TMWActorViewController.xib; sourceTree = "<group>"; };
-		E571EA5419020FA700CB3B31 /* TMWActorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorModel.h; sourceTree = "<group>"; };
-		E571EA5519020FA700CB3B31 /* TMWActorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorModel.m; sourceTree = "<group>"; };
 		E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThatMovieWith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994CF118FDE85100A5B79F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E5994CF318FDE85100A5B79F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -95,6 +95,12 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
+		E5CEC3FC1909B3850032F82B /* TMWActorSearchResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorSearchResults.h; sourceTree = "<group>"; };
+		E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorSearchResults.m; sourceTree = "<group>"; };
+		E5CEC3FF1909B3B50032F82B /* TMWActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActor.h; sourceTree = "<group>"; };
+		E5CEC4001909B3B50032F82B /* TMWActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActor.m; sourceTree = "<group>"; };
+		E5CEC4021909B4260032F82B /* TMWActorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorContainer.h; sourceTree = "<group>"; };
+		E5CEC4051909B8220032F82B /* TMWActorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +168,12 @@
 		E569FF351902F075002928AF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E571EA5419020FA700CB3B31 /* TMWActorModel.h */,
-				E571EA5519020FA700CB3B31 /* TMWActorModel.m */,
+				E5CEC3FF1909B3B50032F82B /* TMWActor.h */,
+				E5CEC4001909B3B50032F82B /* TMWActor.m */,
+				E5CEC4021909B4260032F82B /* TMWActorContainer.h */,
+				E5CEC4051909B8220032F82B /* TMWActorContainer.m */,
+				E5CEC3FC1909B3850032F82B /* TMWActorSearchResults.h */,
+				E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -455,15 +465,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */,
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
 				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
+				E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */,
 				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
 				E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
-				E571EA5619020FA700CB3B31 /* TMWActorModel.m in Sources */,
 				E571EA4C1901FD5800CB3B31 /* TMWActorViewController.m in Sources */,
 				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
 				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
+				E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */,
 				E569FF331902F056002928AF /* TMWMoviesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

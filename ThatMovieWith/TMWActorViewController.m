@@ -11,9 +11,11 @@
 
 #import "TMWActorViewController.h"
 #import "TMWMoviesViewController.h"
+#import "TMWActor.h"
+#import "TMWActorSearchResults.h"
+#import "TMWActorContainer.h"
 #import "TMWCustomCellTableViewCell.h"
 #import "TMWCustomAnimations.h"
-#import "TMWActorModel.h"
 
 #import "UIColor+customColors.h"
 #import "CALayer+circleLayer.h"
@@ -46,10 +48,8 @@
 
 @implementation TMWActorViewController
 
+TMWActorSearchResults *searchResults;
 NSArray *backdropSizes;
-NSArray *responseArray;
-BOOL firstFlipped;
-BOOL secondFlipped;
 
 #define TABLE_HEIGHT 66
 
@@ -72,9 +72,9 @@ BOOL secondFlipped;
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
     }
-    
     return self;
 }
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
@@ -101,10 +101,10 @@ BOOL secondFlipped;
         
         case 1:
         {
-            NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
-            for (NSDictionary *dict in chosenCopy) {
-                if ([dict[@"name"] isEqualToString:self.firstActorLabel.text]) {
-                    [[TMWActorModel actorModel] removeChosenActor:dict];
+            NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
+            for (TMWActor *actor in chosenCopy) {
+                if ([actor.name isEqualToString:self.firstActorLabel.text]) {
+                    [[TMWActorContainer actorContainer] removeActorObject:actor];
                     break;
                 }
             }
@@ -113,10 +113,10 @@ BOOL secondFlipped;
         }
         case 2:
         {
-            NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
-            for (NSDictionary *dict in chosenCopy) {
-                if ([dict[@"name"] isEqualToString:self.secondActorLabel.text]) {
-                    [[TMWActorModel actorModel] removeChosenActor:dict];
+            NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
+            for (TMWActor *actor in chosenCopy) {
+                if ([actor.name isEqualToString:self.secondActorLabel.text]) {
+                    [[TMWActorContainer actorContainer] removeActorObject:actor];
                     break;
                 }
             }
@@ -125,7 +125,7 @@ BOOL secondFlipped;
         }
     }
     // Only hide the continue button if there are not actors
-    if ([TMWActorModel actorModel].chosenActors.count == 0)
+    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
     {
         self.continueButton.hidden = YES;
     }
@@ -178,38 +178,44 @@ BOOL secondFlipped;
     // Remove the bottom (second) actor if both of the actors have been chosen
     if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
     {
-        NSArray *chosenCopy = [TMWActorModel actorModel].chosenActors;
-        for (NSDictionary *dict in chosenCopy)
+        NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
+        for (TMWActor *actor in chosenCopy)
         {
-            if ([dict[@"name"] isEqualToString: self.secondActorLabel.text])
+            if ([actor.name isEqualToString: self.secondActorLabel.text])
             {
-                NSLog(@"Removing actor %@", dict[@"name"]);
-                [[TMWActorModel actorModel] removeChosenActor:dict];
+                NSLog(@"Removing actor %@", actor.name);
+                [[TMWActorContainer actorContainer] removeActorObject:actor];
                 break;
             }
         }
     }
+    TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
 
     // Add the chosen actor to the array of chosen actors
-    [[TMWActorModel actorModel] addChosenActor:[[TMWActorModel actorModel].actorSearchResults objectAtIndex:indexPath.row]];
+    [[TMWActorContainer actorContainer] addActorObject:chosenActor];
     
     if ([self.firstActorLabel.text isEqualToString:@""])
     {
         // The second actor is the default selection for being replaced.
         self.firstActorDropShadow.tag = 1;
-        [self configureActorImageVisibility:self.firstActorImage and:self.firstActorDropShadow
-                              withTextLabel:self.firstActorLabel
-                                atIndexPath:indexPath];
+        [self configureActor:chosenActor
+             ImageVisibility:self.firstActorImage
+              withDropShadow:self.firstActorDropShadow
+                andTextLabel:self.firstActorLabel
+                 atIndexPath:indexPath];
     }
     else
     {
         // The second actor is the default selection for being replaced.
         self.secondActorDropShadow.tag = 2;
-        [self configureActorImageVisibility:self.secondActorImage and:self.secondActorDropShadow
-                              withTextLabel:self.secondActorLabel
-                                atIndexPath:indexPath];
+        [self configureActor:chosenActor
+             ImageVisibility:self.secondActorImage
+               withDropShadow:self.secondActorDropShadow
+                andTextLabel:self.secondActorLabel
+                 atIndexPath:indexPath];
     }
     
+    // One of the actors has been chosen
     if (![self.firstActorLabel.text isEqualToString:@""] || ![self.secondActorLabel.text isEqualToString:@""])
     {
         self.continueButton.tag = 3;
@@ -217,20 +223,21 @@ BOOL secondFlipped;
         self.continueButton.hidden = NO;
                 
         [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
-        [[TMWActorModel actorModel] removeAllActorMovies];
     }
 
 }
 
 
 // Set the actor image and all of it's necessary properties
-- (void)configureActorImageVisibility:(UIImageView *)actorImage and:(UIView *)dropShadow
-                   withTextLabel:(UILabel *)textLabel
-                     atIndexPath:(NSIndexPath *)indexPath
+- (void)configureActor:(TMWActor *)actor
+       ImageVisibility:(UIImageView *)actorImage
+        withDropShadow:(UIView *)dropShadow
+          andTextLabel:(UILabel *)textLabel
+           atIndexPath:(NSIndexPath *)indexPath
 {
     textLabel.hidden = NO;
     textLabel.alpha = 1.0;
-    textLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
+    textLabel.text = actor.name;
     
     // Make the image a circle
     [CALayer circleLayer:actorImage.layer];
@@ -244,14 +251,15 @@ BOOL secondFlipped;
     dropShadow.clipsToBounds = NO;
     
     // If NSString, fetch the image, else use the generated UIImage
-    if ([[[[TMWActorModel actorModel] actorSearchResultImagesHiRes] objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImagesHiRes objectAtIndex:indexPath.row]];
+        NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
         
         [actorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
     else {
-        [actorImage setImage:[[TMWActorModel actorModel].actorSearchResultImagesHiRes objectAtIndex:indexPath.row]];
+        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundHiRes.png"] withInitials:actor.name withFontSize:48];
+        [actorImage setImage:defaultImage];
     }
     [self showImage:actorImage];
     [self showImage:dropShadow];
@@ -273,7 +281,7 @@ BOOL secondFlipped;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[TMWActorModel actorModel].actorSearchResultNames count];
+    return [searchResults.names count];
 }
 
 // Change the Height of the Cell [Default is 44]:
@@ -302,12 +310,12 @@ BOOL secondFlipped;
     cell.imageView.layer.masksToBounds = YES;
     cell.imageView.layer.borderWidth = 0;
 
-    cell.textLabel.text = [[TMWActorModel actorModel].actorSearchResultNames objectAtIndex:indexPath.row];
+    cell.textLabel.text = [searchResults.names objectAtIndex:indexPath.row];
 
     // If NSString, fetch the image, else use the generated UIImage
-    if ([[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    if ([[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row]];
+        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row]];
         
         // Show the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -319,7 +327,8 @@ BOOL secondFlipped;
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }
     else {
-        [cell.imageView setImage:[[TMWActorModel actorModel].actorSearchResultImagesLowRes objectAtIndex:indexPath.row]];
+        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
+        [cell.imageView setImage:defaultImage];
     }
     return cell;
 }
@@ -416,7 +425,7 @@ BOOL secondFlipped;
         });
         
         if (!error) {
-            [TMWActorModel actorModel].actorSearchResults = response[@"results"];
+            searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
             
             dispatch_async(dispatch_get_main_queue(),^{
                 [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
