@@ -35,6 +35,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
 @property (strong, nonatomic) IBOutlet UILabel *startLabel;
 @property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
+@property (strong, nonatomic) IBOutlet UILabel *startThirdLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *startArrow;
 @property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
 @property (strong, nonatomic) IBOutlet UIView *deleteDropShadow;
@@ -78,8 +79,33 @@ NSArray *backdropSizes;
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
         
+        
+        [self showSearchHelp];
+        
     }
     return self;
+}
+
+// Fade in the search instructions
+-(void)showSearchHelp
+{
+    NSLog(@"Help!!!");
+    self.startLabel.alpha = 0.0;
+    self.startThirdLabel.alpha = 0.0;
+    self.startArrow.alpha = 0.0;
+    self.startArrow.hidden = NO;
+    self.startLabel.hidden = NO;
+    self.startThirdLabel.hidden = NO;
+    [UIView animateWithDuration:1.5 delay:2.5 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        self.startLabel.alpha = 1.0;
+        self.startArrow.alpha = 1.0;
+        self.startSecondaryLabel.alpha = 0.0;
+    } completion:nil];
+    [UIView animateWithDuration:1.5 delay:4.5 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        self.startThirdLabel.alpha = 1.0;
+    } completion:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -90,6 +116,9 @@ NSArray *backdropSizes;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    // Fade in the search instructions
+    [self performSelector:@selector(showSearchHelp) withObject:self afterDelay:2.0];
     
     [self loadImageConfiguration];
 }
@@ -130,7 +159,8 @@ NSArray *backdropSizes;
     {
         self.continueButton.hidden = YES;
         self.startLabel.hidden = NO;
-        self.startSecondaryLabel.hidden = NO;
+        //self.startSecondaryLabel.hidden = NO;
+        self.startThirdLabel.hidden = NO;
         [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
     }
 }
@@ -175,6 +205,7 @@ NSArray *backdropSizes;
 {
     self.startLabel.hidden = YES;
     self.startSecondaryLabel.hidden = YES;
+    self.startThirdLabel.hidden = YES;
     [self.startArrow setImage:nil];
     
     [self.searchDisplayController setActive:NO animated:YES];
