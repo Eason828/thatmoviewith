@@ -512,9 +512,9 @@ NSArray *backdropSizes;
     {
         
         [self.animator removeAllBehaviors];
-        
+
         // When the view intersects with the delete image, go ahead and remove it
-        if (!CGRectIntersectsRect(self.deleteImage.bounds, gesture.view.frame)) {
+        if (CGRectIntersectsRect(self.deleteDropShadow.frame, gesture.view.frame)) {
             // Fade out/in the necessary images and text
             [self endGestureFade:gesture];
             
