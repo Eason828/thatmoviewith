@@ -40,6 +40,7 @@
 		E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */; };
 		E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4001909B3B50032F82B /* TMWActor.m */; };
 		E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4051909B8220032F82B /* TMWActorContainer.m */; };
+		E5CEC4091909F7A10032F82B /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E5CEC4081909F7A10032F82B /* delete.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		E5CEC4001909B3B50032F82B /* TMWActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActor.m; sourceTree = "<group>"; };
 		E5CEC4021909B4260032F82B /* TMWActorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorContainer.h; sourceTree = "<group>"; };
 		E5CEC4051909B8220032F82B /* TMWActorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorContainer.m; sourceTree = "<group>"; };
+		E5CEC4081909F7A10032F82B /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = images/delete.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E5CEC4081909F7A10032F82B /* delete.png */,
 				E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */,
 				E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */,
 				E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */,
@@ -377,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5CEC4091909F7A10032F82B /* delete.png in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
 				E569FF341902F056002928AF /* TMWMoviesViewController.xib in Resources */,
 				E569FF451903C2DA002928AF /* arrow.png in Resources */,

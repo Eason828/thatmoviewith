@@ -8,7 +8,6 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <SVWebViewController.h>
-#import <SVProgressHUD.h>
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorContainer.h"
@@ -42,35 +41,6 @@ NSArray *movieResponseWithJLTMDBcall;
 {
     [super viewDidAppear:YES];
     [self.moviesTableView reloadData];
-    
-//    [SVProgressHUD show];
-//    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
-//    
-//    int numActorIDs = (int)[[TMWActorModel actorModel].chosenActorsIDs count];
-//    int i = 0;
-//    for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
-//    {
-//        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
-//            
-//            if (!error) {
-//                [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
-//                // Only refresh once all actor data has been retrieved
-//                if (i == (numActorIDs - 1)) {
-//                    dispatch_async(dispatch_get_main_queue(), ^{
-//                        sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-//                        [self.moviesTableView reloadData];
-//                        [SVProgressHUD dismiss];
-//                    });
-//                }
-//            }
-//            else {
-//                [errorAlertView show];
-//                [SVProgressHUD dismiss];
-//            }
-//        }];
-//        i++;
-//    }
-//    //[SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated

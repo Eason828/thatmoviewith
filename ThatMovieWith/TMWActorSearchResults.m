@@ -19,9 +19,6 @@
 
 @implementation TMWActorSearchResults
 
-
-// DONT FORGET TO ORGANIZE SEARCH RESULTS
-
 - (instancetype)initActorSearchResultsWithResults:(NSArray *)results
 {
     if (self) {
