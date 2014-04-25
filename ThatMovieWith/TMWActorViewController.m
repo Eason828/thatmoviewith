@@ -36,6 +36,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *startLabel;
 @property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *startArrow;
+@property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
+@property (strong, nonatomic) IBOutlet UIView *deleteDropShadow;
+@property (strong, nonatomic) IBOutlet UILabel *deleteLabel;
 
 // Animation stuff
 @property (strong, nonatomic) UIDynamicAnimator *animator;
@@ -51,7 +54,10 @@
 TMWActorSearchResults *searchResults;
 NSArray *backdropSizes;
 
-#define TABLE_HEIGHT 66
+#define ALPHA_FULL      1.0
+#define ALPHA_EMPTY     0.0
+#define FADE_DURATION   0.5
+#define TABLE_HEIGHT    66
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -71,6 +77,7 @@ NSArray *backdropSizes;
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
+        
     }
     return self;
 }
@@ -91,12 +98,6 @@ NSArray *backdropSizes;
 // Remove the actor
 - (void)removeActor:(int)actorNum
 {
-    if ([self.firstActorLabel.text isEqualToString:@""] && [self.secondActorLabel.text isEqualToString:@""])
-    {
-        self.startLabel.hidden = NO;
-        self.startSecondaryLabel.hidden = NO;
-        [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
-    }
     switch (actorNum) {
         
         case 1:
@@ -128,6 +129,9 @@ NSArray *backdropSizes;
     if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
     {
         self.continueButton.hidden = YES;
+        self.startLabel.hidden = NO;
+        self.startSecondaryLabel.hidden = NO;
+        [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
     }
 }
 
@@ -221,8 +225,9 @@ NSArray *backdropSizes;
         self.continueButton.tag = 3;
         self.backgroundButton.tag = 4;
         self.continueButton.hidden = NO;
-                
-        [self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
+        
+        // Make the continue button animate
+        //[self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
     }
 
 }
@@ -441,15 +446,6 @@ NSArray *backdropSizes;
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture
 {
-    // Add the drop shadow effect to the view
-    gesture.view.layer.cornerRadius = gesture.view.frame.size.height/2;
-    gesture.view.layer.shadowColor = [[UIColor blackColor] CGColor];
-    gesture.view.layer.shadowOpacity = 1.0;
-    gesture.view.layer.shadowRadius = 5.0;
-    gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-
-    [gesture.view setNeedsDisplay];
-
     static UIAttachmentBehavior *attachment;
     static CGPoint               startCenter;
 
@@ -463,30 +459,11 @@ NSArray *backdropSizes;
 
     if (gesture.state == UIGestureRecognizerStateBegan)
     {
-        // Hide the actor label
-        if (gesture.view.tag == 1) {
-            self.firstActorLabel.alpha = 1.0f;
-            // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
-            [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                // Animate the alpha value of your imageView from 1.0 to 0.0 here
-                self.firstActorLabel.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-            }];
-        }
-        
-        if (gesture.view.tag == 2) {
-            self.secondActorLabel.alpha = 1.0f;
-            // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
-            [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                // Animate the alpha value of your imageView from 1.0 to 0.0 here
-                self.secondActorLabel.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-            }];
-        }
         
         [self.animator removeAllBehaviors];
+        
+        // Fade out/in the necessary images and text
+        [self startGestureFade:gesture];
 
         startCenter = gesture.view.center;
 
@@ -533,41 +510,35 @@ NSArray *backdropSizes;
     }
     else if (gesture.state == UIGestureRecognizerStateEnded)
     {
-        // Remove the drop shadow effect from the view
-        gesture.view.layer.shadowOpacity = 0.0;
         
         [self.animator removeAllBehaviors];
+        
+        // When the view intersects with the delete image, go ahead and remove it
+        if (!CGRectIntersectsRect(self.deleteImage.bounds, gesture.view.frame)) {
+            // Fade out/in the necessary images and text
+            [self endGestureFade:gesture];
+            
+            [self.animator removeAllBehaviors];
+            for (UIView *view in gesture.view.subviews)
+            {
+                view.hidden = YES;
+            }
+            gesture.view.hidden = YES;
+            UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
+            [self.animator addBehavior:snap];
+            [self removeActor:(int)gesture.view.tag];
+        }
 
         // if we aren't dragging it down, just snap it back and quit
         CGPoint velocity = [gesture velocityInView:self.view];
         CGFloat velocityMagnitude = hypot(velocity.x, velocity.y);
         CGFloat triggerVelocity = 500;
         if (velocityMagnitude<triggerVelocity) {
+            // Fade out/in the necessary images and text
+            [self endGestureFade:gesture];
+            
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
             [self.animator addBehavior:snap];
-            
-            // Show the actor label
-            if (gesture.view.tag == 1) {
-                self.firstActorLabel.alpha = 0.0f;
-                // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
-                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                    // Animate the alpha value of your imageView from 1.0 to 0.0 here
-                    self.firstActorLabel.alpha = 1.0f;
-                } completion:^(BOOL finished) {
-                    // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-                }];
-            }
-            
-            if (gesture.view.tag == 2) {
-                self.secondActorLabel.alpha = 0.0f;
-                // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
-                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                    // Animate the alpha value of your imageView from 1.0 to 0.0 here
-                    self.secondActorLabel.alpha = 1.0f;
-                } completion:^(BOOL finished) {
-                    // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-                }];
-            }
 
             return;
         }
@@ -580,9 +551,11 @@ NSArray *backdropSizes;
         [dynamic setAngularResistance:2];
 
         // when the view no longer intersects with its superview, go ahead and remove it
-
         dynamic.action = ^{
             if (!CGRectIntersectsRect(gesture.view.superview.bounds, gesture.view.frame)) {
+                // Fade out/in the necessary images and text
+                [self endGestureFade:gesture];
+                
                 [self.animator removeAllBehaviors];
                 for (UIView *view in gesture.view.subviews)
                 {
@@ -594,6 +567,7 @@ NSArray *backdropSizes;
                 [self removeActor:(int)gesture.view.tag];
             }
         };
+        
         [self.animator addBehavior:dynamic];
 
         // add a little gravity so it accelerates off the screen (in case user gesture was slow)
@@ -608,6 +582,142 @@ NSArray *backdropSizes;
 - (CGFloat)angleOfView:(UIView *)view
 {
     return atan2(view.transform.b, view.transform.a);
+}
+
+- (void)startGestureFade:(UIGestureRecognizer *)gesture
+{
+    // Add the drop shadow effect to the view
+    gesture.view.layer.cornerRadius = gesture.view.frame.size.height/2;
+    gesture.view.layer.shadowColor = [[UIColor blackColor] CGColor];
+    gesture.view.layer.shadowOpacity = 1.0;
+    gesture.view.layer.shadowRadius = 5.0;
+    gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    
+    [gesture.view setNeedsDisplay];
+    
+    // Setup the image and dropshadow for the delete icon
+    [CALayer circleLayer:self.deleteImage.layer];
+    self.deleteImage.layer.cornerRadius = self.deleteImage.frame.size.height/2;
+    self.deleteImage.layer.masksToBounds = YES;
+    [self.deleteDropShadow addSubview:self.deleteImage];
+    
+    self.deleteImage.frame = CGRectMake(self.deleteDropShadow.frame.origin.x-40, self.deleteDropShadow.frame.origin.y-40, self.deleteDropShadow.frame.size.width, self.deleteDropShadow.frame.size.height);
+    self.deleteDropShadow.clipsToBounds = NO;
+    
+    self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
+    self.deleteDropShadow.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.deleteDropShadow.layer.shadowOpacity = 1.0;
+    self.deleteDropShadow.layer.shadowRadius = 5.0;
+    self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    
+    [self.deleteImage setImage:[UIImage imageNamed:@"delete.png"]];
+    
+    [self showImage:self.deleteImage];
+    [self showImage:self.deleteDropShadow];
+    [self.deleteDropShadow setNeedsDisplay];
+    [self.view bringSubviewToFront:self.deleteDropShadow];
+
+    [self showImage:self.deleteLabel];
+    
+    // Hide the actor label
+    if (gesture.view.tag == 1) {
+        self.firstActorLabel.alpha = ALPHA_FULL;
+        self.secondActorLabel.alpha = ALPHA_FULL;
+        self.secondActorImage.alpha = ALPHA_FULL;
+        self.continueButton.alpha = ALPHA_FULL;
+        self.deleteDropShadow.alpha = ALPHA_EMPTY;
+        self.deleteImage.alpha = ALPHA_EMPTY;
+        self.deleteLabel.alpha = ALPHA_EMPTY;
+        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
+        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+            // Animate the alpha value of your imageView from 1.0 to 0.0 here
+            self.firstActorLabel.alpha = ALPHA_EMPTY;
+            self.secondActorLabel.alpha = ALPHA_EMPTY;
+            self.secondActorImage.alpha = ALPHA_EMPTY;
+            self.continueButton.alpha = ALPHA_EMPTY;
+            self.deleteDropShadow.alpha = ALPHA_FULL;
+            self.deleteImage.alpha = ALPHA_FULL;
+            self.deleteLabel.alpha = ALPHA_FULL;
+        } completion:^(BOOL finished) {
+            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        }];
+    }
+    
+    if (gesture.view.tag == 2) {
+        self.secondActorLabel.alpha = ALPHA_FULL;
+        self.firstActorLabel.alpha = ALPHA_FULL;
+        self.firstActorImage.alpha = ALPHA_FULL;
+        self.continueButton.alpha = ALPHA_FULL;
+        self.deleteDropShadow.alpha = ALPHA_EMPTY;
+        self.deleteImage.alpha = ALPHA_EMPTY;
+        self.deleteLabel.alpha = ALPHA_EMPTY;
+        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
+        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+            // Animate the alpha value of your imageView from 1.0 to 0.0 here
+            self.secondActorLabel.alpha = ALPHA_EMPTY;
+            self.firstActorLabel.alpha = ALPHA_EMPTY;
+            self.firstActorImage.alpha = ALPHA_EMPTY;
+            self.continueButton.alpha = ALPHA_EMPTY;
+            self.deleteDropShadow.alpha = ALPHA_FULL;
+            self.deleteImage.alpha = ALPHA_FULL;
+            self.deleteLabel.alpha = ALPHA_FULL;
+        } completion:^(BOOL finished) {
+            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        }];
+    }
+}
+
+- (void)endGestureFade:(UIGestureRecognizer *)gesture
+{
+    // Remove the drop shadow effect from the view
+    gesture.view.layer.shadowOpacity = 0.0;
+    
+    // Show the actor label
+    if (gesture.view.tag == 1) {
+        self.firstActorLabel.alpha = ALPHA_EMPTY;
+        self.secondActorLabel.alpha = ALPHA_EMPTY;
+        self.secondActorImage.alpha = ALPHA_EMPTY;
+        self.continueButton.alpha = ALPHA_EMPTY;
+        self.deleteDropShadow.alpha = ALPHA_FULL;
+        self.deleteImage.alpha = ALPHA_FULL;
+        self.deleteLabel.alpha = ALPHA_FULL;
+        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
+        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+            // Animate the alpha value of your imageView from 1.0 to 0.0 here
+            self.firstActorLabel.alpha = ALPHA_FULL;
+            self.secondActorLabel.alpha = ALPHA_FULL;
+            self.secondActorImage.alpha = ALPHA_FULL;
+            self.continueButton.alpha = ALPHA_FULL;
+            self.deleteDropShadow.alpha = ALPHA_EMPTY;
+            self.deleteImage.alpha = ALPHA_EMPTY;
+            self.deleteLabel.alpha = ALPHA_EMPTY;
+        } completion:^(BOOL finished) {
+            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        }];
+    }
+    
+    if (gesture.view.tag == 2) {
+        self.secondActorLabel.alpha = ALPHA_EMPTY;
+        self.firstActorLabel.alpha = ALPHA_EMPTY;
+        self.firstActorImage.alpha = ALPHA_EMPTY;
+        self.continueButton.alpha = ALPHA_EMPTY;
+        self.deleteDropShadow.alpha = ALPHA_FULL;
+        self.deleteImage.alpha = ALPHA_FULL;
+        self.deleteLabel.alpha = ALPHA_FULL;
+        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
+        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+            // Animate the alpha value of your imageView from 1.0 to 0.0 here
+            self.secondActorLabel.alpha = ALPHA_FULL;
+            self.firstActorLabel.alpha = ALPHA_FULL;
+            self.firstActorImage.alpha = ALPHA_FULL;
+            self.continueButton.alpha = ALPHA_FULL;
+            self.deleteDropShadow.alpha = ALPHA_EMPTY;
+            self.deleteImage.alpha = ALPHA_EMPTY;
+            self.deleteLabel.alpha = ALPHA_EMPTY;
+        } completion:^(BOOL finished) {
+            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        }];
+    }
 }
 
 @end
