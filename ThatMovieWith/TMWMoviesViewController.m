@@ -11,7 +11,7 @@
 #import <SVProgressHUD.h>
 
 #import "TMWMoviesViewController.h"
-#import "TMWActorModel.h"
+#import "TMWActorContainer.h"
 
 @interface TMWMoviesViewController ()
 
@@ -21,8 +21,6 @@
 
 @implementation TMWMoviesViewController
 
-NSArray *tableData;
-NSArray *sameMovies;
 NSArray *movieResponseWithJLTMDBcall;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,40 +40,42 @@ NSArray *movieResponseWithJLTMDBcall;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [SVProgressHUD show];
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    [super viewDidAppear:YES];
+    [self.moviesTableView reloadData];
     
-    int numActorIDs = (int)[[TMWActorModel actorModel].chosenActorsIDs count];
-    int i = 0;
-    for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
-    {
-        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
-            
-            if (!error) {
-                [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
-                // Only refresh once all actor data has been retrieved
-                if (i == (numActorIDs - 1)) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
-                        [self.moviesTableView reloadData];
-                        [SVProgressHUD dismiss];
-                    });
-                }
-            }
-            else {
-                [errorAlertView show];
-                [SVProgressHUD dismiss];
-            }
-        }];
-        i++;
-    }
-    //[SVProgressHUD dismiss];
+//    [SVProgressHUD show];
+//    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+//    
+//    int numActorIDs = (int)[[TMWActorModel actorModel].chosenActorsIDs count];
+//    int i = 0;
+//    for (id actorID in [TMWActorModel actorModel].chosenActorsIDs)
+//    {
+//        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actorID} andResponseBlock:^(id response, NSError *error) {
+//            
+//            if (!error) {
+//                [[TMWActorModel actorModel] addActorMovies:response[@"cast"]];
+//                // Only refresh once all actor data has been retrieved
+//                if (i == (numActorIDs - 1)) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        sameMovies = [TMWActorModel actorModel].chosenActorsSameMoviesNames;
+//                        [self.moviesTableView reloadData];
+//                        [SVProgressHUD dismiss];
+//                    });
+//                }
+//            }
+//            else {
+//                [errorAlertView show];
+//                [SVProgressHUD dismiss];
+//            }
+//        }];
+//        i++;
+//    }
+//    //[SVProgressHUD dismiss];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    sameMovies = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -87,7 +87,7 @@ NSArray *movieResponseWithJLTMDBcall;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [sameMovies count];
+    return [[TMWActorContainer actorContainer].sameMoviesNames count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -100,8 +100,8 @@ NSArray *movieResponseWithJLTMDBcall;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    if ([sameMovies objectAtIndex:indexPath.row] != nil) {
-        cell.textLabel.text = [sameMovies objectAtIndex:indexPath.row];
+    if ([[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row] != nil) {
+        cell.textLabel.text = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
     }
     return cell;
 }
@@ -112,7 +112,7 @@ NSArray *movieResponseWithJLTMDBcall;
     
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
-                              withParameters:@{@"id":[[TMWActorModel actorModel].chosenActorsSameMoviesIDs objectAtIndex:indexPath.row]}];
+                              withParameters:@{@"id":[[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]}];
     
 }
 
@@ -132,20 +132,20 @@ NSArray *movieResponseWithJLTMDBcall;
         
         
         if (!error) {
-            [TMWActorModel actorModel].movieInfo = response;
+            NSDictionary *movieInfo = [[NSDictionary alloc] initWithDictionary:response];
             
             // If possible, open the movie in the IMDB app
             if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"imdb:///"]])
             {
                 //NSString *info= [TMWActorModel actorModel].movieInfo[];
-                NSString *imdbURL = [@"imdb:///title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]];
+                NSString *imdbURL = [@"imdb:///title/" stringByAppendingString:movieInfo[@"imdb_id"]];
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:imdbURL]];
             }
             // If not, open in the SVWebViewController
             else
             {
-            NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:[TMWActorModel actorModel].movieInfo[@"imdb_id"]];
+            NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
             NSLog(@"%@", webURL);
                 SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
