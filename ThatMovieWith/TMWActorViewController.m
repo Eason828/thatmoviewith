@@ -162,6 +162,7 @@ NSArray *backdropSizes;
         //self.startSecondaryLabel.hidden = NO;
         self.startThirdLabel.hidden = NO;
         [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
+        self.startArrow.hidden = NO;
     }
 }
 
