@@ -121,11 +121,11 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5Y-HL-ucZ" userLabel="deleteView">
-                    <rect key="frame" x="123" y="464" width="75" height="75"/>
+                    <rect key="frame" x="127" y="477" width="66" height="66"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O2n-Ij-Fg6" userLabel="Delete Image">
-                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                            <rect key="frame" x="0.0" y="0.0" width="66" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>

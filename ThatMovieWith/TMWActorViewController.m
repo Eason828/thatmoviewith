@@ -89,7 +89,6 @@ NSArray *backdropSizes;
 // Fade in the search instructions
 -(void)showSearchHelp
 {
-    NSLog(@"Help!!!");
     self.startLabel.alpha = 0.0;
     self.startThirdLabel.alpha = 0.0;
     self.startArrow.alpha = 0.0;
@@ -264,6 +263,22 @@ NSArray *backdropSizes;
 
 }
 
+- (CAAnimation*)getShakeAnimation
+{
+    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    
+    CGFloat wobbleAngle = 0.09f;
+    
+    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
+    
+    animation.autoreverses = YES;
+    animation.duration = 0.09;
+    animation.repeatCount = 4;
+    
+    return animation;
+}
 
 // Set the actor image and all of it's necessary properties
 - (void)configureActor:(TMWActor *)actor
@@ -312,6 +327,7 @@ NSArray *backdropSizes;
     dropShadow.userInteractionEnabled = YES;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     [self.view bringSubviewToFront:dropShadow];
+    [dropShadow.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
 }
 
 
@@ -564,7 +580,7 @@ NSArray *backdropSizes;
         // if we aren't dragging it down, just snap it back and quit
         CGPoint velocity = [gesture velocityInView:self.view];
         CGFloat velocityMagnitude = hypot(velocity.x, velocity.y);
-        CGFloat triggerVelocity = 500;
+        CGFloat triggerVelocity = 800;
         if (velocityMagnitude<triggerVelocity) {
             // Fade out/in the necessary images and text
             [self endGestureFade:gesture];
