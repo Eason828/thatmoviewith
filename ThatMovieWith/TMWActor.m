@@ -13,7 +13,7 @@
 
 @property(nonatomic, copy, readwrite) NSNumber *IDNumber;
 @property(nonatomic, copy, readwrite) NSString *name;
-@property(nonatomic, copy, readwrite) NSArray *movies;
+//@property(nonatomic, copy, readwrite) NSArray *movies;
 @property(nonatomic, copy, readwrite) NSString *hiResImageURLEnding;
 
 @end
