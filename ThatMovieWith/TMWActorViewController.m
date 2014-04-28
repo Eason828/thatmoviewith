@@ -119,6 +119,7 @@ NSArray *backdropSizes;
     // Fade in the search instructions
     [self performSelector:@selector(showSearchHelp) withObject:self afterDelay:2.0];
     
+    // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
 
@@ -353,12 +354,15 @@ NSArray *backdropSizes;
     TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         
-        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                  reuseIdentifier:CellIdentifier];
-        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
         tableView.showsVerticalScrollIndicator = YES;
         [cell layoutSubviews];
+        
+        // Set the line separator left offset to start after the image
+        [self.searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
+    
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
     cell.imageView.layer.masksToBounds = YES;
     cell.imageView.layer.borderWidth = 0;
@@ -383,6 +387,7 @@ NSArray *backdropSizes;
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
         [cell.imageView setImage:defaultImage];
     }
+    
     return cell;
 }
 
@@ -401,6 +406,9 @@ NSArray *backdropSizes;
 
     // If you scroll down in the search table view, this puts it back to the top next time you search
     [self.searchDisplayController.searchResultsTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    
+    // Remove the line separators if there is no results
+    self.searchDisplayController.searchResultsTableView.tableFooterView = [UIView new];
 }
 
 // Added to fix UITableView bottom bounds in UISearchDisplayController
