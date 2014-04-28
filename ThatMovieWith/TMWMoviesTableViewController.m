@@ -1,57 +1,71 @@
 //
-//  TMWMoviesViewController.m
+//  TMWMoviesTableViewController.m
 //  ThatMovieWith
 //
-//  Created by johnrhickey on 4/19/14.
+//  Created by johnrhickey on 4/27/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
+
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <SVWebViewController.h>
 
-#import "TMWMoviesViewController.h"
 #import "TMWActorContainer.h"
+#import "TMWMoviesTableViewController.h"
 
-@interface TMWMoviesViewController ()
-
-@property (strong, nonatomic) IBOutlet UITableView *moviesTableView;
+@interface TMWMoviesTableViewController ()
 
 @end
 
-@implementation TMWMoviesViewController
+@implementation TMWMoviesTableViewController
 
-NSArray *movieResponseWithJLTMDBcall;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (void)viewDidLoad
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    [super viewDidLoad];
+    
     if (self) {
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Movies";
     }
-    return self;
+    self.refreshControl = [UIRefreshControl new];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    [self refresh];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)refresh
+{
+    int count = [[TMWActorContainer actorContainer].allActorObjects count];
+    __block int i = 0;
+    for (TMWActor *actor in [TMWActorContainer actorContainer].allActorObjects) {
+        
+        __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+        
+        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actor.IDNumber} andResponseBlock:^(id response, NSError *error) {
+            
+            if (!error) {
+                actor.movies = [[NSArray alloc] initWithArray:response[@"cast"]];
+                i++;
+                if (i == count) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadData];
+                    });
+                }
+            }
+            else {
+                [errorAlertView show];
+            }
+        }];
+    }
     
+    [self.refreshControl endRefreshing];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)didReceiveMemoryWarning
 {
-    [super viewDidAppear:YES];
-    [self.moviesTableView reloadData];
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
 
 #pragma mark UITableViewMethods
 
@@ -115,8 +129,8 @@ NSArray *movieResponseWithJLTMDBcall;
             // If not, open in the SVWebViewController
             else
             {
-            NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
-            NSLog(@"%@", webURL);
+                NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
+                NSLog(@"%@", webURL);
                 SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentViewController:webViewController animated:YES completion:NULL];
@@ -128,8 +142,5 @@ NSArray *movieResponseWithJLTMDBcall;
         }
     }];
 }
-
-
-
 
 @end

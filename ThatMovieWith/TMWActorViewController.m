@@ -10,7 +10,7 @@
 #import <JLTMDbClient.h>
 
 #import "TMWActorViewController.h"
-#import "TMWMoviesViewController.h"
+#import "TMWMoviesTableViewController.h"
 #import "TMWActor.h"
 #import "TMWActorSearchResults.h"
 #import "TMWActorContainer.h"
@@ -424,7 +424,7 @@ NSArray *backdropSizes;
             // Show the Movies View if the continue button is pressed
             if ([button tag] == 3) {
                 
-                TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+                TMWMoviesTableViewController *moviesViewController = [[TMWMoviesTableViewController alloc] init];
                 [self.navigationController pushViewController:moviesViewController animated:YES];
                 [self.navigationController setNavigationBarHidden:NO animated:NO];
             }

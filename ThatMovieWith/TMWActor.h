@@ -12,7 +12,7 @@
 
 @property(nonatomic, copy, readonly) NSNumber *IDNumber;
 @property(nonatomic, copy, readonly) NSString *name;
-@property(nonatomic, copy, readonly) NSArray *movies;
+@property(nonatomic, copy) NSArray *movies;
 @property(nonatomic, copy, readonly) NSString *hiResImageURLEnding;
 
 - (instancetype)initWithActor:(NSDictionary *)actor;

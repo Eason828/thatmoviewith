@@ -10,7 +10,6 @@
 #import "HockeySDK.h"
 #import "TMWAppDelegate.h"
 #import "TMWActorViewController.h"
-#import "TMWMoviesViewController.h"
 
 @implementation TMWAppDelegate
 
