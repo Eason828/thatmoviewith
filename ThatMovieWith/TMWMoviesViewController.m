@@ -15,49 +15,97 @@
 @interface TMWMoviesViewController ()
 
 @property (strong, nonatomic) IBOutlet UITableView *moviesTableView;
+@property (strong, nonatomic) IBOutlet UIView *noResultsView;
+@property (strong, nonatomic) IBOutlet UILabel *noResultsLabel;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) UINavigationItem *navItem;
 
 @end
 
 @implementation TMWMoviesViewController
 
+int tableViewRows;
 NSArray *movieResponseWithJLTMDBcall;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        UINavigationItem *navItem = self.navigationItem;
-        navItem.title = @"Movies";
+
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
+    [super viewDidLoad];
+    self.navItem = self.navigationItem;
+    self.navItem.title = @"Movies";
+    self.navigationController.navigationBar.translucent = NO;
+    
+    // Add pull to refresh to the table view
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    [self.moviesTableView addSubview:self.refreshControl];
+    [self.view addSubview:self.moviesTableView];
+    // Set the table to be empty by default
+    tableViewRows = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    [self.moviesTableView reloadData];
+    
+    // Refresh the table view
+    [self refresh];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)refresh
 {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    // Fetch the movie data for all actors in the container
+    __block int i = 1;
+    for (TMWActor *actor in [TMWActorContainer actorContainer].allActorObjects) {
+        
+        __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+        
+        [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actor.IDNumber} andResponseBlock:^(id response, NSError *error) {
+            
+            if (!error) {
+                actor.movies = [[NSArray alloc] initWithArray:response[@"cast"]];
+                if (i == [[TMWActorContainer actorContainer].allActorObjects count]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
+                        if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
+                            self.moviesTableView.hidden = YES;
+                            self.noResultsView.hidden = NO;
+                            self.noResultsLabel.hidden = NO;
+                        } else {
+                            self.moviesTableView.hidden = NO;
+                            self.noResultsView.hidden = YES;
+                            self.noResultsLabel.hidden = YES;
+                        }
+                        [self.moviesTableView reloadData];
+                    });
+                }
+                i++;
+            }
+            else {
+                [errorAlertView show];
+            }
+        }];
+    }
+    
+    [self.refreshControl endRefreshing];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 #pragma mark UITableViewMethods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[TMWActorContainer actorContainer].sameMoviesNames count];
+    return tableViewRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -128,8 +176,5 @@ NSArray *movieResponseWithJLTMDBcall;
         }
     }];
 }
-
-
-
 
 @end
