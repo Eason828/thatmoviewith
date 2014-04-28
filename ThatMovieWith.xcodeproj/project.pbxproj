@@ -35,8 +35,8 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
-		E5BBD305190DEA95007A1D83 /* TMWMoviesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BBD303190DEA95007A1D83 /* TMWMoviesTableViewController.m */; };
-		E5BBD306190DEA95007A1D83 /* TMWMoviesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BBD304190DEA95007A1D83 /* TMWMoviesTableViewController.xib */; };
+		E5BBD30D190DFCF8007A1D83 /* TMWMoviesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */; };
+		E5BBD30E190DFCF8007A1D83 /* TMWMoviesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */; };
 		E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */; };
 		E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4001909B3B50032F82B /* TMWActor.m */; };
 		E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4051909B8220032F82B /* TMWActorContainer.m */; };
@@ -93,9 +93,9 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
-		E5BBD302190DEA95007A1D83 /* TMWMoviesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWMoviesTableViewController.h; sourceTree = "<group>"; };
-		E5BBD303190DEA95007A1D83 /* TMWMoviesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWMoviesTableViewController.m; sourceTree = "<group>"; };
-		E5BBD304190DEA95007A1D83 /* TMWMoviesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TMWMoviesTableViewController.xib; sourceTree = "<group>"; };
+		E5BBD30A190DFCF8007A1D83 /* TMWMoviesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWMoviesViewController.h; sourceTree = "<group>"; };
+		E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWMoviesViewController.m; sourceTree = "<group>"; };
+		E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TMWMoviesViewController.xib; sourceTree = "<group>"; };
 		E5CEC3FC1909B3850032F82B /* TMWActorSearchResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorSearchResults.h; sourceTree = "<group>"; };
 		E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorSearchResults.m; sourceTree = "<group>"; };
 		E5CEC3FF1909B3B50032F82B /* TMWActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActor.h; sourceTree = "<group>"; };
@@ -186,8 +186,8 @@
 			children = (
 				E571EA491901FD5800CB3B31 /* TMWActorViewController.h */,
 				E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */,
-				E5BBD302190DEA95007A1D83 /* TMWMoviesTableViewController.h */,
-				E5BBD303190DEA95007A1D83 /* TMWMoviesTableViewController.m */,
+				E5BBD30A190DFCF8007A1D83 /* TMWMoviesViewController.h */,
+				E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -195,8 +195,8 @@
 		E569FF371902F097002928AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */,
 				E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */,
-				E5BBD304190DEA95007A1D83 /* TMWMoviesTableViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -382,7 +382,7 @@
 			files = (
 				E5CEC4091909F7A10032F82B /* delete.png in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
-				E5BBD306190DEA95007A1D83 /* TMWMoviesTableViewController.xib in Resources */,
+				E5BBD30E190DFCF8007A1D83 /* TMWMoviesViewController.xib in Resources */,
 				E569FF451903C2DA002928AF /* arrow.png in Resources */,
 				E571EA4D1901FD5800CB3B31 /* TMWActorViewController.xib in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
@@ -473,6 +473,7 @@
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
 				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
 				E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */,
+				E5BBD30D190DFCF8007A1D83 /* TMWMoviesViewController.m in Sources */,
 				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
 				E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
@@ -480,7 +481,6 @@
 				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
 				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
 				E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */,
-				E5BBD305190DEA95007A1D83 /* TMWMoviesTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
