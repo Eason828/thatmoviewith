@@ -19,7 +19,6 @@
     float limgW =  self.imageView.image.size.height;
     if(limgW > 0) {
         self.textLabel.frame = CGRectMake(IMAGE_SIZE+IMAGE_TEXT_OFFSET,self.textLabel.frame.origin.y,self.textLabel.frame.size.width,self.textLabel.frame.size.height);
-
     }
 }
 
