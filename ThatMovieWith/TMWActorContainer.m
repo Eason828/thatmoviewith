@@ -65,8 +65,11 @@ static TMWActorContainer *actorContainer;
 {
     NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
     for (TMWActor *actor in mutableActorContainer) {
-        [mutableActorsMovies addObject:actor.movies];
+        if (actor.movies) {
+            [mutableActorsMovies addObject:actor.movies];
+        }
     }
+
     
     NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
     for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"original_title"]) {

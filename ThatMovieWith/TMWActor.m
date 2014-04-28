@@ -34,11 +34,6 @@
     return self;
 }
 
-//- (void)setMovies:(NSDictionary *)movies
-//{
-//    _movies = [[NSDictionary alloc] init];
-//}
-
 # pragma mark Getter Methods
 
 - (void)fetchActorMoviesWithID:(NSNumber *)actorFetchID
