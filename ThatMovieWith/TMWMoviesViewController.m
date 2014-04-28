@@ -80,11 +80,9 @@ NSArray *movieResponseWithJLTMDBcall;
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
                             self.moviesTableView.hidden = YES;
                             self.noResultsView.hidden = NO;
-                            self.noResultsLabel.hidden = NO;
                         } else {
                             self.moviesTableView.hidden = NO;
                             self.noResultsView.hidden = YES;
-                            self.noResultsLabel.hidden = YES;
                         }
                         [self.moviesTableView reloadData];
                     });
