@@ -24,7 +24,7 @@
 
 @implementation TMWMoviesViewController
 
-int tableViewRows;
+NSInteger tableViewRows;
 NSArray *movieResponseWithJLTMDBcall;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
