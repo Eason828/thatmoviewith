@@ -12,7 +12,12 @@
 
 @property(nonatomic, copy, readonly) NSArray *allActorObjects;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesNames;
+@property(nonatomic, copy, readonly) NSArray *sameMoviesPosterUrlEndings;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesIDs;
+@property(nonatomic, copy) NSString *imagesBaseURLString;
+@property(nonatomic, copy) NSArray *backdropSizes;
+
+
 
 + (TMWActorContainer *)actorContainer;
 

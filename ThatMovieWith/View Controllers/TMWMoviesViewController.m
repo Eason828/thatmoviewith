@@ -11,6 +11,9 @@
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorContainer.h"
+#import "TMWCustomMovieCellTableViewCell.h"
+
+#import "UIImage+DrawInitialsOnImage.h" // Actor's without images
 
 @interface TMWMoviesViewController ()
 
@@ -23,6 +26,8 @@
 @end
 
 @implementation TMWMoviesViewController
+
+#define TABLE_HEIGHT 88
 
 NSInteger tableViewRows;
 NSArray *movieResponseWithJLTMDBcall;
@@ -106,19 +111,67 @@ NSArray *movieResponseWithJLTMDBcall;
     return tableViewRows;
 }
 
+// Change the Height of the Cell [Default is 44]:
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
+{
+    return TABLE_HEIGHT;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"MoviesTable";
+    static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    [tableView setContentInset:UIEdgeInsetsZero];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+    
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     
+    TMWCustomMovieCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell = [[TMWCustomMovieCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                 reuseIdentifier:CellIdentifier];
+        tableView.showsVerticalScrollIndicator = YES;
+        [cell layoutSubviews];
+        
+        // Set the line separator left offset to start after the image
+        [tableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
+    
     if ([[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row] != nil) {
         cell.textLabel.text = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
     }
+    
+    // grab bound for contentView
+    CGRect contentViewBound = cell.imageView.bounds;
+    
+    // If NSString, fetch the image, else use the generated UIImage
+    if ([[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[3]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
+        
+        // Show the network activity icon
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        
+        // Get the image from the URL and set it
+        [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        CGRect imageViewFrame = cell.imageView.frame;
+        // change x position
+        imageViewFrame.origin.y = contentViewBound.size.height - imageViewFrame.size.height;
+        // assign the new frame
+        cell.imageView.frame = imageViewFrame;
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        
+        // Hide the network activity icon
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }
+    
+    else {
+        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"MoviesBackgroundHiRes.png"] withInitials:[[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row] withFontSize:120];
+        [cell.imageView setImage:defaultImage];
+    }
+    
     return cell;
 }
 

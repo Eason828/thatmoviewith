@@ -8,3 +8,4 @@ build/
 *.pbxuser
 .DS_Store
 HockeySDK-iOS/
+resources/
