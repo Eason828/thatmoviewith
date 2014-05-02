@@ -12,17 +12,9 @@
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
 		E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */; };
-		E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */; };
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
-		E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E54C0891190023A10084E687 /* CALayer+circleLayer.m */; };
-		E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
-		E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699A19001625006CD7F0 /* TMWCustomAnimations.m */; };
-		E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E566699D19002110006CD7F0 /* UIColor+customColors.m */; };
-		E569FF451903C2DA002928AF /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = E569FF441903C2DA002928AF /* arrow.png */; };
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
-		E571EA4C1901FD5800CB3B31 /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */; };
-		E571EA4D1901FD5800CB3B31 /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */; };
 		E5994CF218FDE85100A5B79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF118FDE85100A5B79F /* Foundation.framework */; };
 		E5994CF418FDE85100A5B79F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF318FDE85100A5B79F /* CoreGraphics.framework */; };
 		E5994CF618FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
@@ -35,12 +27,24 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
-		E5BBD30D190DFCF8007A1D83 /* TMWMoviesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */; };
-		E5BBD30E190DFCF8007A1D83 /* TMWMoviesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */; };
-		E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */; };
-		E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4001909B3B50032F82B /* TMWActor.m */; };
-		E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CEC4051909B8220032F82B /* TMWActorContainer.m */; };
+		E5C915FB1913111600A3DEC6 /* addActor.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C915FA1913111600A3DEC6 /* addActor.png */; };
+		E5C916081913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916031913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m */; };
+		E5C916091913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916051913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m */; };
+		E5C9160A1913338E00A3DEC6 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916071913338E00A3DEC6 /* UIImage+ImageEffects.m */; };
+		E5C91611191333FB00A3DEC6 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */; };
+		E5C91612191333FB00A3DEC6 /* UIColor+customColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */; };
+		E5C91613191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */; };
+		E5C916161913340B00A3DEC6 /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */; };
+		E5C916171913340B00A3DEC6 /* TMWMoviesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5C916151913340B00A3DEC6 /* TMWMoviesViewController.xib */; };
+		E5C9161C1913341600A3DEC6 /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916191913341500A3DEC6 /* TMWActorViewController.m */; };
+		E5C9161D1913341600A3DEC6 /* TMWMoviesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9161B1913341500A3DEC6 /* TMWMoviesViewController.m */; };
+		E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9161F1913341F00A3DEC6 /* TMWActor.m */; };
+		E5C916251913341F00A3DEC6 /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916211913341F00A3DEC6 /* TMWActorContainer.m */; };
+		E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */; };
+		E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */; };
+		E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */; };
 		E5CEC4091909F7A10032F82B /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E5CEC4081909F7A10032F82B /* delete.png */; };
+		E5F9187019109BB0000E2552 /* broadway-1361512189.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5F9186F19109BB0000E2552 /* broadway-1361512189.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,23 +64,9 @@
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
 		E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundLowRes@2x.png"; sourceTree = "<group>"; };
-		E5227AE1190890E10094D471 /* UIImage+DrawInitialsOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+DrawInitialsOnImage.h"; sourceTree = "<group>"; };
-		E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+DrawInitialsOnImage.m"; sourceTree = "<group>"; };
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
-		E54C0890190023A10084E687 /* CALayer+circleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+circleLayer.h"; sourceTree = "<group>"; };
-		E54C0891190023A10084E687 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+circleLayer.m"; sourceTree = "<group>"; };
-		E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomCellTableViewCell.h; sourceTree = "<group>"; };
-		E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomCellTableViewCell.m; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		E566699919001625006CD7F0 /* TMWCustomAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWCustomAnimations.h; sourceTree = "<group>"; };
-		E566699A19001625006CD7F0 /* TMWCustomAnimations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWCustomAnimations.m; sourceTree = "<group>"; };
-		E566699C19002110006CD7F0 /* UIColor+customColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+customColors.h"; sourceTree = "<group>"; };
-		E566699D19002110006CD7F0 /* UIColor+customColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+customColors.m"; sourceTree = "<group>"; };
-		E569FF441903C2DA002928AF /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		E571EA411901D28A00CB3B31 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
-		E571EA491901FD5800CB3B31 /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorViewController.h; sourceTree = "<group>"; };
-		E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorViewController.m; sourceTree = "<group>"; };
-		E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TMWActorViewController.xib; sourceTree = "<group>"; };
 		E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThatMovieWith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994CF118FDE85100A5B79F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E5994CF318FDE85100A5B79F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -93,16 +83,35 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
-		E5BBD30A190DFCF8007A1D83 /* TMWMoviesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWMoviesViewController.h; sourceTree = "<group>"; };
-		E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWMoviesViewController.m; sourceTree = "<group>"; };
-		E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TMWMoviesViewController.xib; sourceTree = "<group>"; };
-		E5CEC3FC1909B3850032F82B /* TMWActorSearchResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorSearchResults.h; sourceTree = "<group>"; };
-		E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorSearchResults.m; sourceTree = "<group>"; };
-		E5CEC3FF1909B3B50032F82B /* TMWActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActor.h; sourceTree = "<group>"; };
-		E5CEC4001909B3B50032F82B /* TMWActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActor.m; sourceTree = "<group>"; };
-		E5CEC4021909B4260032F82B /* TMWActorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMWActorContainer.h; sourceTree = "<group>"; };
-		E5CEC4051909B8220032F82B /* TMWActorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMWActorContainer.m; sourceTree = "<group>"; };
+		E5C915FA1913111600A3DEC6 /* addActor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addActor.png; sourceTree = "<group>"; };
+		E5C916021913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWCustomActorCellTableViewCell.h; path = Customizations/TMWCustomActorCellTableViewCell.h; sourceTree = "<group>"; };
+		E5C916031913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWCustomActorCellTableViewCell.m; path = Customizations/TMWCustomActorCellTableViewCell.m; sourceTree = "<group>"; };
+		E5C916041913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWCustomMovieCellTableViewCell.h; path = Customizations/TMWCustomMovieCellTableViewCell.h; sourceTree = "<group>"; };
+		E5C916051913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWCustomMovieCellTableViewCell.m; path = Customizations/TMWCustomMovieCellTableViewCell.m; sourceTree = "<group>"; };
+		E5C916061913338E00A3DEC6 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "Customizations/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		E5C916071913338E00A3DEC6 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "Customizations/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		E5C9160B191333FB00A3DEC6 /* CALayer+circleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+circleLayer.h"; path = "Categories/CALayer+circleLayer.h"; sourceTree = "<group>"; };
+		E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+circleLayer.m"; path = "Categories/CALayer+circleLayer.m"; sourceTree = "<group>"; };
+		E5C9160D191333FB00A3DEC6 /* UIColor+customColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+customColors.h"; path = "Categories/UIColor+customColors.h"; sourceTree = "<group>"; };
+		E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+customColors.m"; path = "Categories/UIColor+customColors.m"; sourceTree = "<group>"; };
+		E5C9160F191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawInitialsOnImage.h"; path = "Categories/UIImage+DrawInitialsOnImage.h"; sourceTree = "<group>"; };
+		E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawInitialsOnImage.m"; path = "Categories/UIImage+DrawInitialsOnImage.m"; sourceTree = "<group>"; };
+		E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWActorViewController.xib; path = Views/TMWActorViewController.xib; sourceTree = "<group>"; };
+		E5C916151913340B00A3DEC6 /* TMWMoviesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWMoviesViewController.xib; path = Views/TMWMoviesViewController.xib; sourceTree = "<group>"; };
+		E5C916181913341500A3DEC6 /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = "View Controllers/TMWActorViewController.h"; sourceTree = "<group>"; };
+		E5C916191913341500A3DEC6 /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorViewController.m; path = "View Controllers/TMWActorViewController.m"; sourceTree = "<group>"; };
+		E5C9161A1913341500A3DEC6 /* TMWMoviesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWMoviesViewController.h; path = "View Controllers/TMWMoviesViewController.h"; sourceTree = "<group>"; };
+		E5C9161B1913341500A3DEC6 /* TMWMoviesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWMoviesViewController.m; path = "View Controllers/TMWMoviesViewController.m"; sourceTree = "<group>"; };
+		E5C9161E1913341F00A3DEC6 /* TMWActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActor.h; path = Models/TMWActor.h; sourceTree = "<group>"; };
+		E5C9161F1913341F00A3DEC6 /* TMWActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActor.m; path = Models/TMWActor.m; sourceTree = "<group>"; };
+		E5C916201913341F00A3DEC6 /* TMWActorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorContainer.h; path = Models/TMWActorContainer.h; sourceTree = "<group>"; };
+		E5C916211913341F00A3DEC6 /* TMWActorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorContainer.m; path = Models/TMWActorContainer.m; sourceTree = "<group>"; };
+		E5C916221913341F00A3DEC6 /* TMWActorSearchResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorSearchResults.h; path = Models/TMWActorSearchResults.h; sourceTree = "<group>"; };
+		E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorSearchResults.m; path = Models/TMWActorSearchResults.m; sourceTree = "<group>"; };
+		E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MoviesBackgroundHiRes.png; sourceTree = "<group>"; };
+		E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MoviesBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5CEC4081909F7A10032F82B /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = images/delete.png; sourceTree = SOURCE_ROOT; };
+		E5F9186F19109BB0000E2552 /* broadway-1361512189.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "broadway-1361512189.ttf"; path = "../resources/broadway-1361512189.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,12 +143,14 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
+				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
+				E5C915FA1913111600A3DEC6 /* addActor.png */,
 				E5CEC4081909F7A10032F82B /* delete.png */,
 				E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */,
 				E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */,
 				E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */,
 				E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */,
-				E569FF441903C2DA002928AF /* arrow.png */,
 				E539DCF81900CD640027661C /* Clear.png */,
 			);
 			name = images;
@@ -158,12 +169,12 @@
 		E54C0893190023C60084E687 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E5227AE1190890E10094D471 /* UIImage+DrawInitialsOnImage.h */,
-				E5227AE2190890E10094D471 /* UIImage+DrawInitialsOnImage.m */,
-				E566699D19002110006CD7F0 /* UIColor+customColors.m */,
-				E566699C19002110006CD7F0 /* UIColor+customColors.h */,
-				E54C0890190023A10084E687 /* CALayer+circleLayer.h */,
-				E54C0891190023A10084E687 /* CALayer+circleLayer.m */,
+				E5C9160B191333FB00A3DEC6 /* CALayer+circleLayer.h */,
+				E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */,
+				E5C9160D191333FB00A3DEC6 /* UIColor+customColors.h */,
+				E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */,
+				E5C9160F191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.h */,
+				E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -171,12 +182,12 @@
 		E569FF351902F075002928AF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E5CEC3FF1909B3B50032F82B /* TMWActor.h */,
-				E5CEC4001909B3B50032F82B /* TMWActor.m */,
-				E5CEC4021909B4260032F82B /* TMWActorContainer.h */,
-				E5CEC4051909B8220032F82B /* TMWActorContainer.m */,
-				E5CEC3FC1909B3850032F82B /* TMWActorSearchResults.h */,
-				E5CEC3FD1909B3850032F82B /* TMWActorSearchResults.m */,
+				E5C9161E1913341F00A3DEC6 /* TMWActor.h */,
+				E5C9161F1913341F00A3DEC6 /* TMWActor.m */,
+				E5C916201913341F00A3DEC6 /* TMWActorContainer.h */,
+				E5C916211913341F00A3DEC6 /* TMWActorContainer.m */,
+				E5C916221913341F00A3DEC6 /* TMWActorSearchResults.h */,
+				E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -184,10 +195,10 @@
 		E569FF361902F084002928AF /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E571EA491901FD5800CB3B31 /* TMWActorViewController.h */,
-				E571EA4A1901FD5800CB3B31 /* TMWActorViewController.m */,
-				E5BBD30A190DFCF8007A1D83 /* TMWMoviesViewController.h */,
-				E5BBD30B190DFCF8007A1D83 /* TMWMoviesViewController.m */,
+				E5C916181913341500A3DEC6 /* TMWActorViewController.h */,
+				E5C916191913341500A3DEC6 /* TMWActorViewController.m */,
+				E5C9161A1913341500A3DEC6 /* TMWMoviesViewController.h */,
+				E5C9161B1913341500A3DEC6 /* TMWMoviesViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -195,8 +206,8 @@
 		E569FF371902F097002928AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E5BBD30C190DFCF8007A1D83 /* TMWMoviesViewController.xib */,
-				E571EA4B1901FD5800CB3B31 /* TMWActorViewController.xib */,
+				E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */,
+				E5C916151913340B00A3DEC6 /* TMWMoviesViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -204,10 +215,12 @@
 		E569FF381902F0B6002928AF /* Customizations */ = {
 			isa = PBXGroup;
 			children = (
-				E55FF55C18FF521700E2EA43 /* TMWCustomCellTableViewCell.h */,
-				E55FF55D18FF521700E2EA43 /* TMWCustomCellTableViewCell.m */,
-				E566699919001625006CD7F0 /* TMWCustomAnimations.h */,
-				E566699A19001625006CD7F0 /* TMWCustomAnimations.m */,
+				E5C916021913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.h */,
+				E5C916031913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m */,
+				E5C916041913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.h */,
+				E5C916051913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m */,
+				E5C916061913338E00A3DEC6 /* UIImage+ImageEffects.h */,
+				E5C916071913338E00A3DEC6 /* UIImage+ImageEffects.m */,
 			);
 			name = Customizations;
 			sourceTree = "<group>";
@@ -215,6 +228,7 @@
 		E571EA481901D90000CB3B31 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E5F9186F19109BB0000E2552 /* broadway-1361512189.ttf */,
 				E539DCFA1900CD6E0027661C /* api */,
 				E5994D0318FDE85100A5B79F /* Images.xcassets */,
 				E539DC67190080F20027661C /* images */,
@@ -382,16 +396,19 @@
 			files = (
 				E5CEC4091909F7A10032F82B /* delete.png in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
-				E5BBD30E190DFCF8007A1D83 /* TMWMoviesViewController.xib in Resources */,
-				E569FF451903C2DA002928AF /* arrow.png in Resources */,
-				E571EA4D1901FD5800CB3B31 /* TMWActorViewController.xib in Resources */,
+				E5C915FB1913111600A3DEC6 /* addActor.png in Resources */,
+				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
+				E5C916171913340B00A3DEC6 /* TMWMoviesViewController.xib in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
+				E5F9187019109BB0000E2552 /* broadway-1361512189.ttf in Resources */,
 				E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */,
 				E5994CFC18FDE85100A5B79F /* InfoPlist.strings in Resources */,
 				E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */,
+				E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */,
 				E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */,
 				E5994D0418FDE85100A5B79F /* Images.xcassets in Resources */,
+				E5C916161913340B00A3DEC6 /* TMWActorViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,18 +486,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5CEC3FE1909B3850032F82B /* TMWActorSearchResults.m in Sources */,
+				E5C91611191333FB00A3DEC6 /* CALayer+circleLayer.m in Sources */,
+				E5C9160A1913338E00A3DEC6 /* UIImage+ImageEffects.m in Sources */,
+				E5C91613191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m in Sources */,
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
-				E54C0892190023A10084E687 /* CALayer+circleLayer.m in Sources */,
-				E5CEC4061909B8220032F82B /* TMWActorContainer.m in Sources */,
-				E5BBD30D190DFCF8007A1D83 /* TMWMoviesViewController.m in Sources */,
-				E566699B19001625006CD7F0 /* TMWCustomAnimations.m in Sources */,
-				E5227AE3190890E10094D471 /* UIImage+DrawInitialsOnImage.m in Sources */,
+				E5C9161D1913341600A3DEC6 /* TMWMoviesViewController.m in Sources */,
+				E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */,
+				E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */,
+				E5C916091913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
-				E571EA4C1901FD5800CB3B31 /* TMWActorViewController.m in Sources */,
-				E566699E19002110006CD7F0 /* UIColor+customColors.m in Sources */,
-				E55FF55E18FF521700E2EA43 /* TMWCustomCellTableViewCell.m in Sources */,
-				E5CEC4011909B3B50032F82B /* TMWActor.m in Sources */,
+				E5C91612191333FB00A3DEC6 /* UIColor+customColors.m in Sources */,
+				E5C916081913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m in Sources */,
+				E5C9161C1913341600A3DEC6 /* TMWActorViewController.m in Sources */,
+				E5C916251913341F00A3DEC6 /* TMWActorContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

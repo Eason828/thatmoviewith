@@ -14,29 +14,23 @@
 #import "TMWActor.h"
 #import "TMWActorSearchResults.h"
 #import "TMWActorContainer.h"
-#import "TMWCustomCellTableViewCell.h"
-#import "TMWCustomAnimations.h"
+#import "TMWCustomActorCellTableViewCell.h" 
 
-#import "UIColor+customColors.h"
-#import "CALayer+circleLayer.h"
-#import "UIImage+DrawInitialsOnImage.h"
+#import "CALayer+circleLayer.h" // Circle layer over actor
+#import "UIImage+DrawInitialsOnImage.h" // Actor's without images
+#import "UIImage+ImageEffects.h" // For the darkened blur effect
 
 @interface TMWActorViewController ()
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
-@property (strong, nonatomic) IBOutlet UILabel *firstActorLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *firstActorImage;
-@property (strong, nonatomic) IBOutlet UILabel *secondActorLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
 @property (strong, nonatomic) IBOutlet UIView *firstActorDropShadow;
 @property (strong, nonatomic) IBOutlet UIView *secondActorDropShadow;
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
-@property (strong, nonatomic) IBOutlet UIButton *backgroundButton;
-@property (strong, nonatomic) IBOutlet UILabel *startLabel;
-@property (strong, nonatomic) IBOutlet UILabel *startSecondaryLabel;
-@property (strong, nonatomic) IBOutlet UILabel *startThirdLabel;
-@property (strong, nonatomic) IBOutlet UIImageView *startArrow;
+@property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
+@property (strong, nonatomic) IBOutlet UILabel *andLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
 @property (strong, nonatomic) IBOutlet UIView *deleteDropShadow;
 @property (strong, nonatomic) IBOutlet UILabel *deleteLabel;
@@ -48,17 +42,21 @@
 @property (strong, nonatomic) UISnapBehavior *snapBehavior;
 @property (strong, nonatomic) UICollisionBehavior *collisionBehavior;
 
+@property (strong, nonatomic) UIImageView *blurImageView;
+
 @end
 
 @implementation TMWActorViewController
-
-TMWActorSearchResults *searchResults;
-NSArray *backdropSizes;
 
 #define ALPHA_FULL      1.0
 #define ALPHA_EMPTY     0.0
 #define FADE_DURATION   0.5
 #define TABLE_HEIGHT    66
+
+TMWActorSearchResults *searchResults;
+TMWActor *actor1;
+TMWActor *actor2;
+int tappedActor;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -78,37 +76,13 @@ NSArray *backdropSizes;
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
-        
-        
-        [self showSearchHelp];
-        
     }
     return self;
 }
 
-// Fade in the search instructions
--(void)showSearchHelp
-{
-    self.startLabel.alpha = 0.0;
-    self.startThirdLabel.alpha = 0.0;
-    self.startArrow.alpha = 0.0;
-    self.startArrow.hidden = NO;
-    self.startLabel.hidden = NO;
-    self.startThirdLabel.hidden = NO;
-    [UIView animateWithDuration:1.5 delay:2.5 options:0 animations:^{
-        // Animate the alpha value of your imageView from 1.0 to 0.0 here
-        self.startLabel.alpha = 1.0;
-        self.startArrow.alpha = 1.0;
-        self.startSecondaryLabel.alpha = 0.0;
-    } completion:nil];
-    [UIView animateWithDuration:1.5 delay:4.5 options:0 animations:^{
-        // Animate the alpha value of your imageView from 1.0 to 0.0 here
-        self.startThirdLabel.alpha = 1.0;
-    } completion:nil];
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
+    // Hide the navigation bar
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
@@ -116,61 +90,124 @@ NSArray *backdropSizes;
 {
     [super viewDidLoad];
 
-    // Fade in the search instructions
-    [self performSelector:@selector(showSearchHelp) withObject:self afterDelay:2.0];
+    // Make the keyboard black
+    [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    // Make the search bar text white
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    
+    // Custom Fonts
+    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:48];
+    self.thatMovieWithLabel.font = broadwayFont;
+    self.andLabel.font = broadwayFont;
+
+    // Tag the actor buttons so they can be identified when pressed
+    self.firstActorDropShadow.tag = 1;
+    self.secondActorDropShadow.tag = 2;
+
+    // Tag the continue button
+    self.continueButton.tag = 3;
+    
+    // Hide the "and" and second actor
+    self.andLabel.hidden = YES;
+    self.secondActorImage.hidden = YES;
+    
+    //Setup for tapping on the image
+    UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.firstActorDropShadow addGestureRecognizer:longPressOne];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
 
+#pragma mark Private Methods
 
 // Remove the actor
-- (void)removeActor:(int)actorNum
+// TODO: Fix the removal of the actor. Maybe save the actor objects to TMWActor *actor1, *actor2
+- (void)removeActor
 {
-    switch (actorNum) {
-        
-        case 1:
-        {
-            NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
-            for (TMWActor *actor in chosenCopy) {
-                if ([actor.name isEqualToString:self.firstActorLabel.text]) {
-                    [[TMWActorContainer actorContainer] removeActorObject:actor];
-                    break;
-                }
-            }
-            self.firstActorLabel.text = @"";
-            break;
-        }
-        case 2:
-        {
-            NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
-            for (TMWActor *actor in chosenCopy) {
-                if ([actor.name isEqualToString:self.secondActorLabel.text]) {
-                    [[TMWActorContainer actorContainer] removeActorObject:actor];
-                    break;
-                }
-            }
-            self.secondActorLabel.text = @"";
-            break;
-        }
-    }
-    // Only hide the continue button if there are not actors
-    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
-    {
-        self.continueButton.hidden = YES;
-        self.startLabel.hidden = NO;
-        //self.startSecondaryLabel.hidden = NO;
-        self.startThirdLabel.hidden = NO;
-        [self.startArrow setImage: [UIImage imageNamed:@"arrow.png"]];
-        self.startArrow.hidden = NO;
-    }
+   switch (tappedActor) {
+       
+       case 1:
+       {
+           [[TMWActorContainer actorContainer] removeActorObject:actor1];
+           self.firstActorDropShadow.hidden = NO;
+           self.firstActorImage.hidden = NO;
+           self.firstActorImage.image = [UIImage imageNamed:@"addActor.png"];
+           break;
+       }
+       case 2:
+       {
+           [[TMWActorContainer actorContainer] removeActorObject:actor2];
+           self.secondActorDropShadow.hidden = NO;
+           self.secondActorImage.hidden = NO;
+           self.secondActorImage.image = [UIImage imageNamed:@"addActor.png"];
+           break;
+       }
+   }
+   // // Only hide the continue button if there are not actors
+   if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
+   {
+       // Reset the view back to the default load view
+       self.firstActorDropShadow.hidden = NO;
+       self.firstActorImage.hidden = NO;
+       self.firstActorImage.image = [UIImage imageNamed:@"addActor.png"];
+       
+       self.continueButton.hidden = YES;
+       self.secondActorImage.hidden = YES;
+       self.andLabel.hidden = YES;
+   }
 }
+
+- (void) loadImageConfiguration
+{
+    
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
+
+        if (!error) {
+            [TMWActorContainer actorContainer].backdropSizes = response[@"images"][@"logo_sizes"];
+            [TMWActorContainer actorContainer].imagesBaseURLString = [response[@"images"][@"base_url"] stringByAppendingString:[TMWActorContainer actorContainer].backdropSizes[1]];
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
+
+- (void) refreshActorResponseWithJLTMDBcall:(NSDictionary *)call
+{
+    NSString *JLTMDBCall = call[@"JLTMDBCall"];
+    NSDictionary *parameters = call[@"parameters"];
+    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
+        // Turn off the network activity in the status bar
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        });
+        
+        if (!error) {
+            searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
+            
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            });
+        }
+        else {
+            [errorAlertView show];
+        }
+    }];
+}
+
 
 -(void)showImage:(UIView*)image
 {
+    // Slowly make the image appear in animateWithDuration seconds
     image.hidden = YES;
     image.alpha = 0.0f;
-    // Then fades it away after 2 seconds (the cross-fade animation will take 0.5s)
     [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
         // Animate the alpha value of your imageView from 1.0 to 0.0 here
         image.alpha = 1.0f;
@@ -180,10 +217,32 @@ NSArray *backdropSizes;
     }];
 }
 
+// Captures the current screen and blurs it
+- (void)blurScreen {
+
+    UIScreen *screen = [UIScreen mainScreen];
+    UIGraphicsBeginImageContextWithOptions(self.view.frame.size, YES, screen.scale);
+    
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:NO];
+    
+    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *blurImage = [snapshot applyDarkEffect];
+    UIGraphicsEndImageContext();
+
+    // Blur the current screen
+    self.blurImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.blurImageView.image = blurImage;
+    self.blurImageView.contentMode = UIViewContentModeBottom;
+    self.blurImageView.clipsToBounds = YES;
+    [self.view addSubview:self.blurImageView];
+
+}
+
 #pragma mark UISearchBar methods
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    // Delays on making the actor API calls
     if([searchText length] != 0) {
         float delay = 0.6;
         
@@ -200,45 +259,121 @@ NSArray *backdropSizes;
     }
 }
 
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    // Hide the search bar when searching is completed
+    self.searchBar.hidden = YES;
+    [self.blurImageView removeFromSuperview];
+}
+
+
+#pragma mark UISearchDisplayController methods
+
+- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{   
+    // Make the background of the search results transparent
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+    backView.backgroundColor = [UIColor clearColor];
+    controller.searchResultsTableView.backgroundView = backView;
+    controller.searchResultsTableView.backgroundColor = [UIColor clearColor];
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    // Hide the search bar when searching is completed
+    self.searchBar.hidden = YES;
+    [self.blurImageView removeFromSuperview];
+}
+
+
 #pragma mark UITableView methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    self.startLabel.hidden = YES;
-    self.startSecondaryLabel.hidden = YES;
-    self.startThirdLabel.hidden = YES;
-    [self.startArrow setImage:nil];
+    // Return the number of rows in the section.
+    return [searchResults.names count];
+}
+
+// Change the Height of the Cell [Default is 44]:
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
+{
+    return TABLE_HEIGHT;
+}
+
+// Todo: add fade in animation to searching
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
     
-    [self.searchDisplayController setActive:NO animated:YES];
+    [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
     
-    // Remove the bottom (second) actor if both of the actors have been chosen
-    if (![self.firstActorLabel.text isEqualToString:@""] && ![self.secondActorLabel.text isEqualToString:@""])
-    {
-        NSArray *chosenCopy = [TMWActorContainer actorContainer].allActorObjects;
-        for (TMWActor *actor in chosenCopy)
-        {
-            if ([actor.name isEqualToString: self.secondActorLabel.text])
-            {
-                NSLog(@"Removing actor %@", actor.name);
-                [[TMWActorContainer actorContainer] removeActorObject:actor];
-                break;
-            }
-        }
+    TMWCustomActorCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        
+        cell = [[TMWCustomActorCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                 reuseIdentifier:CellIdentifier];
+        [cell layoutSubviews];
+        
+        // Set the line separator left offset to start after the image
+        [self.searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
+    
+    // Make the actors images circles in the search table view
+    cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
+    cell.imageView.layer.masksToBounds = YES;
+    cell.imageView.layer.borderWidth = 0;
+    
+    // Make the search table view test and cell separators white
+    cell.textLabel.text = [searchResults.names objectAtIndex:indexPath.row];
+    cell.textLabel.textColor = [UIColor whiteColor];
+    tableView.separatorColor = [UIColor whiteColor];
+    
+    // If NSString, fetch the image, else use the generated UIImage
+    if ([[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+        
+        NSString *urlstring = [[TMWActorContainer actorContainer].imagesBaseURLString stringByAppendingString:[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row]];
+        
+        // Show the network activity icon
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        // Get the image from the URL and set it
+        [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        
+        // Hide the network activity icon
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }
+    else {
+        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
+        [cell.imageView setImage:defaultImage];
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{   
+    [self.searchDisplayController setActive:NO animated:NO];
+
     TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
 
     // Add the chosen actor to the array of chosen actors
     [[TMWActorContainer actorContainer] addActorObject:chosenActor];
     
-    if ([self.firstActorLabel.text isEqualToString:@""])
+    if (tappedActor == 1)
     {
         // The second actor is the default selection for being replaced.
         self.firstActorDropShadow.tag = 1;
         [self configureActor:chosenActor
              ImageVisibility:self.firstActorImage
               withDropShadow:self.firstActorDropShadow
-                andTextLabel:self.firstActorLabel
                  atIndexPath:indexPath];
+        
+        // Show the second actor information
+        actor1 = chosenActor;
+        [self showImage:self.andLabel];
+        [self showImage:self.secondActorImage];
+        UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [self.secondActorDropShadow addGestureRecognizer:longPressOne];
     }
     else
     {
@@ -247,23 +382,15 @@ NSArray *backdropSizes;
         [self configureActor:chosenActor
              ImageVisibility:self.secondActorImage
                withDropShadow:self.secondActorDropShadow
-                andTextLabel:self.secondActorLabel
                  atIndexPath:indexPath];
-    }
-    
-    // One of the actors has been chosen
-    if (![self.firstActorLabel.text isEqualToString:@""] || ![self.secondActorLabel.text isEqualToString:@""])
-    {
-        self.continueButton.tag = 3;
-        self.backgroundButton.tag = 4;
-        self.continueButton.hidden = NO;
         
-        // Make the continue button animate
-        //[self.continueButton.layer addAnimation:[TMWCustomAnimations buttonOpacityAnimation] forKey:@"opacity"];
+        actor2 = chosenActor;
     }
 
+    self.continueButton.hidden = NO; 
 }
 
+// Wobble animation when adding an actor
 - (CAAnimation*)getShakeAnimation
 {
     CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
@@ -285,20 +412,15 @@ NSArray *backdropSizes;
 - (void)configureActor:(TMWActor *)actor
        ImageVisibility:(UIImageView *)actorImage
         withDropShadow:(UIView *)dropShadow
-          andTextLabel:(UILabel *)textLabel
            atIndexPath:(NSIndexPath *)indexPath
 {
-    textLabel.hidden = NO;
-    textLabel.alpha = 1.0;
-    textLabel.text = actor.name;
-    
     // Make the image a circle
     [CALayer circleLayer:actorImage.layer];
     actorImage.contentMode = UIViewContentModeScaleAspectFill;
     actorImage.layer.cornerRadius = actorImage.frame.size.height/2;
     actorImage.layer.masksToBounds = YES;
-    
 
+    // Add a drop shadow
     [dropShadow addSubview:actorImage];
     actorImage.frame = CGRectMake(dropShadow.frame.origin.x-40, dropShadow.frame.origin.y-40, actorImage.frame.size.width, actorImage.frame.size.height);
     dropShadow.clipsToBounds = NO;
@@ -306,7 +428,7 @@ NSArray *backdropSizes;
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [[self.imagesBaseUrlString stringByReplacingOccurrencesOfString:backdropSizes[1] withString:backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
         
         [actorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
     }
@@ -321,74 +443,10 @@ NSArray *backdropSizes;
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [dropShadow addGestureRecognizer:panGesture];
     
-    //Setup for tapping on the image
-    UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [dropShadow addGestureRecognizer:longPressOne];
-    
     dropShadow.userInteractionEnabled = YES;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     [self.view bringSubviewToFront:dropShadow];
     [dropShadow.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return [searchResults.names count];
-}
-
-// Change the Height of the Cell [Default is 44]:
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    return TABLE_HEIGHT;
-}
-
-// Todo: add fade in animation to searching
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    
-    [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
-    
-    TMWCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        
-        cell = [[TMWCustomCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                                 reuseIdentifier:CellIdentifier];
-        tableView.showsVerticalScrollIndicator = YES;
-        [cell layoutSubviews];
-        
-        // Set the line separator left offset to start after the image
-        [self.searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
-    }
-    
-    cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
-    cell.imageView.layer.masksToBounds = YES;
-    cell.imageView.layer.borderWidth = 0;
-
-    cell.textLabel.text = [searchResults.names objectAtIndex:indexPath.row];
-
-    // If NSString, fetch the image, else use the generated UIImage
-    if ([[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
-        
-        NSString *urlstring = [self.imagesBaseUrlString stringByAppendingString:[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row]];
-        
-        // Show the network activity icon
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-        // Get the image from the URL and set it
-        [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
-        
-        // Hide the network activity icon
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    }
-    else {
-        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
-        [cell.imageView setImage:defaultImage];
-    }
-    
-    return cell;
 }
 
 #pragma mark UISearchDisplayController methods
@@ -427,15 +485,36 @@ NSArray *backdropSizes;
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
+        case 1: // First actor button
+        {
+            
+            break;            
+        }
+            
+        case 2: // Second actor button
+        {
+            // Blur the current screen
+            // Put the search bar in front of the blurred view
+            [self.view bringSubviewToFront:self.searchBar];
+            
+            // Show the search bar
+            self.searchBar.hidden = NO;
+            self.searchBar.translucent = YES;
+            self.searchBar.backgroundImage = [UIImage new];
+            self.searchBar.scopeBarBackgroundImage = [UIImage new];
+            [self.searchBar becomeFirstResponder];
+            [self.searchDisplayController setActive:YES animated:YES];
+
+            break;
+        }
+            
         case 3: // Continue button
         {
             // Show the Movies View if the continue button is pressed
-            if ([button tag] == 3) {
-                
-                TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
-                [self.navigationController pushViewController:moviesViewController animated:YES];
-                [self.navigationController setNavigationBarHidden:NO animated:NO];
-            }
+            TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+            [self.navigationController pushViewController:moviesViewController animated:YES];
+            [self.navigationController setNavigationBarHidden:NO animated:NO];
+            
             break;
         }
         case 4: // Background button
@@ -445,58 +524,44 @@ NSArray *backdropSizes;
     }
 }
 
+// TODO: Change the actorbuttons to images with the (+), and put their handlers here
 - (void)handleTapGesture:(UITapGestureRecognizer *)tap
 {
-    NSLog(@"%ld", (long)tap.view.tag);
-    // Perform flipping here
+    // Blur the current screen
+    [self blurScreen];
+    // Put the search bar in front of the blurred view
+    [self.view bringSubviewToFront:self.searchBar];
+    
+    // Show the search bar
+    self.searchBar.hidden = NO;
+    self.searchBar.translucent = YES;
+    self.searchBar.backgroundImage = [UIImage new];
+    self.searchBar.scopeBarBackgroundImage = [UIImage new];
+    [self.searchBar becomeFirstResponder];
+    [self.searchDisplayController setActive:YES animated:YES];
+    
+    // Show the search bar
+    self.searchBar.hidden = NO;
+    self.searchBar.translucent = YES;
+    self.searchBar.backgroundImage = [UIImage new];
+    self.searchBar.scopeBarBackgroundImage = [UIImage new];
+    [self.searchBar becomeFirstResponder];
+    [self.searchDisplayController setActive:YES animated:YES];
+    
+    switch ((long)tap.view.tag) {
+        case 1:
+        {
+            tappedActor = 1;
+            break;
+        }
+        case 2:
+        {
+            tappedActor = 2;
+            break;
+        }
+    }
 }
 
-
-#pragma mark Private Methods
-
-- (void) loadImageConfiguration
-{
-    
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
-    
-    [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
-
-        if (!error) {
-            backdropSizes = response[@"images"][@"logo_sizes"];
-            self.imagesBaseUrlString = [response[@"images"][@"base_url"] stringByAppendingString:backdropSizes[1]];
-        }
-        else {
-            [errorAlertView show];
-        }
-    }];
-}
-
-- (void) refreshActorResponseWithJLTMDBcall:(NSDictionary *)call
-{
-    NSString *JLTMDBCall = call[@"JLTMDBCall"];
-    NSDictionary *parameters = call[@"parameters"];
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
-        // Turn off the network activity in the status bar
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        });
-        
-        if (!error) {
-            searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-            
-            dispatch_async(dispatch_get_main_queue(),^{
-                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            });
-        }
-        else {
-            [errorAlertView show];
-        }
-    }];
-}
 
 #pragma mark UIPanGestureRecognizer Methods
 
@@ -582,7 +647,8 @@ NSArray *backdropSizes;
             gesture.view.hidden = YES;
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
             [self.animator addBehavior:snap];
-            [self removeActor:(int)gesture.view.tag];
+            tappedActor = (int)gesture.view.tag;
+            [self removeActor];
         }
 
         // if we aren't dragging it down, just snap it back and quit
@@ -620,7 +686,8 @@ NSArray *backdropSizes;
                 gesture.view.hidden = YES;
                 UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
                 [self.animator addBehavior:snap];
-                [self removeActor:(int)gesture.view.tag];
+                tappedActor = (int)gesture.view.tag;
+                [self removeActor];
             }
         };
         
@@ -640,6 +707,7 @@ NSArray *backdropSizes;
     return atan2(view.transform.b, view.transform.a);
 }
 
+// Fades the necessary views when an actor is dragged around
 - (void)startGestureFade:(UIGestureRecognizer *)gesture
 {
     // Add the drop shadow effect to the view
@@ -677,52 +745,27 @@ NSArray *backdropSizes;
     
     // Hide the actor label
     if (gesture.view.tag == 1) {
-        self.firstActorLabel.alpha = ALPHA_FULL;
-        self.secondActorLabel.alpha = ALPHA_FULL;
-        self.secondActorImage.alpha = ALPHA_FULL;
-        self.continueButton.alpha = ALPHA_FULL;
-        self.deleteDropShadow.alpha = ALPHA_EMPTY;
-        self.deleteImage.alpha = ALPHA_EMPTY;
-        self.deleteLabel.alpha = ALPHA_EMPTY;
-        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
-        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-            // Animate the alpha value of your imageView from 1.0 to 0.0 here
-            self.firstActorLabel.alpha = ALPHA_EMPTY;
-            self.secondActorLabel.alpha = ALPHA_EMPTY;
-            self.secondActorImage.alpha = ALPHA_EMPTY;
-            self.continueButton.alpha = ALPHA_EMPTY;
-            self.deleteDropShadow.alpha = ALPHA_FULL;
-            self.deleteImage.alpha = ALPHA_FULL;
-            self.deleteLabel.alpha = ALPHA_FULL;
-        } completion:^(BOOL finished) {
-            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        }];
+        [self fadeAnimation:self.secondActorImage];
+        [self fadeAnimation:self.continueButton];
+        [self fadeAnimation:self.thatMovieWithLabel];
+        [self fadeAnimation:self.andLabel];
+        [self appearAnimation:self.deleteDropShadow];
+        [self appearAnimation:self.deleteImage];
+        [self appearAnimation:self.deleteLabel];
     }
     
     if (gesture.view.tag == 2) {
-        self.secondActorLabel.alpha = ALPHA_FULL;
-        self.firstActorLabel.alpha = ALPHA_FULL;
-        self.firstActorImage.alpha = ALPHA_FULL;
-        self.continueButton.alpha = ALPHA_FULL;
-        self.deleteDropShadow.alpha = ALPHA_EMPTY;
-        self.deleteImage.alpha = ALPHA_EMPTY;
-        self.deleteLabel.alpha = ALPHA_EMPTY;
-        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
-        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-            // Animate the alpha value of your imageView from 1.0 to 0.0 here
-            self.secondActorLabel.alpha = ALPHA_EMPTY;
-            self.firstActorLabel.alpha = ALPHA_EMPTY;
-            self.firstActorImage.alpha = ALPHA_EMPTY;
-            self.continueButton.alpha = ALPHA_EMPTY;
-            self.deleteDropShadow.alpha = ALPHA_FULL;
-            self.deleteImage.alpha = ALPHA_FULL;
-            self.deleteLabel.alpha = ALPHA_FULL;
-        } completion:^(BOOL finished) {
-            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        }];
+        [self fadeAnimation:self.firstActorImage];
+        [self fadeAnimation:self.continueButton];
+        [self fadeAnimation:self.thatMovieWithLabel];
+        [self fadeAnimation:self.andLabel];
+        [self appearAnimation:self.deleteDropShadow];
+        [self appearAnimation:self.deleteImage];
+        [self appearAnimation:self.deleteLabel];
     }
 }
 
+// Fades the necessary views when an actor is dragged around
 - (void)endGestureFade:(UIGestureRecognizer *)gesture
 {
     // Remove the drop shadow effect from the view
@@ -730,50 +773,45 @@ NSArray *backdropSizes;
     
     // Show the actor label
     if (gesture.view.tag == 1) {
-        self.firstActorLabel.alpha = ALPHA_EMPTY;
-        self.secondActorLabel.alpha = ALPHA_EMPTY;
-        self.secondActorImage.alpha = ALPHA_EMPTY;
-        self.continueButton.alpha = ALPHA_EMPTY;
-        self.deleteDropShadow.alpha = ALPHA_FULL;
-        self.deleteImage.alpha = ALPHA_FULL;
-        self.deleteLabel.alpha = ALPHA_FULL;
-        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
-        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-            // Animate the alpha value of your imageView from 1.0 to 0.0 here
-            self.firstActorLabel.alpha = ALPHA_FULL;
-            self.secondActorLabel.alpha = ALPHA_FULL;
-            self.secondActorImage.alpha = ALPHA_FULL;
-            self.continueButton.alpha = ALPHA_FULL;
-            self.deleteDropShadow.alpha = ALPHA_EMPTY;
-            self.deleteImage.alpha = ALPHA_EMPTY;
-            self.deleteLabel.alpha = ALPHA_EMPTY;
-        } completion:^(BOOL finished) {
-            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        }];
+        [self appearAnimation:self.secondActorImage];
+        [self appearAnimation:self.continueButton];
+        [self appearAnimation:self.thatMovieWithLabel];
+        [self appearAnimation:self.andLabel];
+        [self fadeAnimation:self.deleteDropShadow];
+        [self fadeAnimation:self.deleteImage];
+        [self fadeAnimation:self.deleteLabel];
     }
     
     if (gesture.view.tag == 2) {
-        self.secondActorLabel.alpha = ALPHA_EMPTY;
-        self.firstActorLabel.alpha = ALPHA_EMPTY;
-        self.firstActorImage.alpha = ALPHA_EMPTY;
-        self.continueButton.alpha = ALPHA_EMPTY;
-        self.deleteDropShadow.alpha = ALPHA_FULL;
-        self.deleteImage.alpha = ALPHA_FULL;
-        self.deleteLabel.alpha = ALPHA_FULL;
-        // Then fades it away after 2 seconds (the cross-fade animation will take FADE_DURATIONs)
-        [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-            // Animate the alpha value of your imageView from 1.0 to 0.0 here
-            self.secondActorLabel.alpha = ALPHA_FULL;
-            self.firstActorLabel.alpha = ALPHA_FULL;
-            self.firstActorImage.alpha = ALPHA_FULL;
-            self.continueButton.alpha = ALPHA_FULL;
-            self.deleteDropShadow.alpha = ALPHA_EMPTY;
-            self.deleteImage.alpha = ALPHA_EMPTY;
-            self.deleteLabel.alpha = ALPHA_EMPTY;
-        } completion:^(BOOL finished) {
-            // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        }];
+        [self appearAnimation:self.firstActorImage];
+        [self appearAnimation:self.continueButton];
+        [self appearAnimation:self.thatMovieWithLabel];
+        [self appearAnimation:self.andLabel];
+        [self fadeAnimation:self.deleteDropShadow];
+        [self fadeAnimation:self.deleteImage];
+        [self fadeAnimation:self.deleteLabel];
     }
+}
+
+- (void)fadeAnimation:(UIView *)view
+{
+    view.alpha = ALPHA_FULL;
+    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+        view.alpha = ALPHA_EMPTY;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+    }];
+    
+}
+
+- (void)appearAnimation:(UIView *)view
+{
+    view.alpha = ALPHA_EMPTY;
+    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
+        view.alpha = ALPHA_FULL;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+    }];
 }
 
 @end

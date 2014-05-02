@@ -10,6 +10,4 @@
 
 @interface TMWActorViewController : UIViewController
 
-@property (copy, nonatomic) NSString *imagesBaseUrlString;
-
 @end
