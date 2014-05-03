@@ -11,12 +11,14 @@
                 <outlet property="deleteDropShadow" destination="h5Y-HL-ucZ" id="tao-8o-KtG"/>
                 <outlet property="deleteImage" destination="O2n-Ij-Fg6" id="FZc-2U-Bv3"/>
                 <outlet property="deleteLabel" destination="yEx-fM-xho" id="aYe-tq-fMF"/>
-                <outlet property="firstActorDropShadow" destination="T0C-oI-mru" id="FpE-IH-dlh"/>
+                <outlet property="firstActorButton" destination="MBa-lb-G7T" id="KUE-7d-0lc"/>
+                <outlet property="firstActorDropShadow" destination="T0C-oI-mru" id="HYK-hO-JnR"/>
                 <outlet property="firstActorImage" destination="17O-NN-qn3" id="OmH-gT-CdY"/>
                 <outlet property="searchBar" destination="hpu-Ls-tL3" id="Tfy-Te-dyH"/>
                 <outlet property="searchBarController" destination="aZt-um-9EG" id="5F2-i5-ks0"/>
                 <outlet property="searchDisplayController" destination="aZt-um-9EG" id="PSy-oF-VuH"/>
-                <outlet property="secondActorDropShadow" destination="sWC-m8-DYr" id="xe1-Bw-OIx"/>
+                <outlet property="secondActorButton" destination="5su-cV-Ecx" id="OIz-R4-f7r"/>
+                <outlet property="secondActorDropShadow" destination="sWC-m8-DYr" id="LCA-gp-Tva"/>
                 <outlet property="secondActorImage" destination="IJI-es-uex" id="BVy-Do-MYx"/>
                 <outlet property="thatMovieWithLabel" destination="Jkg-Pm-WM4" id="3C1-Xf-kWr"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -52,8 +54,11 @@
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" none="YES" button="YES"/>
+                    </accessibility>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sWC-m8-DYr" userLabel="secondActorDropShadow">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sWC-m8-DYr" userLabel="secondActorDropShadow" customClass="UIButton">
                     <rect key="frame" x="90" y="361" width="140" height="140"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -63,6 +68,9 @@
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" none="YES" button="YES"/>
+                    </accessibility>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5Y-HL-ucZ" userLabel="deleteView">
                     <rect key="frame" x="127" y="477" width="66" height="66"/>
@@ -97,6 +105,26 @@
                         <outlet property="delegate" destination="-1" id="umV-cw-PBb"/>
                     </connections>
                 </searchBar>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBa-lb-G7T" userLabel="firstActorButton">
+                    <rect key="frame" x="90" y="153" width="140" height="140"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="addActor.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="QM4-WI-z2w"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5su-cV-Ecx" userLabel="secondActorButton">
+                    <rect key="frame" x="90" y="361" width="140" height="140"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="addActor.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="i5J-mT-vtf"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

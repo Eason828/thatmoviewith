@@ -20,14 +20,20 @@
 #import "UIImage+DrawInitialsOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h" // For the darkened blur effect
 
-@interface TMWActorViewController ()
+@interface TMWActorViewController () {
+    // Gesture recgonizers for dragging the actor images around
+    UIPanGestureRecognizer *firstPanGesture;
+    UIPanGestureRecognizer *secondPanGesture;
+}
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
 @property (strong, nonatomic) IBOutlet UIImageView *firstActorImage;
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
 @property (strong, nonatomic) IBOutlet UIView *firstActorDropShadow;
+@property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
 @property (strong, nonatomic) IBOutlet UIView *secondActorDropShadow;
+@property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
 @property (strong, nonatomic) IBOutlet UILabel *andLabel;
@@ -102,7 +108,9 @@ int tappedActor;
 
     // Tag the actor buttons so they can be identified when pressed
     self.firstActorDropShadow.tag = 1;
+    self.firstActorButton.tag = 1;
     self.secondActorDropShadow.tag = 2;
+    self.secondActorButton.tag = 2;
 
     // Tag the continue button
     self.continueButton.tag = 3;
@@ -110,16 +118,44 @@ int tappedActor;
     // Hide the "and" and second actor
     self.andLabel.hidden = YES;
     self.secondActorImage.hidden = YES;
+    self.secondActorButton.hidden = YES;
     
-    //Setup for tapping on the image
-    UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.firstActorDropShadow addGestureRecognizer:longPressOne];
+    // Setup for dragging the actors around
+    firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    secondPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [self.firstActorDropShadow addGestureRecognizer:firstPanGesture];
+    [self.secondActorDropShadow addGestureRecognizer:secondPanGesture];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
 
 #pragma mark Private Methods
+
+// Blur the background and bring up the search bar
+- (void)searchForActor
+{
+    // Blur the current screen
+    [self blurScreen];
+    // Put the search bar in front of the blurred view
+    [self.view bringSubviewToFront:self.searchBar];
+    
+    // Show the search bar
+    self.searchBar.hidden = NO;
+    self.searchBar.translucent = YES;
+    self.searchBar.backgroundImage = [UIImage new];
+    self.searchBar.scopeBarBackgroundImage = [UIImage new];
+    [self.searchBar becomeFirstResponder];
+    [self.searchDisplayController setActive:YES animated:YES];
+    
+    // Show the search bar
+    self.searchBar.hidden = NO;
+    self.searchBar.translucent = YES;
+    self.searchBar.backgroundImage = [UIImage new];
+    self.searchBar.scopeBarBackgroundImage = [UIImage new];
+    [self.searchBar becomeFirstResponder];
+    [self.searchDisplayController setActive:YES animated:YES];
+}
 
 // Remove the actor
 // TODO: Fix the removal of the actor. Maybe save the actor objects to TMWActor *actor1, *actor2
@@ -131,8 +167,11 @@ int tappedActor;
        {
            [[TMWActorContainer actorContainer] removeActorObject:actor1];
            self.firstActorDropShadow.hidden = NO;
+           self.firstActorButton.hidden = NO;
+           [self.view bringSubviewToFront:self.firstActorButton];
            self.firstActorImage.hidden = NO;
            self.firstActorImage.image = [UIImage imageNamed:@"addActor.png"];
+           firstPanGesture.enabled = NO;
            break;
        }
        case 2:
@@ -140,7 +179,9 @@ int tappedActor;
            [[TMWActorContainer actorContainer] removeActorObject:actor2];
            self.secondActorDropShadow.hidden = NO;
            self.secondActorImage.hidden = NO;
+           self.secondActorButton.hidden = NO;
            self.secondActorImage.image = [UIImage imageNamed:@"addActor.png"];
+           secondPanGesture.enabled = NO;
            break;
        }
    }
@@ -154,6 +195,7 @@ int tappedActor;
        
        self.continueButton.hidden = YES;
        self.secondActorImage.hidden = YES;
+       self.secondActorButton.hidden = YES;
        self.andLabel.hidden = YES;
    }
 }
@@ -368,12 +410,14 @@ int tappedActor;
               withDropShadow:self.firstActorDropShadow
                  atIndexPath:indexPath];
         
+        // Enable dragging the actor around
+        firstPanGesture.enabled = YES;
+        
         // Show the second actor information
         actor1 = chosenActor;
         [self showImage:self.andLabel];
         [self showImage:self.secondActorImage];
-        UITapGestureRecognizer *longPressOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        [self.secondActorDropShadow addGestureRecognizer:longPressOne];
+        self.secondActorButton.hidden = NO;
     }
     else
     {
@@ -383,6 +427,9 @@ int tappedActor;
              ImageVisibility:self.secondActorImage
                withDropShadow:self.secondActorDropShadow
                  atIndexPath:indexPath];
+        
+        // Enable dragging the actor around
+        secondPanGesture.enabled = YES;
         
         actor2 = chosenActor;
     }
@@ -440,8 +487,6 @@ int tappedActor;
     [self showImage:dropShadow];
     
     // Setup for dragging the image around
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [dropShadow addGestureRecognizer:panGesture];
     
     dropShadow.userInteractionEnabled = YES;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
@@ -482,29 +527,24 @@ int tappedActor;
 // For showing the
 -(IBAction)buttonPressed:(id)sender
 {
+
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
         case 1: // First actor button
         {
-            
+            NSLog(@"button 1 tapped!");
+            tappedActor = 1;
+            self.firstActorButton.hidden = YES;
+            [self searchForActor];
             break;            
         }
             
         case 2: // Second actor button
         {
-            // Blur the current screen
-            // Put the search bar in front of the blurred view
-            [self.view bringSubviewToFront:self.searchBar];
-            
-            // Show the search bar
-            self.searchBar.hidden = NO;
-            self.searchBar.translucent = YES;
-            self.searchBar.backgroundImage = [UIImage new];
-            self.searchBar.scopeBarBackgroundImage = [UIImage new];
-            [self.searchBar becomeFirstResponder];
-            [self.searchDisplayController setActive:YES animated:YES];
-
+            tappedActor = 2;
+            self.secondActorButton.hidden = YES;
+            [self searchForActor];
             break;
         }
             
@@ -517,51 +557,8 @@ int tappedActor;
             
             break;
         }
-        case 4: // Background button
-        {
-            break; // flip the image back over
-        }
     }
 }
-
-// TODO: Change the actorbuttons to images with the (+), and put their handlers here
-- (void)handleTapGesture:(UITapGestureRecognizer *)tap
-{
-    // Blur the current screen
-    [self blurScreen];
-    // Put the search bar in front of the blurred view
-    [self.view bringSubviewToFront:self.searchBar];
-    
-    // Show the search bar
-    self.searchBar.hidden = NO;
-    self.searchBar.translucent = YES;
-    self.searchBar.backgroundImage = [UIImage new];
-    self.searchBar.scopeBarBackgroundImage = [UIImage new];
-    [self.searchBar becomeFirstResponder];
-    [self.searchDisplayController setActive:YES animated:YES];
-    
-    // Show the search bar
-    self.searchBar.hidden = NO;
-    self.searchBar.translucent = YES;
-    self.searchBar.backgroundImage = [UIImage new];
-    self.searchBar.scopeBarBackgroundImage = [UIImage new];
-    [self.searchBar becomeFirstResponder];
-    [self.searchDisplayController setActive:YES animated:YES];
-    
-    switch ((long)tap.view.tag) {
-        case 1:
-        {
-            tappedActor = 1;
-            break;
-        }
-        case 2:
-        {
-            tappedActor = 2;
-            break;
-        }
-    }
-}
-
 
 #pragma mark UIPanGestureRecognizer Methods
 
