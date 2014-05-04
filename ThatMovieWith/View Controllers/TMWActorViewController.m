@@ -54,10 +54,10 @@
 
 @implementation TMWActorViewController
 
-#define ALPHA_FULL      1.0
-#define ALPHA_EMPTY     0.0
-#define FADE_DURATION   0.5
-#define TABLE_HEIGHT    66
+static const NSUInteger ALPHA_FULL = 1;
+static const NSUInteger TABLE_HEIGHT = 66;
+static const double ALPHA_EMPTY = 0.0;
+static const double FADE_DURATION = 0.5;
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
@@ -746,6 +746,7 @@ int tappedActor;
         [self fadeAnimation:self.continueButton];
         [self fadeAnimation:self.thatMovieWithLabel];
         [self fadeAnimation:self.andLabel];
+        [self fadeAnimation:self.secondActorButton];
         [self appearAnimation:self.deleteDropShadow];
         [self appearAnimation:self.deleteImage];
         [self appearAnimation:self.deleteLabel];
@@ -756,6 +757,7 @@ int tappedActor;
         [self fadeAnimation:self.continueButton];
         [self fadeAnimation:self.thatMovieWithLabel];
         [self fadeAnimation:self.andLabel];
+        [self fadeAnimation:self.secondActorButton];
         [self appearAnimation:self.deleteDropShadow];
         [self appearAnimation:self.deleteImage];
         [self appearAnimation:self.deleteLabel];
@@ -774,6 +776,7 @@ int tappedActor;
         [self appearAnimation:self.continueButton];
         [self appearAnimation:self.thatMovieWithLabel];
         [self appearAnimation:self.andLabel];
+        [self appearAnimation:self.secondActorButton];
         [self fadeAnimation:self.deleteDropShadow];
         [self fadeAnimation:self.deleteImage];
         [self fadeAnimation:self.deleteLabel];
@@ -784,6 +787,7 @@ int tappedActor;
         [self appearAnimation:self.continueButton];
         [self appearAnimation:self.thatMovieWithLabel];
         [self appearAnimation:self.andLabel];
+        [self appearAnimation:self.secondActorButton];
         [self fadeAnimation:self.deleteDropShadow];
         [self fadeAnimation:self.deleteImage];
         [self fadeAnimation:self.deleteLabel];

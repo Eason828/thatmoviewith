@@ -22,7 +22,7 @@
 - (instancetype)initActorSearchResultsWithResults:(NSArray *)results
 {
     if (self) {
-        self.results = results;
+        _results = results;
     }
     return self;
 }
@@ -32,7 +32,7 @@
 - (NSArray *)names
 {
     NSMutableArray *mutableNamesArray = [[NSMutableArray alloc] init];
-    for (NSDictionary *dict in self.results) {
+    for (NSDictionary *dict in _results) {
         [mutableNamesArray addObject:dict[@"name"]];
     }
     return mutableNamesArray;

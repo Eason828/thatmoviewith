@@ -27,7 +27,7 @@
 
 @implementation TMWMoviesViewController
 
-#define TABLE_HEIGHT 88
+static const NSUInteger TABLE_HEIGHT = 88;
 
 NSInteger tableViewRows;
 NSArray *movieResponseWithJLTMDBcall;
