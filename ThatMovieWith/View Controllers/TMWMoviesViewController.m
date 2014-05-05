@@ -7,7 +7,7 @@
 //
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
-#import <SVWebViewController.h>
+#import "SVWebViewController.h"
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorContainer.h"
