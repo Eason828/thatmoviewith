@@ -70,7 +70,7 @@ NSArray *movieResponseWithJLTMDBcall;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     // Fetch the movie data for all actors in the container
-    __block int i = 1;
+    __block NSUInteger i = 1;
     for (TMWActor *actor in [TMWActorContainer actorContainer].allActorObjects) {
         
         __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
