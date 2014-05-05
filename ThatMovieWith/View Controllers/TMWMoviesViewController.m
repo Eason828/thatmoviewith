@@ -7,7 +7,7 @@
 //
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
-#import <SVWebViewController.h>
+#import "SVWebViewController.h"
 
 #import "TMWMoviesViewController.h"
 #import "TMWActorContainer.h"
@@ -203,23 +203,11 @@ NSArray *movieResponseWithJLTMDBcall;
         if (!error) {
             NSDictionary *movieInfo = [[NSDictionary alloc] initWithDictionary:response];
             
-            // If possible, open the movie in the IMDB app
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"imdb:///"]])
-            {
-                //NSString *info= [TMWActorModel actorModel].movieInfo[];
-                NSString *imdbURL = [@"imdb:///title/" stringByAppendingString:movieInfo[@"imdb_id"]];
-                
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:imdbURL]];
-            }
-            // If not, open in the SVWebViewController
-            else
-            {
             NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
             NSLog(@"%@", webURL);
                 SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentViewController:webViewController animated:YES completion:NULL];
-            }
             
         }
         else {
