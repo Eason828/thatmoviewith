@@ -55,6 +55,10 @@ NSArray *movieResponseWithJLTMDBcall;
     [self.view addSubview:self.moviesTableView];
     // Set the table to be empty by default
     tableViewRows = 0;
+    
+    // Remove the line separators if there is no results
+    // This also eliminates the separators when loading the table
+    self.moviesTableView.tableFooterView = [UIView new];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -100,8 +104,11 @@ NSArray *movieResponseWithJLTMDBcall;
         }];
     }
     
+    // End refreshing and remove the pull to refresh
     [self.refreshControl endRefreshing];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [self.refreshControl removeFromSuperview];
+    
+     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 #pragma mark UITableViewMethods
@@ -119,6 +126,8 @@ NSArray *movieResponseWithJLTMDBcall;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
+    
     static NSString *CellIdentifier = @"Cell";
     
     [tableView setContentInset:UIEdgeInsetsZero];
