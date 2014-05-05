@@ -102,7 +102,7 @@ int tappedActor;
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
     
     // Custom Fonts
-    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:48];
+    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:32];
     self.thatMovieWithLabel.font = broadwayFont;
     self.andLabel.font = broadwayFont;
 
@@ -765,7 +765,7 @@ int tappedActor;
         [self fadeAnimation:self.continueButton];
         [self fadeAnimation:self.thatMovieWithLabel];
         [self fadeAnimation:self.andLabel];
-        [self fadeAnimation:self.secondActorButton];
+        [self fadeAnimation:self.firstActorButton];
         [self appearAnimation:self.deleteDropShadow];
         [self appearAnimation:self.deleteImage];
         [self appearAnimation:self.deleteLabel];
@@ -780,7 +780,7 @@ int tappedActor;
     
     // Show the actor label
     if (gesture.view.tag == 1) {
-        [self appearAnimation:self.secondActorImage];
+
         [self appearAnimation:self.continueButton];
         [self appearAnimation:self.thatMovieWithLabel];
         [self appearAnimation:self.andLabel];
@@ -791,11 +791,10 @@ int tappedActor;
     }
     
     if (gesture.view.tag == 2) {
-        [self appearAnimation:self.firstActorImage];
         [self appearAnimation:self.continueButton];
         [self appearAnimation:self.thatMovieWithLabel];
         [self appearAnimation:self.andLabel];
-        [self appearAnimation:self.secondActorButton];
+        [self appearAnimation:self.firstActorButton];
         [self fadeAnimation:self.deleteDropShadow];
         [self fadeAnimation:self.deleteImage];
         [self fadeAnimation:self.deleteLabel];
