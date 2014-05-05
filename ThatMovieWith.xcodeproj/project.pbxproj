@@ -27,6 +27,7 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
+		E5C1DED219175B820041E31D /* SVWebViewControllerActivityIMDB@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C1DED119175B820041E31D /* SVWebViewControllerActivityIMDB@2x.png */; };
 		E5C915FB1913111600A3DEC6 /* addActor.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C915FA1913111600A3DEC6 /* addActor.png */; };
 		E5C916081913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916031913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m */; };
 		E5C916091913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916051913338E00A3DEC6 /* TMWCustomMovieCellTableViewCell.m */; };
@@ -83,6 +84,7 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
+		E5C1DED119175B820041E31D /* SVWebViewControllerActivityIMDB@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SVWebViewControllerActivityIMDB@2x.png"; sourceTree = "<group>"; };
 		E5C915FA1913111600A3DEC6 /* addActor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addActor.png; sourceTree = "<group>"; };
 		E5C916021913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWCustomActorCellTableViewCell.h; path = Customizations/TMWCustomActorCellTableViewCell.h; sourceTree = "<group>"; };
 		E5C916031913338E00A3DEC6 /* TMWCustomActorCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWCustomActorCellTableViewCell.m; path = Customizations/TMWCustomActorCellTableViewCell.m; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E5C1DED119175B820041E31D /* SVWebViewControllerActivityIMDB@2x.png */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
 				E5C915FA1913111600A3DEC6 /* addActor.png */,
@@ -396,6 +399,7 @@
 			files = (
 				E5CEC4091909F7A10032F82B /* delete.png in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
+				E5C1DED219175B820041E31D /* SVWebViewControllerActivityIMDB@2x.png in Resources */,
 				E5C915FB1913111600A3DEC6 /* addActor.png in Resources */,
 				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
 				E5C916171913340B00A3DEC6 /* TMWMoviesViewController.xib in Resources */,
