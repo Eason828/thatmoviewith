@@ -20,6 +20,8 @@
 #import "UIImage+DrawInitialsOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h" // For the darkened blur effect
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface TMWActorViewController () {
     // Gesture recgonizers for dragging the actor images around
     UIPanGestureRecognizer *firstPanGesture;
@@ -30,9 +32,7 @@
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
 @property (strong, nonatomic) IBOutlet UIImageView *firstActorImage;
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
-@property (strong, nonatomic) IBOutlet UIView *firstActorDropShadow;
 @property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
-@property (strong, nonatomic) IBOutlet UIView *secondActorDropShadow;
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
@@ -107,9 +107,7 @@ int tappedActor;
     self.andLabel.font = broadwayFont;
 
     // Tag the actor buttons so they can be identified when pressed
-    self.firstActorDropShadow.tag = 1;
     self.firstActorButton.tag = 1;
-    self.secondActorDropShadow.tag = 2;
     self.secondActorButton.tag = 2;
 
     // Tag the continue button
@@ -117,14 +115,15 @@ int tappedActor;
     
     // Hide the "and" and second actor
     self.andLabel.hidden = YES;
-    self.secondActorImage.hidden = YES;
     self.secondActorButton.hidden = YES;
     
     // Setup for dragging the actors around
     firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     secondPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [self.firstActorDropShadow addGestureRecognizer:firstPanGesture];
-    [self.secondActorDropShadow addGestureRecognizer:secondPanGesture];
+    [self.firstActorButton addGestureRecognizer:firstPanGesture];
+    [self.secondActorButton addGestureRecognizer:secondPanGesture];
+    firstPanGesture.enabled = NO;
+    secondPanGesture.enabled = NO;
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -166,21 +165,18 @@ int tappedActor;
        case 1:
        {
            [[TMWActorContainer actorContainer] removeActorObject:actor1];
-           self.firstActorDropShadow.hidden = NO;
            self.firstActorButton.hidden = NO;
+           [self.firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
            [self.view bringSubviewToFront:self.firstActorButton];
-           self.firstActorImage.hidden = NO;
-           self.firstActorImage.image = [UIImage imageNamed:@"addActor.png"];
            firstPanGesture.enabled = NO;
            break;
        }
        case 2:
        {
            [[TMWActorContainer actorContainer] removeActorObject:actor2];
-           self.secondActorDropShadow.hidden = NO;
-           self.secondActorImage.hidden = NO;
            self.secondActorButton.hidden = NO;
-           self.secondActorImage.image = [UIImage imageNamed:@"addActor.png"];
+           [self.secondActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
+           [self.view bringSubviewToFront:self.secondActorButton];
            secondPanGesture.enabled = NO;
            break;
        }
@@ -189,12 +185,9 @@ int tappedActor;
    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
    {
        // Reset the view back to the default load view
-       self.firstActorDropShadow.hidden = NO;
-       self.firstActorImage.hidden = NO;
-       self.firstActorImage.image = [UIImage imageNamed:@"addActor.png"];
-       
+       [self.firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
+       secondPanGesture.enabled = NO;
        self.continueButton.hidden = YES;
-       self.secondActorImage.hidden = YES;
        self.secondActorButton.hidden = YES;
        self.andLabel.hidden = YES;
    }
@@ -304,6 +297,7 @@ int tappedActor;
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     // Hide the search bar when searching is completed
+    [self.searchDisplayController setActive:NO animated:NO];
     self.searchBar.hidden = YES;
     [self.blurImageView removeFromSuperview];
 }
@@ -323,6 +317,7 @@ int tappedActor;
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
     // Hide the search bar when searching is completed
+    [self.searchDisplayController setActive:NO animated:NO];
     self.searchBar.hidden = YES;
     [self.blurImageView removeFromSuperview];
 }
@@ -393,10 +388,13 @@ int tappedActor;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{   
+{
     [self.searchDisplayController setActive:NO animated:NO];
 
     TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
+    
+    // Remove an actor if one was chosen
+    [self removeActor];
 
     // Add the chosen actor to the array of chosen actors
     [[TMWActorContainer actorContainer] addActorObject:chosenActor];
@@ -404,10 +402,9 @@ int tappedActor;
     if (tappedActor == 1)
     {
         // The second actor is the default selection for being replaced.
-        self.firstActorDropShadow.tag = 1;
         [self configureActor:chosenActor
              ImageVisibility:self.firstActorImage
-              withDropShadow:self.firstActorDropShadow
+              withButton:self.firstActorButton
                  atIndexPath:indexPath];
         
         // Enable dragging the actor around
@@ -415,22 +412,20 @@ int tappedActor;
         
         // Show the second actor information
         actor1 = chosenActor;
-        [self showImage:self.andLabel];
-        [self showImage:self.secondActorImage];
+        self.andLabel.hidden = NO;
         self.secondActorButton.hidden = NO;
     }
     else
     {
         // The second actor is the default selection for being replaced.
-        self.secondActorDropShadow.tag = 2;
         [self configureActor:chosenActor
              ImageVisibility:self.secondActorImage
-               withDropShadow:self.secondActorDropShadow
+               withButton:self.secondActorButton
                  atIndexPath:indexPath];
         
         // Enable dragging the actor around
         secondPanGesture.enabled = YES;
-        
+        self.secondActorButton.hidden = NO;
         actor2 = chosenActor;
     }
 
@@ -458,7 +453,7 @@ int tappedActor;
 // Set the actor image and all of it's necessary properties
 - (void)configureActor:(TMWActor *)actor
        ImageVisibility:(UIImageView *)actorImage
-        withDropShadow:(UIView *)dropShadow
+            withButton:(UIButton *)button
            atIndexPath:(NSIndexPath *)indexPath
 {
     // Make the image a circle
@@ -468,30 +463,54 @@ int tappedActor;
     actorImage.layer.masksToBounds = YES;
 
     // Add a drop shadow
-    [dropShadow addSubview:actorImage];
-    actorImage.frame = CGRectMake(dropShadow.frame.origin.x-40, dropShadow.frame.origin.y-40, actorImage.frame.size.width, actorImage.frame.size.height);
-    dropShadow.clipsToBounds = NO;
+    [button addSubview:actorImage];
+    //actorImage.frame = CGRectMake(button.frame.origin.x, button.frame.origin.y, actorImage.frame.size.width, actorImage.frame.size.height);
+    actorImage.frame = button.bounds;
+    NSLog(@"%f, %f", button.bounds.origin.x, button.bounds.origin.y);
+    button.clipsToBounds = NO;
     
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
         
-        [actorImage setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        __weak typeof(actorImage) weakActorImage = actorImage;
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
+        [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"Clear.png"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
+            
+            // Set the image
+            weakActorImage.image = image;
+            // Get the actor circle image with layer and set it to the button background
+            UIGraphicsBeginImageContextWithOptions(weakActorImage.bounds.size, weakActorImage.opaque, 0.0);
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            [weakActorImage.layer renderInContext:context];
+            UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            [button setBackgroundImage:screenShot forState:UIControlStateNormal];
+            [weakActorImage removeFromSuperview];
+            
+        } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
+            NSLog(@"Failed with error: %@", error);
+        }];
     }
     else {
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundHiRes.png"] withInitials:actor.name withFontSize:48];
         [actorImage setImage:defaultImage];
+        // Get the actor circle initials image with layer and set it to the button background
+        UIGraphicsBeginImageContextWithOptions(actorImage.bounds.size, actorImage.opaque, 0.0);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [actorImage.layer renderInContext:context];
+        UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [button setBackgroundImage:screenShot forState:UIControlStateNormal];
+        [actorImage removeFromSuperview];
+        
     }
-    [self showImage:actorImage];
-    [self showImage:dropShadow];
-    
-    // Setup for dragging the image around
-    
-    dropShadow.userInteractionEnabled = YES;
+    [self showImage:button];
+
+    button.userInteractionEnabled = YES;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    [self.view bringSubviewToFront:dropShadow];
-    [dropShadow.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
+    [button.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
 }
 
 #pragma mark UISearchDisplayController methods
@@ -533,9 +552,7 @@ int tappedActor;
     switch ([button tag]) {
         case 1: // First actor button
         {
-            NSLog(@"button 1 tapped!");
             tappedActor = 1;
-            self.firstActorButton.hidden = YES;
             [self searchForActor];
             break;            
         }
@@ -543,7 +560,6 @@ int tappedActor;
         case 2: // Second actor button
         {
             tappedActor = 2;
-            self.secondActorButton.hidden = YES;
             [self searchForActor];
             break;
         }
@@ -718,11 +734,7 @@ int tappedActor;
     
     // Setup the image and dropshadow for the delete icon
     [CALayer circleLayer:self.deleteImage.layer];
-    self.deleteImage.layer.cornerRadius = self.deleteImage.frame.size.height/2;
-    self.deleteImage.layer.masksToBounds = YES;
     [self.deleteDropShadow addSubview:self.deleteImage];
-    
-    self.deleteImage.frame = CGRectMake(self.deleteDropShadow.frame.origin.x-40, self.deleteDropShadow.frame.origin.y-40, self.deleteDropShadow.frame.size.width, self.deleteDropShadow.frame.size.height);
     self.deleteDropShadow.clipsToBounds = NO;
     
     self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
@@ -730,8 +742,6 @@ int tappedActor;
     self.deleteDropShadow.layer.shadowOpacity = 1.0;
     self.deleteDropShadow.layer.shadowRadius = 5.0;
     self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-    
-    [self.deleteImage setImage:[UIImage imageNamed:@"delete.png"]];
     
     [self showImage:self.deleteImage];
     [self showImage:self.deleteDropShadow];
@@ -742,7 +752,6 @@ int tappedActor;
     
     // Hide the actor label
     if (gesture.view.tag == 1) {
-        [self fadeAnimation:self.secondActorImage];
         [self fadeAnimation:self.continueButton];
         [self fadeAnimation:self.thatMovieWithLabel];
         [self fadeAnimation:self.andLabel];
@@ -753,7 +762,6 @@ int tappedActor;
     }
     
     if (gesture.view.tag == 2) {
-        [self fadeAnimation:self.firstActorImage];
         [self fadeAnimation:self.continueButton];
         [self fadeAnimation:self.thatMovieWithLabel];
         [self fadeAnimation:self.andLabel];
