@@ -61,32 +61,16 @@ static TMWActorContainer *actorContainer;
     return [NSArray arrayWithArray:mutableActorContainer];
 }
 
-- (NSArray *)sameMoviesNames
-{
-    TMWActor *firstActor = mutableActorContainer[0];
-    NSMutableArray *sameMoviesArray = [[NSMutableArray alloc] init];
-    
-    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
-    
-    // Get the movie title for all movies in sameMovieIDs
-    for (id sameMovieID in self.sameMoviesIDs) {
-        if ([IDArray containsObject:sameMovieID]) {
-            [sameMoviesArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"original_title"]];
-        }
-    }
-    return sameMoviesArray;
-}
-
-- (NSArray *)sameMoviesIDs
+- (NSArray *)sameMovies
 {
     NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
     for (TMWActor *actor in mutableActorContainer) {
         if (actor.movies) {
             [mutableActorsMovies addObject:actor.movies];
-    
         }
     }
     
+    // Get a intersection containing the IDs of the same movies
     NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
     for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"id"]) {
         
@@ -97,8 +81,68 @@ static TMWActorContainer *actorContainer;
             [intersection addObjectsFromArray:individualActorMovies];
         }
     }
-    return [[intersection set] allObjects];
+    NSArray *sameIDs = [[intersection set] allObjects];
     
+    // Create an array movies objects from those IDs
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *sameMoviesArray = [[NSMutableArray alloc] init];
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    for (id sameMovieID in sameIDs) {
+        if ([IDArray containsObject:sameMovieID]) {
+            [sameMoviesArray addObject:firstActor.movies[[IDArray indexOfObject:sameMovieID]]];
+        }
+    }
+    
+    // Sort the movies by release date
+    NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"release_date"
+                                                                 ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortByName];
+    NSArray *sortedMoviesArray = [sameMoviesArray sortedArrayUsingDescriptors:sortDescriptors];
+    
+    // Put the movies with "null" release dates first, because they're likely to
+    // be movies that aren't out yet.
+    NSArray *releaseDatesArray = [sortedMoviesArray valueForKey:@"release_date"];
+    NSMutableArray *nullFirstArray = [[NSMutableArray alloc] initWithArray:sortedMoviesArray];
+    for (id movieRelease in releaseDatesArray) {
+        if (movieRelease == (id)[NSNull null]) {
+            [nullFirstArray removeObjectAtIndex:[releaseDatesArray indexOfObject:movieRelease]];
+            [nullFirstArray insertObject:sortedMoviesArray[[releaseDatesArray indexOfObject:movieRelease]] atIndex:0];
+        }
+    }
+    return nullFirstArray;
+}
+
+- (NSArray *)sameMoviesIDs
+{
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *sameMoviesIDsArray = [[NSMutableArray alloc] init];
+    
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    // Get the movie id for all movies in sameMovieIDs
+    for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
+        if ([IDArray containsObject:sameMovieID]) {
+            [sameMoviesIDsArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"id"]];
+        }
+    }
+    return sameMoviesIDsArray;
+}
+
+- (NSArray *)sameMoviesNames
+{
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *sameMoviesNamesArray = [[NSMutableArray alloc] init];
+    
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    // Get the movie title for all movies in sameMovieIDs
+    for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
+        if ([IDArray containsObject:sameMovieID]) {
+            [sameMoviesNamesArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"original_title"]];
+        }
+    }
+    return sameMoviesNamesArray;
 }
 
 - (NSArray *)sameMoviesPosterUrlEndings
@@ -109,7 +153,7 @@ static TMWActorContainer *actorContainer;
     NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
     
     // Get the poster path for all movies in sameMovieIDs
-    for (id sameMovieID in self.sameMoviesIDs) {
+    for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
         if ([IDArray containsObject:sameMovieID]) {
             [samePosterArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"poster_path"]];
         }
