@@ -154,8 +154,8 @@ NSArray *movieResponseWithJLTMDBcall;
     // grab bound for contentView
     CGRect contentViewBound = cell.imageView.bounds;
     
-    // If NSString, fetch the image, else use the generated UIImage
-    if ([[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
+    // If an image exists, fetch it. Else use the generated UIImage
+    if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
         
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[3]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
         

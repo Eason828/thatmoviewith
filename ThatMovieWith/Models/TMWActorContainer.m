@@ -63,23 +63,18 @@ static TMWActorContainer *actorContainer;
 
 - (NSArray *)sameMoviesNames
 {
-    NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
-    for (TMWActor *actor in mutableActorContainer) {
-        if (actor.movies) {
-            [mutableActorsMovies addObject:actor.movies];
-        }
-    }
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *sameMoviesArray = [[NSMutableArray alloc] init];
     
-    NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
-    for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"original_title"]) {
-        if ([intersection count] != 0) {
-            [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
-        }
-        else {
-            [intersection addObjectsFromArray:individualActorMovies];
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    // Get the movie title for all movies in sameMovieIDs
+    for (id sameMovieID in self.sameMoviesIDs) {
+        if ([IDArray containsObject:sameMovieID]) {
+            [sameMoviesArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"original_title"]];
         }
     }
-    return [[intersection set] allObjects];
+    return sameMoviesArray;
 }
 
 - (NSArray *)sameMoviesIDs
@@ -108,40 +103,19 @@ static TMWActorContainer *actorContainer;
 
 - (NSArray *)sameMoviesPosterUrlEndings
 {
-    NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
-    for (TMWActor *actor in mutableActorContainer) {
-        if (actor.movies) {
-            [mutableActorsMovies addObject:actor.movies];
-            
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *samePosterArray = [[NSMutableArray alloc] init];
+    
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    // Get the poster path for all movies in sameMovieIDs
+    for (id sameMovieID in self.sameMoviesIDs) {
+        if ([IDArray containsObject:sameMovieID]) {
+            [samePosterArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"poster_path"]];
         }
     }
-    
-    
-    NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
-    for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"poster_path"]) {
-        
-        NSMutableArray *mutableIndividualActorMovies = [[NSMutableArray alloc] initWithArray:individualActorMovies];
-        
-        if ([intersection count] != 0) {
-            [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
-        }
-        else {
-            
-            // Replace the null instances in the array with an int
-            // because sets will consider every null value as 1 value
-            NSUInteger i = 0;
-            for (NSString *posterPath in individualActorMovies)
-            {
-                if (posterPath == (id)[NSNull null]) {
-                    [mutableIndividualActorMovies replaceObjectAtIndex:i withObject:[NSNumber numberWithInteger:i]];
-                }
-                i++;
-            }
-            
-            [intersection addObjectsFromArray:mutableIndividualActorMovies];
-        }
-    }
-    return [[intersection set] allObjects];
+
+    return samePosterArray;
 }
 
 @end

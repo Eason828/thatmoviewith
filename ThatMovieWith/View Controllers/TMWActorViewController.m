@@ -466,7 +466,6 @@ int tappedActor;
     [button addSubview:actorImage];
     //actorImage.frame = CGRectMake(button.frame.origin.x, button.frame.origin.y, actorImage.frame.size.width, actorImage.frame.size.height);
     actorImage.frame = button.bounds;
-    NSLog(@"%f, %f", button.bounds.origin.x, button.bounds.origin.y);
     button.clipsToBounds = NO;
     
     // If NSString, fetch the image, else use the generated UIImage
