@@ -40,6 +40,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
 @property (strong, nonatomic) IBOutlet UIView *deleteDropShadow;
 @property (strong, nonatomic) IBOutlet UILabel *deleteLabel;
+@property (strong, nonatomic) IBOutlet UIView *deleteGradientView;
 
 // Animation stuff
 @property (strong, nonatomic) UIDynamicAnimator *animator;
@@ -124,6 +125,36 @@ int tappedActor;
     [self.secondActorButton addGestureRecognizer:secondPanGesture];
     firstPanGesture.enabled = NO;
     secondPanGesture.enabled = NO;
+    
+    
+    // Add the gradient to the delete gradient view
+    self.deleteGradientView.backgroundColor = [UIColor clearColor];
+    UIColor *colorOne = [UIColor clearColor];
+    UIColor *colorTwo = [UIColor colorWithRed:(0/255.0)  green:(0/255.0)  blue:(0/255.0)  alpha:0.3];
+    
+    NSArray *colors = [NSArray arrayWithObjects:(id)colorOne.CGColor, colorTwo.CGColor, nil];
+    NSNumber *stopOne = [NSNumber numberWithFloat:0.8];
+    NSNumber *stopTwo = [NSNumber numberWithFloat:1.0];
+    
+    NSArray *locations = [NSArray arrayWithObjects:stopOne, stopTwo, nil];
+    
+    CAGradientLayer *headerLayer = [CAGradientLayer layer];
+    headerLayer.frame = self.view.bounds;
+    headerLayer.colors = colors;
+    headerLayer.locations = locations;
+    [self.deleteGradientView.layer insertSublayer:headerLayer atIndex:0];
+    
+    // Setup the image and dropshadow for the delete icon
+    [CALayer circleLayer:self.deleteImage.layer];
+    [self.deleteDropShadow addSubview:self.deleteImage];
+    self.deleteDropShadow.clipsToBounds = NO;
+
+    self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
+    self.deleteDropShadow.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.deleteDropShadow.layer.shadowOpacity = 1.0;
+    self.deleteDropShadow.layer.shadowRadius = 5.0;
+    self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -466,7 +497,6 @@ int tappedActor;
     [button addSubview:actorImage];
     //actorImage.frame = CGRectMake(button.frame.origin.x, button.frame.origin.y, actorImage.frame.size.width, actorImage.frame.size.height);
     actorImage.frame = button.bounds;
-    NSLog(@"%f, %f", button.bounds.origin.x, button.bounds.origin.y);
     button.clipsToBounds = NO;
     
     // If NSString, fetch the image, else use the generated UIImage
@@ -644,7 +674,6 @@ int tappedActor;
     }
     else if (gesture.state == UIGestureRecognizerStateEnded)
     {
-        
         [self.animator removeAllBehaviors];
 
         // When the view intersects with the delete image, go ahead and remove it
@@ -653,8 +682,7 @@ int tappedActor;
             [self endGestureFade:gesture];
             
             [self.animator removeAllBehaviors];
-            for (UIView *view in gesture.view.subviews)
-            {
+            for (UIView *view in gesture.view.subviews) {
                 view.hidden = YES;
             }
             gesture.view.hidden = YES;
@@ -692,8 +720,7 @@ int tappedActor;
                 [self endGestureFade:gesture];
                 
                 [self.animator removeAllBehaviors];
-                for (UIView *view in gesture.view.subviews)
-                {
+                for (UIView *view in gesture.view.subviews) {
                     view.hidden = YES;
                 }
                 gesture.view.hidden = YES;
@@ -732,73 +759,22 @@ int tappedActor;
     
     [gesture.view setNeedsDisplay];
     
-    // Setup the image and dropshadow for the delete icon
-    [CALayer circleLayer:self.deleteImage.layer];
-    [self.deleteDropShadow addSubview:self.deleteImage];
-    self.deleteDropShadow.clipsToBounds = NO;
-    
-    self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
-    self.deleteDropShadow.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.deleteDropShadow.layer.shadowOpacity = 1.0;
-    self.deleteDropShadow.layer.shadowRadius = 5.0;
-    self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-    
-    [self showImage:self.deleteImage];
-    [self showImage:self.deleteDropShadow];
     [self.deleteDropShadow setNeedsDisplay];
-    [self.view bringSubviewToFront:self.deleteDropShadow];
-
-    [self showImage:self.deleteLabel];
     
-    // Hide the actor label
-    if (gesture.view.tag == 1) {
-        [self fadeAnimation:self.continueButton];
-        [self fadeAnimation:self.thatMovieWithLabel];
-        [self fadeAnimation:self.andLabel];
-        [self fadeAnimation:self.secondActorButton];
-        [self appearAnimation:self.deleteDropShadow];
-        [self appearAnimation:self.deleteImage];
-        [self appearAnimation:self.deleteLabel];
-    }
-    
-    if (gesture.view.tag == 2) {
-        [self fadeAnimation:self.continueButton];
-        [self fadeAnimation:self.thatMovieWithLabel];
-        [self fadeAnimation:self.andLabel];
-        [self fadeAnimation:self.firstActorButton];
-        [self appearAnimation:self.deleteDropShadow];
-        [self appearAnimation:self.deleteImage];
-        [self appearAnimation:self.deleteLabel];
-    }
+    self.deleteImage.hidden = NO;
+    [self slideUpAnimation:self.deleteGradientView];
+    [self slideUpAnimation:self.deleteDropShadow];
 }
 
 // Fades the necessary views when an actor is dragged around
 - (void)endGestureFade:(UIGestureRecognizer *)gesture
 {
-    // Remove the drop shadow effect from the view
+    // Remove the drop shadow effect from the actor image
     gesture.view.layer.shadowOpacity = 0.0;
     
-    // Show the actor label
-    if (gesture.view.tag == 1) {
-
-        [self appearAnimation:self.continueButton];
-        [self appearAnimation:self.thatMovieWithLabel];
-        [self appearAnimation:self.andLabel];
-        [self appearAnimation:self.secondActorButton];
-        [self fadeAnimation:self.deleteDropShadow];
-        [self fadeAnimation:self.deleteImage];
-        [self fadeAnimation:self.deleteLabel];
-    }
-    
-    if (gesture.view.tag == 2) {
-        [self appearAnimation:self.continueButton];
-        [self appearAnimation:self.thatMovieWithLabel];
-        [self appearAnimation:self.andLabel];
-        [self appearAnimation:self.firstActorButton];
-        [self fadeAnimation:self.deleteDropShadow];
-        [self fadeAnimation:self.deleteImage];
-        [self fadeAnimation:self.deleteLabel];
-    }
+    [self fadeAnimation:self.deleteLabel];
+    [self slideDownAnimation:self.deleteGradientView];
+    [self slideDownAnimation:self.deleteDropShadow];
 }
 
 - (void)fadeAnimation:(UIView *)view
@@ -820,6 +796,32 @@ int tappedActor;
     } completion:^(BOOL finished) {
         // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
     }];
+}
+
+- (void)slideUpAnimation:(UIView *)view
+{
+    view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+    view.alpha = 1.0;
+    view.hidden = NO;
+    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
+                     animations:^{
+                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
+                     } completion:^(BOOL finished) {
+                         [self showImage:self.deleteLabel];
+                     }];
+}
+
+- (void)slideDownAnimation:(UIView *)view
+{
+    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
+                     animations:^{
+                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+                     } completion:^(BOOL finished) {
+                         // Move the view back
+                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
+                         view.alpha = 0.0;
+                         view.hidden = YES;
+                     }];
 }
 
 @end
