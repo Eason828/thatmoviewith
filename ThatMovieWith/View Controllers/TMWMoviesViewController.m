@@ -14,6 +14,7 @@
 #import "TMWCustomMovieCellTableViewCell.h"
 
 #import "UIImage+DrawInitialsOnImage.h" // Actor's without images
+#import "UIColor+customColors.h"
 
 @interface TMWMoviesViewController ()
 
@@ -46,7 +47,20 @@ NSArray *movieResponseWithJLTMDBcall;
     [super viewDidLoad];
     self.navItem = self.navigationItem;
     self.navItem.title = @"Movies";
+    
+    // Set the title color
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
+    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
+    
+    // Set the back button color
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    self.view.backgroundColor = [UIColor blackColor];
+    self.moviesTableView.backgroundColor = [UIColor blackColor];
+
     self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
+    self.navigationController.navigationBar.titleTextAttributes = attributes;
     
     // Add pull to refresh to the table view
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -140,6 +154,7 @@ NSArray *movieResponseWithJLTMDBcall;
     if (cell == nil) {
         cell = [[TMWCustomMovieCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                  reuseIdentifier:CellIdentifier];
+        cell.textLabel.textColor = [UIColor goldColor];
         tableView.showsVerticalScrollIndicator = YES;
         [cell layoutSubviews];
         
