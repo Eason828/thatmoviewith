@@ -155,6 +155,7 @@ NSArray *movieResponseWithJLTMDBcall;
         cell = [[TMWCustomMovieCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                  reuseIdentifier:CellIdentifier];
         cell.textLabel.textColor = [UIColor goldColor];
+        tableView.separatorColor = [UIColor grayColor];
         tableView.showsVerticalScrollIndicator = YES;
         [cell layoutSubviews];
         

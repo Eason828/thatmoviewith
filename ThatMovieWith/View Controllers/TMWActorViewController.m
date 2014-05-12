@@ -101,6 +101,9 @@ int tappedActor;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Calls perferredStatusBarStyle
+    [self setNeedsStatusBarAppearanceUpdate];
 
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
@@ -111,6 +114,7 @@ int tappedActor;
     UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
     self.thatMovieWithLabel.font = broadwayFont;
     self.andLabel.font = broadwayFont;
+
     self.view.backgroundColor = [UIColor blackColor];
     self.thatMovieWithLabel.textColor = [UIColor goldColor];
     self.andLabel.textColor = [UIColor goldColor];
@@ -171,6 +175,10 @@ int tappedActor;
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark Private Methods
