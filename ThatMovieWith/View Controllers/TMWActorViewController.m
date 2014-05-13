@@ -8,6 +8,7 @@
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
+#import <FlatUIKit.h>
 
 #import "TMWActorViewController.h"
 #import "TMWMoviesViewController.h"
@@ -19,6 +20,7 @@
 #import "CALayer+circleLayer.h" // Circle layer over actor
 #import "UIImage+DrawInitialsOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h" // For the darkened blur effect
+#import "UIColor+customColors.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -34,7 +36,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
 @property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
 @property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
-@property (strong, nonatomic) IBOutlet UIButton *continueButton;
+@property (strong, nonatomic) IBOutlet FUIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
 @property (strong, nonatomic) IBOutlet UILabel *andLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
@@ -69,6 +71,9 @@ int tappedActor;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Set the cancel button color in the search bar
+        [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor goldColor]];
+        
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
 
@@ -96,16 +101,23 @@ int tappedActor;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Calls perferredStatusBarStyle
+    [self setNeedsStatusBarAppearanceUpdate];
 
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     // Make the search bar text white
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor goldColor]];
     
     // Custom Fonts
-    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:32];
+    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
     self.thatMovieWithLabel.font = broadwayFont;
     self.andLabel.font = broadwayFont;
+
+    self.view.backgroundColor = [UIColor blackColor];
+    self.thatMovieWithLabel.textColor = [UIColor goldColor];
+    self.andLabel.textColor = [UIColor goldColor];
 
     // Tag the actor buttons so they can be identified when pressed
     self.firstActorButton.tag = 1;
@@ -130,7 +142,7 @@ int tappedActor;
     // Add the gradient to the delete gradient view
     self.deleteGradientView.backgroundColor = [UIColor clearColor];
     UIColor *colorOne = [UIColor clearColor];
-    UIColor *colorTwo = [UIColor colorWithRed:(0/255.0)  green:(0/255.0)  blue:(0/255.0)  alpha:0.3];
+    UIColor *colorTwo = [UIColor colorWithRed:(255/255.0)  green:(255/255.0)  blue:(255/255.0)  alpha:0.3];
     
     NSArray *colors = [NSArray arrayWithObjects:(id)colorOne.CGColor, colorTwo.CGColor, nil];
     NSNumber *stopOne = [NSNumber numberWithFloat:0.8];
@@ -150,14 +162,23 @@ int tappedActor;
     self.deleteDropShadow.clipsToBounds = NO;
 
     self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
-    self.deleteDropShadow.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.deleteDropShadow.layer.shadowColor = [[UIColor whiteColor] CGColor];
     self.deleteDropShadow.layer.shadowOpacity = 1.0;
     self.deleteDropShadow.layer.shadowRadius = 5.0;
     self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     
+    // Custom continue button
+    self.continueButton.buttonColor = [UIColor goldColor];
+    self.continueButton.cornerRadius = 6.0f;
+    self.continueButton.titleLabel.font = [UIFont fontWithName:@"Broadway" size:20];
+    [self.continueButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark Private Methods
@@ -178,13 +199,6 @@ int tappedActor;
     [self.searchBar becomeFirstResponder];
     [self.searchDisplayController setActive:YES animated:YES];
     
-    // Show the search bar
-    self.searchBar.hidden = NO;
-    self.searchBar.translucent = YES;
-    self.searchBar.backgroundImage = [UIImage new];
-    self.searchBar.scopeBarBackgroundImage = [UIImage new];
-    [self.searchBar becomeFirstResponder];
-    [self.searchDisplayController setActive:YES animated:YES];
 }
 
 // Remove the actor
@@ -394,7 +408,7 @@ int tappedActor;
     // Make the search table view test and cell separators white
     cell.textLabel.text = [searchResults.names objectAtIndex:indexPath.row];
     cell.textLabel.textColor = [UIColor whiteColor];
-    tableView.separatorColor = [UIColor whiteColor];
+    tableView.separatorColor = [UIColor goldColor];
     
     // If NSString, fetch the image, else use the generated UIImage
     if ([[searchResults.lowResImageEndingURLs objectAtIndex:indexPath.row] isKindOfClass:[NSString class]]) {
@@ -495,7 +509,6 @@ int tappedActor;
 
     // Add a drop shadow
     [button addSubview:actorImage];
-    //actorImage.frame = CGRectMake(button.frame.origin.x, button.frame.origin.y, actorImage.frame.size.width, actorImage.frame.size.height);
     actorImage.frame = button.bounds;
     button.clipsToBounds = NO;
     
@@ -752,7 +765,7 @@ int tappedActor;
 {
     // Add the drop shadow effect to the view
     gesture.view.layer.cornerRadius = gesture.view.frame.size.height/2;
-    gesture.view.layer.shadowColor = [[UIColor blackColor] CGColor];
+    gesture.view.layer.shadowColor = [[UIColor goldColor] CGColor];
     gesture.view.layer.shadowOpacity = 1.0;
     gesture.view.layer.shadowRadius = 5.0;
     gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);

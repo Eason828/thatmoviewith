@@ -11,5 +11,8 @@
 @interface UIColor (customColors)
 
 + (UIColor *)ringBlueColor;
++ (UIColor *)movieRedColor;
++ (UIColor *)navyBlueColor;
++ (UIColor *)goldColor;
 
 @end

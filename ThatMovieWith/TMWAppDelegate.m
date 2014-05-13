@@ -11,6 +11,8 @@
 #import "TMWAppDelegate.h"
 #import "TMWActorViewController.h"
 
+#import "UIColor+customColors.h"
+
 @implementation TMWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -24,7 +26,6 @@
     self.window.rootViewController = navController;
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
-    
     
     // Hockey app needs to be the last 3rd party integration in this method
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
