@@ -115,8 +115,6 @@ int tappedActor;
     UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
-
-//    self.view.backgroundColor = [UIColor blackColor];
     
     _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains.jpg"]];
     

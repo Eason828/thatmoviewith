@@ -126,6 +126,7 @@
 
 - (UIImage *)applyDarkCurtainEffect
 {
+    // TODO: Remove FBTweaks here
     CGFloat alpha = FBTweakValue(@"Curtain", @"Group", @"Duration", 0.53);
     CGFloat blurRad = FBTweakValue(@"Curtain", @"Group", @"Blur Radius", 12.0);
     UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:alpha];
