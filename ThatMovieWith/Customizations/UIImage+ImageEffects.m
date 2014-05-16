@@ -94,6 +94,7 @@
  */
 
 #import "UIImage+ImageEffects.h"
+#import "FBTweakInline.h"
 
 @import Accelerate;
 #import <float.h>
@@ -122,6 +123,14 @@
     return [self applyBlurWithRadius:8 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 }
 
+
+- (UIImage *)applyDarkCurtainEffect
+{
+    CGFloat alpha = FBTweakValue(@"Curtain", @"Group", @"Duration", 0.53);
+    CGFloat blurRad = FBTweakValue(@"Curtain", @"Group", @"Blur Radius", 12.0);
+    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:alpha];
+    return [self applyBlurWithRadius:blurRad tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
+}
 
 - (UIImage *)applyTintEffectWithColor:(UIColor *)tintColor
 {

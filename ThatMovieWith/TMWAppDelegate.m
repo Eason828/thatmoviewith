@@ -10,14 +10,50 @@
 #import "HockeySDK.h"
 #import "TMWAppDelegate.h"
 #import "TMWContainerViewController.h"
+#import "FBTweak.h"
+#import "FBTweakInline.h"
+#import "FBTweakShakeWindow.h"
+#import "FBTweakViewController.h"
 
 #import "UIColor+customColors.h"
 
-@implementation TMWAppDelegate
+@interface TMWAppDelegate () <FBTweakObserver, FBTweakViewControllerDelegate>
+@end
+
+@implementation TMWAppDelegate {
+    FBTweak *_flipTweak;
+}
+
+
+- (UIWindow *)window
+{
+    if (!_window) {
+        _window = [[FBTweakShakeWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    }
+    
+    return _window;
+}
+
+- (void)tweakDidChange:(FBTweak *)tweak
+{
+    if (tweak == _flipTweak) {
+        _window.layer.sublayerTransform = CATransform3DMakeScale(1.0, [_flipTweak.currentValue boolValue] ? -1.0 : 1.0, 1.0);
+    }
+}
+
+- (void)tweakViewControllerPressedDone:(FBTweakViewController *)tweakViewController
+{
+    [tweakViewController dismissViewControllerAnimated:YES completion:NULL];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    FBTweakAction(@"Actions", @"Scoped", @"One", ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Hello" message:@"Scoped alert test #1." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Done", nil];
+        [alert show];
+    });
+    
+    self.window = [[FBTweakShakeWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
     

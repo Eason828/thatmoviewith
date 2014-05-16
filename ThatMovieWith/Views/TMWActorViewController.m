@@ -52,6 +52,7 @@
 @property (strong, nonatomic) UICollisionBehavior *collisionBehavior;
 
 @property (strong, nonatomic) UIImageView *blurImageView;
+@property (strong, nonatomic) UIImageView *curtainView;
 
 @end
 
@@ -115,7 +116,19 @@ int tappedActor;
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
 
-    self.view.backgroundColor = [UIColor blackColor];
+//    self.view.backgroundColor = [UIColor blackColor];
+    
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains.jpg"]];
+    
+    _curtainView.frame = self.view.frame;
+    UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
+    _curtainView.image = blurImage;
+    [self.view insertSubview:_curtainView atIndex:0];
+    
+    
+    //[self.view insertSubview:_curtainView atIndex:0];
+    
+    
     _thatMovieWithLabel.textColor = [UIColor goldColor];
     _andLabel.textColor = [UIColor goldColor];
 

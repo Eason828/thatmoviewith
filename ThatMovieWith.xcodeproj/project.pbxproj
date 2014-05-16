@@ -32,6 +32,7 @@
 		E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E9192589A500B7A738 /* TMWAboutViewController.m */; };
 		E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */; };
 		E5BB14F3192589A500B7A738 /* TMWMoviesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14EC192589A500B7A738 /* TMWMoviesViewController.m */; };
+		E5BB14F61925933A00B7A738 /* curtains.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E5BB14F51925933A00B7A738 /* curtains.jpg */; };
 		E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = E5C1DEE119175E900041E31D /* LICENSE.txt */; };
 		E5C1DEFC19175E900041E31D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E5C1DEE219175E900041E31D /* README.md */; };
 		E5C1DEFD19175E900041E31D /* SVModalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C1DEE519175E900041E31D /* SVModalWebViewController.m */; };
@@ -111,6 +112,7 @@
 		E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWAboutViewController.xib; path = Views/TMWAboutViewController.xib; sourceTree = "<group>"; };
 		E5BB14EB192589A500B7A738 /* TMWMoviesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWMoviesViewController.h; path = Views/TMWMoviesViewController.h; sourceTree = "<group>"; };
 		E5BB14EC192589A500B7A738 /* TMWMoviesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWMoviesViewController.m; path = Views/TMWMoviesViewController.m; sourceTree = "<group>"; };
+		E5BB14F51925933A00B7A738 /* curtains.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = curtains.jpg; sourceTree = "<group>"; };
 		E5C1DEE119175E900041E31D /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		E5C1DEE219175E900041E31D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E5C1DEE419175E900041E31D /* SVModalWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVModalWebViewController.h; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E5BB14F51925933A00B7A738 /* curtains.jpg */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
 				E5C915FA1913111600A3DEC6 /* addActor.png */,
@@ -538,6 +541,7 @@
 				E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */,
 				E5C1DF0B19175F640041E31D /* SVWebViewControllerActivityIMDB@2x.png in Resources */,
 				E5C1DEFE19175E900041E31D /* SVWebViewController.bundle in Resources */,
+				E5BB14F61925933A00B7A738 /* curtains.jpg in Resources */,
 				E5994D0418FDE85100A5B79F /* Images.xcassets in Resources */,
 				E5C916161913340B00A3DEC6 /* TMWActorViewController.xib in Resources */,
 				E5C1DF0819175E900041E31D /* SVWebViewControllerActivitySafari@2x.png in Resources */,
