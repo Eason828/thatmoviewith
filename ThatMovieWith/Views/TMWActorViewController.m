@@ -116,15 +116,43 @@ int tappedActor;
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
     
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains.jpg"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
     
-    _curtainView.frame = self.view.frame;
     UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
-    _curtainView.image = blurImage;
+    //_curtainView.image = blurImage;
+    
+    // Make the frame a little bit bigger for the parallax effect
+    _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
+                                    _curtainView.frame.origin.y-16,
+                                    self.view.frame.size.width+32,
+                                    self.view.frame.size.height+32);
+    
+    // Set vertical effect
+    UIInterpolatingMotionEffect *verticalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.y"
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+    verticalMotionEffect.minimumRelativeValue = @(-16);
+    verticalMotionEffect.maximumRelativeValue = @(16);
+    
+    // Set horizontal effect
+    UIInterpolatingMotionEffect *horizontalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.x"
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+    horizontalMotionEffect.minimumRelativeValue = @(-16);
+    horizontalMotionEffect.maximumRelativeValue = @(16);
+    
+    // Create group to combine both
+    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    
+    // Add both effects to your view
+    [_curtainView addMotionEffect:group];
+    
+    
     [self.view insertSubview:_curtainView atIndex:0];
     
-    
-    //[self.view insertSubview:_curtainView atIndex:0];
     
     
     _thatMovieWithLabel.textColor = [UIColor goldColor];
@@ -133,17 +161,16 @@ int tappedActor;
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
+    
+    // Make the buttons glow
+    _firstActorButton.showsTouchWhenHighlighted = YES;
+    _secondActorButton.showsTouchWhenHighlighted = YES;
 
-    // Tag the continue button
     _continueButton.tag = 3;
     
     // Hide the "and" and second actor
     _andLabel.hidden = YES;
     _secondActorButton.hidden = YES;
-    
-    // Make the buttons glow
-    _firstActorButton.showsTouchWhenHighlighted = YES;
-    _secondActorButton.showsTouchWhenHighlighted = YES;
     
     // Setup for dragging the actors around
     firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];

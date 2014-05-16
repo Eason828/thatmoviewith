@@ -10,52 +10,17 @@
 #import "HockeySDK.h"
 #import "TMWAppDelegate.h"
 #import "TMWContainerViewController.h"
-#import "FBTweak.h"
-#import "FBTweakInline.h"
-#import "FBTweakShakeWindow.h"
-#import "FBTweakViewController.h"
 
 #import "UIColor+customColors.h"
 
-@interface TMWAppDelegate () <FBTweakObserver, FBTweakViewControllerDelegate>
+@interface TMWAppDelegate ()
 @end
 
-@implementation TMWAppDelegate {
-    FBTweak *_flipTweak; // TODO: Remove FBTweaks here
-}
-
-// TODO: Remove FBTweaks here
-- (UIWindow *)window
-{
-    if (!_window) {
-        _window = [[FBTweakShakeWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    }
-    
-    return _window;
-}
-// TODO: Remove FBTweaks here
-- (void)tweakDidChange:(FBTweak *)tweak
-{
-    if (tweak == _flipTweak) {
-        _window.layer.sublayerTransform = CATransform3DMakeScale(1.0, [_flipTweak.currentValue boolValue] ? -1.0 : 1.0, 1.0);
-    }
-}
-// TODO: Remove FBTweaks here
-- (void)tweakViewControllerPressedDone:(FBTweakViewController *)tweakViewController
-{
-    [tweakViewController dismissViewControllerAnimated:YES completion:NULL];
-}
+@implementation TMWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // TODO: Remove FBTweaks here
-    FBTweakAction(@"Actions", @"Scoped", @"One", ^{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Hello" message:@"Scoped alert test #1." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Done", nil];
-        [alert show];
-    });
-    
-    // TODO: Remove FBTweaks here
-    self.window = [[FBTweakShakeWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
     
