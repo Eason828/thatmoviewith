@@ -112,35 +112,39 @@ int tappedActor;
     
     // Custom Fonts
     UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
-    self.thatMovieWithLabel.font = broadwayFont;
-    self.andLabel.font = broadwayFont;
+    _thatMovieWithLabel.font = broadwayFont;
+    _andLabel.font = broadwayFont;
 
     self.view.backgroundColor = [UIColor blackColor];
-    self.thatMovieWithLabel.textColor = [UIColor goldColor];
-    self.andLabel.textColor = [UIColor goldColor];
+    _thatMovieWithLabel.textColor = [UIColor goldColor];
+    _andLabel.textColor = [UIColor goldColor];
 
     // Tag the actor buttons so they can be identified when pressed
-    self.firstActorButton.tag = 1;
-    self.secondActorButton.tag = 2;
+    _firstActorButton.tag = 1;
+    _secondActorButton.tag = 2;
 
     // Tag the continue button
-    self.continueButton.tag = 3;
+    _continueButton.tag = 3;
     
     // Hide the "and" and second actor
-    self.andLabel.hidden = YES;
-    self.secondActorButton.hidden = YES;
+    _andLabel.hidden = YES;
+    _secondActorButton.hidden = YES;
+    
+    // Make the buttons glow
+    _firstActorButton.showsTouchWhenHighlighted = YES;
+    _secondActorButton.showsTouchWhenHighlighted = YES;
     
     // Setup for dragging the actors around
     firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     secondPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [self.firstActorButton addGestureRecognizer:firstPanGesture];
-    [self.secondActorButton addGestureRecognizer:secondPanGesture];
+    [_firstActorButton addGestureRecognizer:firstPanGesture];
+    [_secondActorButton addGestureRecognizer:secondPanGesture];
     firstPanGesture.enabled = NO;
     secondPanGesture.enabled = NO;
     
     
     // Add the gradient to the delete gradient view
-    self.deleteGradientView.backgroundColor = [UIColor clearColor];
+    _deleteGradientView.backgroundColor = [UIColor clearColor];
     UIColor *colorOne = [UIColor clearColor];
     UIColor *colorTwo = [UIColor colorWithRed:(255/255.0)  green:(255/255.0)  blue:(255/255.0)  alpha:0.3];
     
@@ -154,24 +158,24 @@ int tappedActor;
     headerLayer.frame = self.view.bounds;
     headerLayer.colors = colors;
     headerLayer.locations = locations;
-    [self.deleteGradientView.layer insertSublayer:headerLayer atIndex:0];
+    [_deleteGradientView.layer insertSublayer:headerLayer atIndex:0];
     
     // Setup the image and dropshadow for the delete icon
-    [CALayer circleLayer:self.deleteImage.layer];
-    [self.deleteDropShadow addSubview:self.deleteImage];
-    self.deleteDropShadow.clipsToBounds = NO;
+    [CALayer circleLayer:_deleteImage.layer];
+    [_deleteDropShadow addSubview:_deleteImage];
+    _deleteDropShadow.clipsToBounds = NO;
 
-    self.deleteDropShadow.layer.cornerRadius = self.deleteDropShadow.frame.size.height/2;
-    self.deleteDropShadow.layer.shadowColor = [[UIColor whiteColor] CGColor];
-    self.deleteDropShadow.layer.shadowOpacity = 1.0;
-    self.deleteDropShadow.layer.shadowRadius = 5.0;
-    self.deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    _deleteDropShadow.layer.cornerRadius = _deleteDropShadow.frame.size.height/2;
+    _deleteDropShadow.layer.shadowColor = [[UIColor whiteColor] CGColor];
+    _deleteDropShadow.layer.shadowOpacity = 1.0;
+    _deleteDropShadow.layer.shadowRadius = 5.0;
+    _deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     
     // Custom continue button
-    self.continueButton.buttonColor = [UIColor goldColor];
-    self.continueButton.cornerRadius = 6.0f;
-    self.continueButton.titleLabel.font = [UIFont fontWithName:@"Broadway" size:20];
-    [self.continueButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _continueButton.buttonColor = [UIColor goldColor];
+    _continueButton.cornerRadius = 6.0f;
+    _continueButton.titleLabel.font = [UIFont fontWithName:@"Broadway" size:20];
+    [_continueButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -189,20 +193,18 @@ int tappedActor;
     // Blur the current screen
     [self blurScreen];
     // Put the search bar in front of the blurred view
-    [self.view bringSubviewToFront:self.searchBar];
+    [self.view bringSubviewToFront:_searchBar];
     
     // Show the search bar
-    self.searchBar.hidden = NO;
-    self.searchBar.translucent = YES;
-    self.searchBar.backgroundImage = [UIImage new];
-    self.searchBar.scopeBarBackgroundImage = [UIImage new];
-    [self.searchBar becomeFirstResponder];
+    _searchBar.hidden = NO;
+    _searchBar.translucent = YES;
+    _searchBar.backgroundImage = [UIImage new];
+    _searchBar.scopeBarBackgroundImage = [UIImage new];
+    [_searchBar becomeFirstResponder];
     [self.searchDisplayController setActive:YES animated:YES];
     
 }
 
-// Remove the actor
-// TODO: Fix the removal of the actor. Maybe save the actor objects to TMWActor *actor1, *actor2
 - (void)removeActor
 {
    switch (tappedActor) {
@@ -210,18 +212,18 @@ int tappedActor;
        case 1:
        {
            [[TMWActorContainer actorContainer] removeActorObject:actor1];
-           self.firstActorButton.hidden = NO;
-           [self.firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
-           [self.view bringSubviewToFront:self.firstActorButton];
+           _firstActorButton.hidden = NO;
+           [_firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
+           [self.view bringSubviewToFront:_firstActorButton];
            firstPanGesture.enabled = NO;
            break;
        }
        case 2:
        {
            [[TMWActorContainer actorContainer] removeActorObject:actor2];
-           self.secondActorButton.hidden = NO;
-           [self.secondActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
-           [self.view bringSubviewToFront:self.secondActorButton];
+           _secondActorButton.hidden = NO;
+           [_secondActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
+           [self.view bringSubviewToFront:_secondActorButton];
            secondPanGesture.enabled = NO;
            break;
        }
@@ -230,11 +232,11 @@ int tappedActor;
    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
    {
        // Reset the view back to the default load view
-       [self.firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
+       [_firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
        secondPanGesture.enabled = NO;
-       self.continueButton.hidden = YES;
-       self.secondActorButton.hidden = YES;
-       self.andLabel.hidden = YES;
+       _continueButton.hidden = YES;
+       _secondActorButton.hidden = YES;
+       _andLabel.hidden = YES;
    }
 }
 
@@ -310,11 +312,11 @@ int tappedActor;
     UIGraphicsEndImageContext();
 
     // Blur the current screen
-    self.blurImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    self.blurImageView.image = blurImage;
-    self.blurImageView.contentMode = UIViewContentModeBottom;
-    self.blurImageView.clipsToBounds = YES;
-    [self.view addSubview:self.blurImageView];
+    _blurImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    _blurImageView.image = blurImage;
+    _blurImageView.contentMode = UIViewContentModeBottom;
+    _blurImageView.clipsToBounds = YES;
+    [self.view addSubview:_blurImageView];
 
 }
 
@@ -343,8 +345,8 @@ int tappedActor;
 {
     // Hide the search bar when searching is completed
     [self.searchDisplayController setActive:NO animated:NO];
-    self.searchBar.hidden = YES;
-    [self.blurImageView removeFromSuperview];
+    _searchBar.hidden = YES;
+    [_blurImageView removeFromSuperview];
 }
 
 
@@ -363,8 +365,8 @@ int tappedActor;
 {
     // Hide the search bar when searching is completed
     [self.searchDisplayController setActive:NO animated:NO];
-    self.searchBar.hidden = YES;
-    [self.blurImageView removeFromSuperview];
+    _searchBar.hidden = YES;
+    [_blurImageView removeFromSuperview];
 }
 
 
@@ -397,7 +399,7 @@ int tappedActor;
         [cell layoutSubviews];
         
         // Set the line separator left offset to start after the image
-        [self.searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
+        [_searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
     
     // Make the actors images circles in the search table view
@@ -449,7 +451,7 @@ int tappedActor;
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
              ImageVisibility:self.firstActorImage
-              withButton:self.firstActorButton
+              withButton:_firstActorButton
                  atIndexPath:indexPath];
         
         // Enable dragging the actor around
@@ -457,24 +459,24 @@ int tappedActor;
         
         // Show the second actor information
         actor1 = chosenActor;
-        self.andLabel.hidden = NO;
-        self.secondActorButton.hidden = NO;
+        _andLabel.hidden = NO;
+        _secondActorButton.hidden = NO;
     }
     else
     {
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
              ImageVisibility:self.secondActorImage
-               withButton:self.secondActorButton
+               withButton:_secondActorButton
                  atIndexPath:indexPath];
         
         // Enable dragging the actor around
         secondPanGesture.enabled = YES;
-        self.secondActorButton.hidden = NO;
+        _secondActorButton.hidden = NO;
         actor2 = chosenActor;
     }
 
-    self.continueButton.hidden = NO; 
+    _continueButton.hidden = NO; 
 }
 
 // Wobble animation when adding an actor
@@ -552,7 +554,7 @@ int tappedActor;
     [self showImage:button];
 
     button.userInteractionEnabled = YES;
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     [button.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
 }
 
@@ -637,7 +639,7 @@ int tappedActor;
     if (gesture.state == UIGestureRecognizerStateBegan)
     {
         
-        [self.animator removeAllBehaviors];
+        [_animator removeAllBehaviors];
         
         // Fade out/in the necessary images and text
         [self startGestureFade:gesture];
@@ -676,7 +678,7 @@ int tappedActor;
 
         // add attachment behavior
 
-        [self.animator addBehavior:attachment];
+        [_animator addBehavior:attachment];
     }
     else if (gesture.state == UIGestureRecognizerStateChanged)
     {
@@ -687,20 +689,20 @@ int tappedActor;
     }
     else if (gesture.state == UIGestureRecognizerStateEnded)
     {
-        [self.animator removeAllBehaviors];
+        [_animator removeAllBehaviors];
 
         // When the view intersects with the delete image, go ahead and remove it
-        if (CGRectIntersectsRect(self.deleteDropShadow.frame, gesture.view.frame)) {
+        if (CGRectIntersectsRect(_deleteDropShadow.frame, gesture.view.frame)) {
             // Fade out/in the necessary images and text
             [self endGestureFade:gesture];
             
-            [self.animator removeAllBehaviors];
+            [_animator removeAllBehaviors];
             for (UIView *view in gesture.view.subviews) {
                 view.hidden = YES;
             }
             gesture.view.hidden = YES;
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
-            [self.animator addBehavior:snap];
+            [_animator addBehavior:snap];
             tappedActor = (int)gesture.view.tag;
             [self removeActor];
         }
@@ -714,7 +716,7 @@ int tappedActor;
             [self endGestureFade:gesture];
             
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
-            [self.animator addBehavior:snap];
+            [_animator addBehavior:snap];
 
             return;
         }
@@ -744,13 +746,13 @@ int tappedActor;
             }
         };
         
-        [self.animator addBehavior:dynamic];
+        [_animator addBehavior:dynamic];
 
         // add a little gravity so it accelerates off the screen (in case user gesture was slow)
 
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
         gravity.magnitude = 0.1;
-        [self.animator addBehavior:gravity];
+        [_animator addBehavior:gravity];
         
     }
 }
@@ -772,11 +774,11 @@ int tappedActor;
     
     [gesture.view setNeedsDisplay];
     
-    [self.deleteDropShadow setNeedsDisplay];
+    [_deleteDropShadow setNeedsDisplay];
     
-    self.deleteImage.hidden = NO;
-    [self slideUpAnimation:self.deleteGradientView];
-    [self slideUpAnimation:self.deleteDropShadow];
+    _deleteImage.hidden = NO;
+    [self slideUpAnimation:_deleteGradientView];
+    [self slideUpAnimation:_deleteDropShadow];
 }
 
 // Fades the necessary views when an actor is dragged around
@@ -786,8 +788,8 @@ int tappedActor;
     gesture.view.layer.shadowOpacity = 0.0;
     
     [self fadeAnimation:self.deleteLabel];
-    [self slideDownAnimation:self.deleteGradientView];
-    [self slideDownAnimation:self.deleteDropShadow];
+    [self slideDownAnimation:_deleteGradientView];
+    [self slideDownAnimation:_deleteDropShadow];
 }
 
 - (void)fadeAnimation:(UIView *)view

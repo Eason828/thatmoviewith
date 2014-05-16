@@ -45,8 +45,8 @@ NSArray *movieResponseWithJLTMDBcall;
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.navItem = self.navigationItem;
-    self.navItem.title = @"Movies";
+    _navItem = self.navigationItem;
+    _navItem.title = @"Movies";
     
     // Set the title color
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
@@ -56,23 +56,23 @@ NSArray *movieResponseWithJLTMDBcall;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     self.view.backgroundColor = [UIColor blackColor];
-    self.moviesTableView.backgroundColor = [UIColor blackColor];
+    _moviesTableView.backgroundColor = [UIColor blackColor];
 
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
     self.navigationController.navigationBar.titleTextAttributes = attributes;
     
     // Add pull to refresh to the table view
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-    [self.moviesTableView addSubview:self.refreshControl];
-    [self.view addSubview:self.moviesTableView];
+    _refreshControl = [[UIRefreshControl alloc] init];
+    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    [_moviesTableView addSubview:_refreshControl];
+    [self.view addSubview:_moviesTableView];
     // Set the table to be empty by default
     tableViewRows = 0;
     
     // Remove the line separators if there is no results
     // This also eliminates the separators when loading the table
-    self.moviesTableView.tableFooterView = [UIView new];
+    _moviesTableView.tableFooterView = [UIView new];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -119,8 +119,8 @@ NSArray *movieResponseWithJLTMDBcall;
     }
     
     // End refreshing and remove the pull to refresh
-    [self.refreshControl endRefreshing];
-    [self.refreshControl removeFromSuperview];
+    [_refreshControl endRefreshing];
+    [_refreshControl removeFromSuperview];
     
      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }

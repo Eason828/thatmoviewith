@@ -9,7 +9,7 @@
 #import <JLTMDbClient.h>
 #import "HockeySDK.h"
 #import "TMWAppDelegate.h"
-#import "TMWActorViewController.h"
+#import "TMWContainerViewController.h"
 
 #import "UIColor+customColors.h"
 
@@ -19,12 +19,13 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    TMWActorViewController *actorViewController = [[TMWActorViewController alloc] init];
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:actorViewController];
+    
+    TMWContainerViewController *containerController = [TMWContainerViewController new];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:containerController];
     
     self.window.rootViewController = navController;
-    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
     // Hockey app needs to be the last 3rd party integration in this method
