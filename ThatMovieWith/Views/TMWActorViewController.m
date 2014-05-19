@@ -119,21 +119,21 @@ int tappedActor;
     _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
     
     UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
-    //_curtainView.image = blurImage;
+    _curtainView.image = blurImage;
     
     // Make the frame a little bit bigger for the parallax effect
     _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
-                                    _curtainView.frame.origin.y-16,
+                                    _curtainView.frame.origin.y-48,
                                     self.view.frame.size.width+32,
-                                    self.view.frame.size.height+32);
+                                    self.view.frame.size.height+96);
     
     // Set vertical effect
     UIInterpolatingMotionEffect *verticalMotionEffect =
     [[UIInterpolatingMotionEffect alloc]
      initWithKeyPath:@"center.y"
      type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-    verticalMotionEffect.minimumRelativeValue = @(-16);
-    verticalMotionEffect.maximumRelativeValue = @(16);
+    verticalMotionEffect.minimumRelativeValue = @(-48);
+    verticalMotionEffect.maximumRelativeValue = @(48);
     
     // Set horizontal effect
     UIInterpolatingMotionEffect *horizontalMotionEffect =
@@ -153,11 +153,18 @@ int tappedActor;
     
     [self.view insertSubview:_curtainView atIndex:0];
     
-    
-    
+    // Set the text color and dropshadows
     _thatMovieWithLabel.textColor = [UIColor goldColor];
+    [CALayer dropShadowLayer:_thatMovieWithLabel.layer];
+    
     _andLabel.textColor = [UIColor goldColor];
+    [CALayer dropShadowLayer:_andLabel.layer];
 
+    // Custom dropshadows for the buttons
+    [CALayer dropShadowLayer:_firstActorButton.layer];
+    [CALayer dropShadowLayer:_secondActorButton.layer];
+    [CALayer dropShadowLayer:_continueButton.layer];
+    
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
@@ -791,7 +798,6 @@ int tappedActor;
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
         gravity.magnitude = 0.1;
         [_animator addBehavior:gravity];
-        
     }
 }
 
@@ -824,6 +830,9 @@ int tappedActor;
 {
     // Remove the drop shadow effect from the actor image
     gesture.view.layer.shadowOpacity = 0.0;
+    
+    // Add the original drop shadow effect
+    [CALayer dropShadowLayer:gesture.view.layer];
     
     [self fadeAnimation:self.deleteLabel];
     [self slideDownAnimation:_deleteGradientView];

@@ -125,8 +125,8 @@
 
 - (UIImage *)applyDarkCurtainEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.53];
-    return [self applyBlurWithRadius:12.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
+    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.25];
+    return [self applyBlurWithRadius:0.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
 }
 
 - (UIImage *)applyTintEffectWithColor:(UIColor *)tintColor
