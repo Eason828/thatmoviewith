@@ -62,15 +62,13 @@ CGFloat cellWidth;
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:attributes];
-    
+
     // Set the back button color
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-    self.collectionView.backgroundColor = [UIColor blackColor];
     self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
     self.navigationController.navigationBar.titleTextAttributes = attributes;
-    self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
-    
+    self.navigationController.navigationBar.alpha = 0.85;
     
     tableViewRows = 0;
 }
@@ -229,7 +227,7 @@ CGFloat cellWidth;
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
             [self presentViewController:webViewController animated:YES completion:NULL];
-            
+            //TODO: Reset the nav bar transparency and other bugs when dismissing the modal view controller by making this view controller a modal view controller delegate
         }
         else {
             [errorAlertView show];
