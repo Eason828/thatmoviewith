@@ -7,6 +7,7 @@
 //
 
 #import "UIImage+DrawInitialsOnImage.h"
+#import "CALayer+circleLayer.h"
 
 @implementation UIImage (DrawInitialsOnImage)
 
@@ -74,5 +75,41 @@
     
     return retImage;
 }
+
++ (UIImage *)imageByDrawingMovieNameOnImage:(UIImage *)image withMovieName:(NSString *)movieName withFontSize:(int)fontSize
+{
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);
+    
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+    
+    // get the context for CoreGraphics
+    UIGraphicsGetCurrentContext();
+        
+    NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    textStyle.alignment = NSTextAlignmentCenter;
+        UIFont *textFont = [UIFont systemFontOfSize:fontSize];
+    
+    NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
+    
+    // Create the CGRect to the size of the text box
+    CGRect bound = [movieName boundingRectWithSize:CGSizeMake(image.size.width-20, image.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    
+    CGRect textRect = CGRectMake(10, (image.size.height - (bound.size.height))/2, image.size.width-20, (image.size.height - bound.size.height));
+    
+    // Draw the text on the image
+    [movieName drawInRect:textRect withAttributes:@{NSFontAttributeName:textFont, NSParagraphStyleAttributeName:textStyle, NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // free the context
+    UIGraphicsEndImageContext();
+    
+    return retImage;
+}
+
 
 @end

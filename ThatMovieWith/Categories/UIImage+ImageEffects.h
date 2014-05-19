@@ -101,6 +101,7 @@
 - (UIImage *)applyExtraLightEffect;
 - (UIImage *)applyDarkEffect;
 - (UIImage *)applyDarkCurtainEffect;
+- (UIImage *)applyPosterEffect;
 - (UIImage *)applyTintEffectWithColor:(UIColor *)tintColor;
 
 - (UIImage *)applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;

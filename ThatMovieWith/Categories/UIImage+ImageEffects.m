@@ -129,6 +129,12 @@
     return [self applyBlurWithRadius:0.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
 }
 
+- (UIImage *)applyPosterEffect
+{
+    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.5];
+    return [self applyBlurWithRadius:0.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
+}
+
 - (UIImage *)applyTintEffectWithColor:(UIColor *)tintColor
 {
     const CGFloat EffectColorAlpha = 0.6;

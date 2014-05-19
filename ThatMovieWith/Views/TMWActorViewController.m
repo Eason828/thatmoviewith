@@ -11,7 +11,7 @@
 #import <FlatUIKit.h>
 
 #import "TMWActorViewController.h"
-#import "TMWMoviesViewController.h"
+#import "TMWMoviesCollectionViewController.h"
 #import "TMWActor.h"
 #import "TMWActorSearchResults.h"
 #import "TMWActorContainer.h"
@@ -657,7 +657,7 @@ int tappedActor;
         case 3: // Continue button
         {
             // Show the Movies View if the continue button is pressed
-            TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+            TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
             [self.navigationController pushViewController:moviesViewController animated:YES];
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
