@@ -169,10 +169,6 @@ int tappedActor;
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
     
-    // Make the buttons glow
-    _firstActorButton.showsTouchWhenHighlighted = YES;
-    _secondActorButton.showsTouchWhenHighlighted = YES;
-
     _continueButton.tag = 3;
     
     // Hide the "and" and second actor
