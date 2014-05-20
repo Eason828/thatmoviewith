@@ -27,7 +27,8 @@
 
 @implementation TMWMoviesCollectionViewController
 
-static const NSUInteger TABLE_HEIGHT = 220;
+static const NSUInteger TABLE_HEIGHT = 198;
+static const NSUInteger TITLE_FONT_SIZE = 36;
 
 NSInteger tableViewRows;
 CGFloat cellWidth;
@@ -37,7 +38,7 @@ CGFloat cellWidth;
 {
     ParallaxFlowLayout *layout = [[ParallaxFlowLayout alloc] init];
     layout.minimumLineSpacing = 16;
-    layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
+    //layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
     
     self = [super initWithCollectionViewLayout:layout];
     
@@ -64,6 +65,7 @@ CGFloat cellWidth;
     [[UINavigationBar appearance] setTitleTextAttributes:attributes];
 
     // Set the back button color
+    self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
     self.navigationController.navigationBar.titleTextAttributes = attributes;
@@ -71,14 +73,19 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.alpha = 0.85;
     
     tableViewRows = 0;
+    
+    // Refresh the table view
+    [self refresh];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
     
-    // Refresh the table view
-    [self refresh];
+    // For when dismissing the view controller
+    // TODO: Find a method to put this in before the
+    // view is shown. viewWillAppear doesn't work.
+    self.navigationController.navigationBar.alpha = 0.85;
 }
 
 
@@ -115,7 +122,7 @@ CGFloat cellWidth;
             NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
             
             UIImage *darkImage = [image applyPosterEffect];
-            UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:36];
+            UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:TITLE_FONT_SIZE];
             cell.imageView.image = initialsImage;
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
@@ -135,12 +142,10 @@ CGFloat cellWidth;
     
     else {
         UIImage *defaultImage = [UIImage imageNamed:@"MoviesBackgroundHiRes"];
-        //UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"MoviesBackgroundHiRes.png"] withInitials:[[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row] withFontSize:120];
-        
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
         
         UIImage *darkImage = [defaultImage applyPosterEffect];
-        UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:36];
+        UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:TITLE_FONT_SIZE];
         cell.imageView.image = initialsImage;
     }
 
@@ -172,6 +177,7 @@ CGFloat cellWidth;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
+                            // TODO: Fix no results view
                             //self.collectionView.hidden = YES;
 //                            self.noResultsView.hidden = NO;
                         } else {
@@ -188,10 +194,6 @@ CGFloat cellWidth;
             }
         }];
     }
-    
-    // End refreshing and remove the pull to refresh
-//    [_refreshControl endRefreshing];
-//    [_refreshControl removeFromSuperview];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
@@ -226,8 +228,9 @@ CGFloat cellWidth;
             NSLog(@"%@", webURL);
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            webViewController.barsTintColor = [UIColor blackColor];
+            
             [self presentViewController:webViewController animated:YES completion:NULL];
-            //TODO: Reset the nav bar transparency and other bugs when dismissing the modal view controller by making this view controller a modal view controller delegate
         }
         else {
             [errorAlertView show];
