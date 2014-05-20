@@ -11,6 +11,7 @@
 #import "TMWAboutViewController.h"
 
 #import "UIColor+customColors.h"
+#import "CALayer+circleLayer.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -54,6 +55,9 @@
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_actorViewController.view addSubview:_infoButton];
+    
+    // Add dropshadow to the info button
+    [CALayer dropShadowLayer:_infoButton.layer];
     
     // Done button to flip back to the main view
     _doneButton = [UIButton buttonWithType:UIButtonTypeInfoLight];

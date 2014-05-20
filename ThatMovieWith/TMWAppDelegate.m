@@ -13,6 +13,9 @@
 
 #import "UIColor+customColors.h"
 
+@interface TMWAppDelegate ()
+@end
+
 @implementation TMWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

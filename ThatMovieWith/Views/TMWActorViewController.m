@@ -11,7 +11,7 @@
 #import <FlatUIKit.h>
 
 #import "TMWActorViewController.h"
-#import "TMWMoviesViewController.h"
+#import "TMWMoviesCollectionViewController.h"
 #import "TMWActor.h"
 #import "TMWActorSearchResults.h"
 #import "TMWActorContainer.h"
@@ -52,6 +52,7 @@
 @property (strong, nonatomic) UICollisionBehavior *collisionBehavior;
 
 @property (strong, nonatomic) UIImageView *blurImageView;
+@property (strong, nonatomic) UIImageView *curtainView;
 
 @end
 
@@ -114,25 +115,65 @@ int tappedActor;
     UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
-
-    self.view.backgroundColor = [UIColor blackColor];
+    
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    
+    UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
+    _curtainView.image = blurImage;
+    
+    // Make the frame a little bit bigger for the parallax effect
+    _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
+                                    _curtainView.frame.origin.y-48,
+                                    self.view.frame.size.width+32,
+                                    self.view.frame.size.height+96);
+    
+    // Set vertical effect
+    UIInterpolatingMotionEffect *verticalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.y"
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+    verticalMotionEffect.minimumRelativeValue = @(-48);
+    verticalMotionEffect.maximumRelativeValue = @(48);
+    
+    // Set horizontal effect
+    UIInterpolatingMotionEffect *horizontalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.x"
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+    horizontalMotionEffect.minimumRelativeValue = @(-16);
+    horizontalMotionEffect.maximumRelativeValue = @(16);
+    
+    // Create group to combine both
+    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    
+    // Add both effects to your view
+    [_curtainView addMotionEffect:group];
+    
+    
+    [self.view insertSubview:_curtainView atIndex:0];
+    
+    // Set the text color and dropshadows
     _thatMovieWithLabel.textColor = [UIColor goldColor];
+    [CALayer dropShadowLayer:_thatMovieWithLabel.layer];
+    
     _andLabel.textColor = [UIColor goldColor];
+    [CALayer dropShadowLayer:_andLabel.layer];
 
+    // Custom dropshadows for the buttons
+    [CALayer dropShadowLayer:_firstActorButton.layer];
+    [CALayer dropShadowLayer:_secondActorButton.layer];
+    [CALayer dropShadowLayer:_continueButton.layer];
+    
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
-
-    // Tag the continue button
+    
     _continueButton.tag = 3;
     
     // Hide the "and" and second actor
     _andLabel.hidden = YES;
     _secondActorButton.hidden = YES;
-    
-    // Make the buttons glow
-    _firstActorButton.showsTouchWhenHighlighted = YES;
-    _secondActorButton.showsTouchWhenHighlighted = YES;
     
     // Setup for dragging the actors around
     firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -612,7 +653,7 @@ int tappedActor;
         case 3: // Continue button
         {
             // Show the Movies View if the continue button is pressed
-            TMWMoviesViewController *moviesViewController = [[TMWMoviesViewController alloc] init];
+            TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
             [self.navigationController pushViewController:moviesViewController animated:YES];
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
@@ -753,7 +794,6 @@ int tappedActor;
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
         gravity.magnitude = 0.1;
         [_animator addBehavior:gravity];
-        
     }
 }
 
@@ -786,6 +826,9 @@ int tappedActor;
 {
     // Remove the drop shadow effect from the actor image
     gesture.view.layer.shadowOpacity = 0.0;
+    
+    // Add the original drop shadow effect
+    [CALayer dropShadowLayer:gesture.view.layer];
     
     [self fadeAnimation:self.deleteLabel];
     [self slideDownAnimation:_deleteGradientView];

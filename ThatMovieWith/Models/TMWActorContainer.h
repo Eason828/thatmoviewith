@@ -17,6 +17,7 @@
 @property(nonatomic, copy, readonly) NSArray *sameMoviesIDs;
 @property(nonatomic, copy) NSString *imagesBaseURLString;
 @property(nonatomic, copy) NSArray *backdropSizes;
+// "w45", "w92", "w154", "w185", "w300", "w500", "original"
 
 + (TMWActorContainer *)actorContainer;
 

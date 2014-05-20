@@ -11,5 +11,6 @@
 @interface CALayer (circleLayer)
 
 + (void)circleLayer:(CALayer *)layer;
++ (void)dropShadowLayer:(CALayer *)layer;
 
 @end

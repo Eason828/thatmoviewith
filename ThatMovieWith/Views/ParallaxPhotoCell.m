@@ -1,0 +1,87 @@
+//
+//  ParallaxPhotoCell.m
+//  ParallaxScrolling
+//
+//  Created by Ole Begemann on 01.05.14.
+//  Copyright (c) 2014 Ole Begemann. All rights reserved.
+//
+
+#import "ParallaxPhotoCell.h"
+#import "ParallaxLayoutAttributes.h"
+
+@interface ParallaxPhotoCell ()
+
+@property (nonatomic, strong) NSLayoutConstraint *imageViewHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *imageViewCenterYConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *movieNameHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *movieNameCenterYConstraint;
+
+@end
+
+
+@implementation ParallaxPhotoCell
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self == nil) {
+        return nil;
+    }
+
+    self.clipsToBounds = YES;
+
+    [self setupImageView];
+    [self setupConstraints];
+    [self setNeedsUpdateConstraints];
+    
+    return self;
+}
+
+- (void)setupImageView
+{
+    _imageView = [[UIImageView alloc] initWithImage:nil];
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.contentView addSubview:_imageView];
+}
+
+- (void)setupConstraints
+{
+    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    // Horizontal constraints for image view
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+    
+    // Vertical constraints for image view
+    self.imageViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeHeight multiplier:1 constant:0];
+    self.imageViewCenterYConstraint = [NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
+    [self.contentView addConstraint:self.imageViewHeightConstraint];
+    [self.contentView addConstraint:self.imageViewCenterYConstraint];
+}
+
+- (void)updateConstraints
+{
+    [super updateConstraints];
+    
+    // Make sure image view is tall enough to cover maxParallaxOffset in both directions
+    self.imageViewHeightConstraint.constant = 2 * self.maxParallaxOffset;
+}
+
+- (void)setMaxParallaxOffset:(CGFloat)maxParallaxOffset
+{
+    _maxParallaxOffset = maxParallaxOffset;
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+{
+    [super applyLayoutAttributes:layoutAttributes];
+    
+    NSParameterAssert(layoutAttributes != nil);
+    NSParameterAssert([layoutAttributes isKindOfClass:[ParallaxLayoutAttributes class]]);
+
+    ParallaxLayoutAttributes *parallaxLayoutAttributes = (ParallaxLayoutAttributes *)layoutAttributes;
+    self.imageViewCenterYConstraint.constant = parallaxLayoutAttributes.parallaxOffset.y;
+}
+
+@end
