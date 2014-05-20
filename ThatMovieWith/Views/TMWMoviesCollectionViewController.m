@@ -21,6 +21,7 @@
 @interface TMWMoviesCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, copy) NSArray *photos;
+@property (nonatomic, copy) UIImageView *curtainView;
 
 @end
 
@@ -59,6 +60,7 @@ CGFloat cellWidth;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.collectionView.alwaysBounceVertical = YES;
     [self.collectionView registerClass:[ParallaxPhotoCell class] forCellWithReuseIdentifier:@"PhotoCell"];
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
@@ -71,6 +73,43 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.titleTextAttributes = attributes;
     self.navigationController.navigationBar.backItem.title = @"Actors";
     self.navigationController.navigationBar.alpha = 0.85;
+    
+    
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    
+    UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
+    _curtainView.image = blurImage;
+    
+    // Make the frame a little bit bigger for the parallax effect
+    _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
+                                    _curtainView.frame.origin.y-48,
+                                    self.view.frame.size.width+32,
+                                    self.view.frame.size.height+96);
+    
+    // Set vertical effect
+    UIInterpolatingMotionEffect *verticalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.y"
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+    verticalMotionEffect.minimumRelativeValue = @(-48);
+    verticalMotionEffect.maximumRelativeValue = @(48);
+    
+    // Set horizontal effect
+    UIInterpolatingMotionEffect *horizontalMotionEffect =
+    [[UIInterpolatingMotionEffect alloc]
+     initWithKeyPath:@"center.x"
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+    horizontalMotionEffect.minimumRelativeValue = @(-16);
+    horizontalMotionEffect.maximumRelativeValue = @(16);
+    
+    // Create group to combine both
+    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    
+    // Add both effects to your view
+    [_curtainView addMotionEffect:group];    
+    
+    self.collectionView.backgroundView = _curtainView;
     
     tableViewRows = 0;
     
