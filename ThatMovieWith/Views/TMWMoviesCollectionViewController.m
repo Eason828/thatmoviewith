@@ -37,7 +37,7 @@ CGFloat cellWidth;
 - (id)init
 {
     ParallaxFlowLayout *layout = [[ParallaxFlowLayout alloc] init];
-    layout.minimumLineSpacing = 16;
+    layout.minimumLineSpacing = 8;
     //layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
     
     self = [super initWithCollectionViewLayout:layout];

@@ -54,7 +54,7 @@
     [_infoButton setTintColor:[UIColor goldColor]];
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [_actorViewController.view addSubview:_infoButton];
+    //[_actorViewController.view addSubview:_infoButton];
     
     // Add dropshadow to the info button
     [CALayer dropShadowLayer:_infoButton.layer];
