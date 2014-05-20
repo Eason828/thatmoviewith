@@ -101,6 +101,7 @@
 - (UIImage *)applyExtraLightEffect;
 - (UIImage *)applyDarkEffect;
 - (UIImage *)applyDarkCurtainEffect;
+- (UIImage *)applyVeryDarkCurtainEffect;
 - (UIImage *)applyPosterEffect;
 - (UIImage *)applyTintEffectWithColor:(UIColor *)tintColor;
 
