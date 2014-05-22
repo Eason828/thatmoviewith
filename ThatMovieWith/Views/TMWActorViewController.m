@@ -304,13 +304,7 @@ int tappedActor;
     NSDictionary *parameters = call[@"parameters"];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
-        // Turn off the network activity in the status bar
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        });
         
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
