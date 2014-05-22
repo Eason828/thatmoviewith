@@ -245,13 +245,18 @@ CGFloat cellWidth;
         if (!error) {
             NSDictionary *movieInfo = [[NSDictionary alloc] initWithDictionary:response];
             
-            NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
-            NSLog(@"%@", webURL);
-            SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
-            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            webViewController.barsTintColor = [UIColor blackColor];
+            if (![movieInfo[@"imdb_id"]isEqualToString:@""]) {
+                NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
+                NSLog(@"%@", webURL);
+                SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
+                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                webViewController.barsTintColor = [UIColor blackColor];
+                [self presentViewController:webViewController animated:YES completion:NULL];
+            }
+            else {
+                [errorAlertView show];
+            }
             
-            [self presentViewController:webViewController animated:YES completion:NULL];
         }
         else {
             [errorAlertView show];

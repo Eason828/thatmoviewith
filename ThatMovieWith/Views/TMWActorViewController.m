@@ -39,8 +39,6 @@
 @property (strong, nonatomic) IBOutlet FUIButton *continueButton;
 @property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
 @property (strong, nonatomic) IBOutlet UILabel *andLabel;
-@property (strong, nonatomic) IBOutlet UIImageView *deleteImage;
-@property (strong, nonatomic) IBOutlet UIView *deleteDropShadow;
 @property (strong, nonatomic) IBOutlet UILabel *deleteLabel;
 @property (strong, nonatomic) IBOutlet UIView *deleteGradientView;
 
@@ -61,7 +59,7 @@
 static const NSUInteger ALPHA_FULL = 1;
 static const NSUInteger TABLE_HEIGHT = 66;
 static const double ALPHA_EMPTY = 0.0;
-static const double FADE_DURATION = 0.5;
+static const double FADE_DURATION = 0.3;
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
@@ -186,31 +184,20 @@ int tappedActor;
     
     // Add the gradient to the delete gradient view
     _deleteGradientView.backgroundColor = [UIColor clearColor];
-    UIColor *colorOne = [UIColor clearColor];
-    UIColor *colorTwo = [UIColor colorWithRed:(255/255.0)  green:(255/255.0)  blue:(255/255.0)  alpha:0.3];
+    UIColor *colorOne = [UIColor colorWithRed:(0/255.0)  green:(0/255.0)  blue:(0/255.0)  alpha:0.6];
+    UIColor *colorTwo = [UIColor clearColor];
     
     NSArray *colors = [NSArray arrayWithObjects:(id)colorOne.CGColor, colorTwo.CGColor, nil];
-    NSNumber *stopOne = [NSNumber numberWithFloat:0.8];
+    NSNumber *stopOne = [NSNumber numberWithFloat:0.0];
     NSNumber *stopTwo = [NSNumber numberWithFloat:1.0];
     
     NSArray *locations = [NSArray arrayWithObjects:stopOne, stopTwo, nil];
     
     CAGradientLayer *headerLayer = [CAGradientLayer layer];
-    headerLayer.frame = self.view.bounds;
+    headerLayer.frame = _deleteGradientView.frame;
     headerLayer.colors = colors;
     headerLayer.locations = locations;
     [_deleteGradientView.layer insertSublayer:headerLayer atIndex:0];
-    
-    // Setup the image and dropshadow for the delete icon
-    [CALayer circleLayer:_deleteImage.layer];
-    [_deleteDropShadow addSubview:_deleteImage];
-    _deleteDropShadow.clipsToBounds = NO;
-
-    _deleteDropShadow.layer.cornerRadius = _deleteDropShadow.frame.size.height/2;
-    _deleteDropShadow.layer.shadowColor = [[UIColor whiteColor] CGColor];
-    _deleteDropShadow.layer.shadowOpacity = 1.0;
-    _deleteDropShadow.layer.shadowRadius = 5.0;
-    _deleteDropShadow.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     
     // Custom continue button
     _continueButton.buttonColor = [UIColor goldColor];
@@ -726,22 +713,6 @@ int tappedActor;
     {
         [_animator removeAllBehaviors];
 
-        // When the view intersects with the delete image, go ahead and remove it
-        if (CGRectIntersectsRect(_deleteDropShadow.frame, gesture.view.frame)) {
-            // Fade out/in the necessary images and text
-            [self endGestureFade:gesture];
-            
-            [_animator removeAllBehaviors];
-            for (UIView *view in gesture.view.subviews) {
-                view.hidden = YES;
-            }
-            gesture.view.hidden = YES;
-            UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
-            [_animator addBehavior:snap];
-            tappedActor = (int)gesture.view.tag;
-            [self removeActor];
-        }
-
         // if we aren't dragging it down, just snap it back and quit
         CGPoint velocity = [gesture velocityInView:self.view];
         CGFloat velocityMagnitude = hypot(velocity.x, velocity.y);
@@ -808,11 +779,8 @@ int tappedActor;
     
     [gesture.view setNeedsDisplay];
     
-    [_deleteDropShadow setNeedsDisplay];
-    
-    _deleteImage.hidden = NO;
-    [self slideUpAnimation:_deleteGradientView];
-    [self slideUpAnimation:_deleteDropShadow];
+    [self slideDownAnimation:_deleteLabel];
+    [self slideDownAnimation:_deleteGradientView];
 }
 
 // Fades the necessary views when an actor is dragged around
@@ -824,9 +792,8 @@ int tappedActor;
     // Add the original drop shadow effect
     [CALayer dropShadowLayer:gesture.view.layer];
     
-    [self fadeAnimation:self.deleteLabel];
-    [self slideDownAnimation:_deleteGradientView];
-    [self slideDownAnimation:_deleteDropShadow];
+    [self slideUpAnimation:_deleteLabel];
+    [self slideUpAnimation:_deleteGradientView];
 }
 
 - (void)fadeAnimation:(UIView *)view
@@ -850,27 +817,25 @@ int tappedActor;
     }];
 }
 
-- (void)slideUpAnimation:(UIView *)view
+- (void)slideDownAnimation:(UIView *)view
 {
-    view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+    view.center = CGPointMake(view.center.x, view.center.y - 100.0);
     view.alpha = 1.0;
     view.hidden = NO;
     [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
                      animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
-                     } completion:^(BOOL finished) {
-                         [self showImage:self.deleteLabel];
-                     }];
+                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+                     } completion:nil];
 }
 
-- (void)slideDownAnimation:(UIView *)view
+- (void)slideUpAnimation:(UIView *)view
 {
     [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
                      animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
                      } completion:^(BOOL finished) {
                          // Move the view back
-                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
+                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
                          view.alpha = 0.0;
                          view.hidden = YES;
                      }];
