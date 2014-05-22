@@ -66,7 +66,6 @@
 		E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */; };
 		E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */; };
 		E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */; };
-		E5CEC4091909F7A10032F82B /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E5CEC4081909F7A10032F82B /* delete.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,7 +166,6 @@
 		E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorSearchResults.m; path = Models/TMWActorSearchResults.m; sourceTree = "<group>"; };
 		E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MoviesBackgroundHiRes.png; sourceTree = "<group>"; };
 		E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MoviesBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
-		E5CEC4081909F7A10032F82B /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = images/delete.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,7 +202,6 @@
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
 				E5C915FA1913111600A3DEC6 /* addActor.png */,
-				E5CEC4081909F7A10032F82B /* delete.png */,
 				E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */,
 				E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */,
 				E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */,
@@ -267,8 +264,8 @@
 		E569FF371902F097002928AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */,
 				E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */,
+				E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -542,7 +539,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */,
-				E5CEC4091909F7A10032F82B /* delete.png in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,

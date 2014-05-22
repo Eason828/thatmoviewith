@@ -20,7 +20,7 @@
 + (void)dropShadowLayer:(CALayer *)layer
 {
     layer.shadowColor = [[UIColor blackColor] CGColor];
-    layer.shadowOffset = CGSizeMake(5, 5);
+    layer.shadowOffset = CGSizeMake(4, 4);
     layer.shadowRadius = 3.0;
     layer.shadowOpacity = 0.5;
 }

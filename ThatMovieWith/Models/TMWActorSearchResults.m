@@ -22,7 +22,7 @@
 - (instancetype)initActorSearchResultsWithResults:(NSArray *)results
 {
     if (self) {
-        _results = results;
+        self.results = results;
     }
     return self;
 }

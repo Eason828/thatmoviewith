@@ -8,9 +8,7 @@
             <connections>
                 <outlet property="andLabel" destination="z5e-Hx-riI" id="nKg-Hb-jwu"/>
                 <outlet property="continueButton" destination="TcH-RB-otG" id="D5t-zX-c08"/>
-                <outlet property="deleteDropShadow" destination="h5Y-HL-ucZ" id="tao-8o-KtG"/>
                 <outlet property="deleteGradientView" destination="MKL-yK-S5o" id="pbz-NK-iDP"/>
-                <outlet property="deleteImage" destination="O2n-Ij-Fg6" id="FZc-2U-Bv3"/>
                 <outlet property="deleteLabel" destination="yEx-fM-xho" id="aYe-tq-fMF"/>
                 <outlet property="firstActorButton" destination="MBa-lb-G7T" id="KUE-7d-0lc"/>
                 <outlet property="firstActorImage" destination="17O-NN-qn3" id="OmH-gT-CdY"/>
@@ -89,27 +87,16 @@
                     </connections>
                 </button>
                 <view hidden="YES" opaque="NO" contentMode="scaleToFill" id="MKL-yK-S5o" userLabel="deleteGradient">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Drag Here To Remove" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yEx-fM-xho" userLabel="deleteLabel">
-                            <rect key="frame" x="76" y="547" width="169" height="21"/>
+                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flick to remove" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yEx-fM-xho" userLabel="deleteLabel">
+                            <rect key="frame" x="76" y="23" width="169" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view hidden="YES" contentMode="scaleToFill" id="h5Y-HL-ucZ" userLabel="deleteView">
-                    <rect key="frame" x="127" y="477" width="66" height="66"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="delete.png" id="O2n-Ij-Fg6" userLabel="Delete Image">
-                            <rect key="frame" x="0.0" y="0.0" width="66" height="66"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
@@ -130,6 +117,5 @@
     </objects>
     <resources>
         <image name="addActor.png" width="608" height="608"/>
-        <image name="delete.png" width="241" height="241"/>
     </resources>
 </document>
