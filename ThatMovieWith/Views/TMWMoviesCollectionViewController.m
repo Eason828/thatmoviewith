@@ -21,15 +21,14 @@
 @interface TMWMoviesCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, copy) NSArray *photos;
-@property (nonatomic, copy) UIImageView *curtainView;
 
 @end
 
 
 @implementation TMWMoviesCollectionViewController
 
-static const NSUInteger TABLE_HEIGHT = 198;
-static const NSUInteger TITLE_FONT_SIZE = 36;
+static const NSUInteger TABLE_HEIGHT = 176;
+static const NSUInteger TITLE_FONT_SIZE = 24;
 
 NSInteger tableViewRows;
 CGFloat cellWidth;
@@ -38,7 +37,7 @@ CGFloat cellWidth;
 - (id)init
 {
     ParallaxFlowLayout *layout = [[ParallaxFlowLayout alloc] init];
-    layout.minimumLineSpacing = 8;
+    layout.minimumLineSpacing = 0;
     //layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
     
     self = [super initWithCollectionViewLayout:layout];
@@ -72,19 +71,7 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
     self.navigationController.navigationBar.titleTextAttributes = attributes;
     self.navigationController.navigationBar.backItem.title = @"Actors";
-    self.navigationController.navigationBar.alpha = 0.85;
-    
-    
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
-    
-    UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
-    _curtainView.image = blurImage;
-    
-    // Make the frame a little bit bigger for the parallax effect
-    _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
-                                    _curtainView.frame.origin.y-48,
-                                    self.view.frame.size.width+32,
-                                    self.view.frame.size.height+96);
+    self.navigationController.navigationBar.alpha = 0.95;
     
     // Set vertical effect
     UIInterpolatingMotionEffect *verticalMotionEffect =
@@ -106,11 +93,6 @@ CGFloat cellWidth;
     UIMotionEffectGroup *group = [UIMotionEffectGroup new];
     group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
     
-    // Add both effects to your view
-    [_curtainView addMotionEffect:group];    
-    
-    self.collectionView.backgroundView = _curtainView;
-    
     tableViewRows = 0;
     
     // Refresh the table view
@@ -124,7 +106,7 @@ CGFloat cellWidth;
     // For when dismissing the view controller
     // TODO: Find a method to put this in before the
     // view is shown. viewWillAppear doesn't work.
-    self.navigationController.navigationBar.alpha = 0.85;
+    self.navigationController.navigationBar.alpha = 0.95;
 }
 
 

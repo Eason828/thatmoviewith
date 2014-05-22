@@ -73,7 +73,6 @@ static TMWActorContainer *actorContainer;
     // Get a intersection containing the IDs of the same movies
     NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
     for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"id"]) {
-        
         if ([intersection count] != 0) {
             [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
         }
@@ -102,12 +101,11 @@ static TMWActorContainer *actorContainer;
     
     // Put the movies with "null" release dates first, because they're likely to
     // be movies that aren't out yet.
-    NSArray *releaseDatesArray = [sortedMoviesArray valueForKey:@"release_date"];
     NSMutableArray *nullFirstArray = [[NSMutableArray alloc] initWithArray:sortedMoviesArray];
-    for (id movieRelease in releaseDatesArray) {
-        if (movieRelease == (id)[NSNull null]) {
-            [nullFirstArray removeObjectAtIndex:[releaseDatesArray indexOfObject:movieRelease]];
-            [nullFirstArray insertObject:sortedMoviesArray[[releaseDatesArray indexOfObject:movieRelease]] atIndex:0];
+    for (id movie in sortedMoviesArray) {
+        if ([movie valueForKey:@"release_date"] == (id)[NSNull null]) {
+            [nullFirstArray removeObject:movie];
+            [nullFirstArray insertObject:movie atIndex:0];
         }
     }
     return nullFirstArray;
