@@ -9,6 +9,7 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <FlatUIKit.h>
+#import <POP.h>
 
 #import "TMWActorViewController.h"
 #import "TMWMoviesCollectionViewController.h"
@@ -60,6 +61,14 @@ static const NSUInteger ALPHA_FULL = 1;
 static const NSUInteger TABLE_HEIGHT = 66;
 static const double ALPHA_EMPTY = 0.0;
 static const double FADE_DURATION = 0.3;
+static const int POP_SLIDE_DISTANCE = 75;
+static const int POP_ACTOR_SPRING_BOUNCINESS = 22;
+static const int POP_ACTOR_SPRING_SPEED = 15;
+static const int POP_SLIDE_UP_SPRING_BOUNCINESS = 18;
+static const int POP_SLIDE_UP_SPRING_SPEED = 20;
+static const int POP_SLIDE_DOWN_SPRING_BOUNCINESS = 20;
+static const int POP_SLIDE_DOWN_SPRING_SPEED = 20;
+
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
@@ -180,6 +189,9 @@ int tappedActor;
     [_secondActorButton addGestureRecognizer:secondPanGesture];
     firstPanGesture.enabled = NO;
     secondPanGesture.enabled = NO;
+    
+    // Move the delete label outside of the view
+    _deleteLabel.center = CGPointMake(_deleteLabel.center.x, _deleteLabel.center.y - POP_SLIDE_DISTANCE);
     
     
     // Add the gradient to the delete gradient view
@@ -501,24 +513,6 @@ int tappedActor;
     _continueButton.hidden = NO; 
 }
 
-// Wobble animation when adding an actor
-- (CAAnimation*)getShakeAnimation
-{
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    
-    CGFloat wobbleAngle = 0.09f;
-    
-    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
-    
-    animation.autoreverses = YES;
-    animation.duration = 0.09;
-    animation.repeatCount = 4;
-    
-    return animation;
-}
-
 // Set the actor image and all of it's necessary properties
 - (void)configureActor:(TMWActor *)actor
        ImageVisibility:(UIImageView *)actorImage
@@ -556,6 +550,16 @@ int tappedActor;
             [button setBackgroundImage:screenShot forState:UIControlStateNormal];
             [weakActorImage removeFromSuperview];
             
+            POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+            anim.springSpeed = 15;
+            anim.springBounciness = 22;
+            anim.fromValue  = [NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
+            anim.toValue  = [NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
+            [button.layer pop_addAnimation:anim forKey:@"scaleAnimation"];
+            
+            
+           // [button.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
+            
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Failed with error: %@", error);
         }];
@@ -572,12 +576,18 @@ int tappedActor;
         [button setBackgroundImage:screenShot forState:UIControlStateNormal];
         [actorImage removeFromSuperview];
         
+        POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+        anim.springSpeed = POP_ACTOR_SPRING_SPEED;
+        anim.springBounciness = POP_ACTOR_SPRING_BOUNCINESS;
+        anim.fromValue  = [NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
+        anim.toValue  = [NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
+        [button.layer pop_addAnimation:anim forKey:@"scaleAnimation"];
+        
     }
     [self showImage:button];
 
     button.userInteractionEnabled = YES;
     _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    [button.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
 }
 
 #pragma mark UISearchDisplayController methods
@@ -779,7 +789,7 @@ int tappedActor;
     
     [gesture.view setNeedsDisplay];
     
-    [self slideDownAnimation:_deleteLabel];
+    [self slideDownPopAnimation:_deleteLabel];
     [self slideDownAnimation:_deleteGradientView];
 }
 
@@ -792,7 +802,7 @@ int tappedActor;
     // Add the original drop shadow effect
     [CALayer dropShadowLayer:gesture.view.layer];
     
-    [self slideUpAnimation:_deleteLabel];
+    [self slideUpPopAnimation:_deleteLabel];
     [self slideUpAnimation:_deleteGradientView];
 }
 
@@ -819,12 +829,12 @@ int tappedActor;
 
 - (void)slideDownAnimation:(UIView *)view
 {
-    view.center = CGPointMake(view.center.x, view.center.y - 100.0);
+    view.center = CGPointMake(view.center.x, view.center.y - POP_SLIDE_DISTANCE);
     view.alpha = 1.0;
     view.hidden = NO;
     [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
                      animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+                         view.center = CGPointMake(view.center.x, view.center.y + POP_SLIDE_DISTANCE);
                      } completion:nil];
 }
 
@@ -832,13 +842,39 @@ int tappedActor;
 {
     [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
                      animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y - 100.0);
+                         view.center = CGPointMake(view.center.x, view.center.y - POP_SLIDE_DISTANCE);
                      } completion:^(BOOL finished) {
                          // Move the view back
-                         view.center = CGPointMake(view.center.x, view.center.y + 100.0);
+                         view.center = CGPointMake(view.center.x, view.center.y + POP_SLIDE_DISTANCE);
                          view.alpha = 0.0;
                          view.hidden = YES;
                      }];
+}
+
+- (void)slideDownPopAnimation:(UIView *)view
+{
+    view.alpha = 1.0;
+    view.hidden = NO;
+    POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    anim.fromValue = @(view.center.y);
+    anim.toValue = @(view.center.y + POP_SLIDE_DISTANCE);
+    anim.springBounciness = POP_SLIDE_DOWN_SPRING_BOUNCINESS;
+    anim.springSpeed = POP_SLIDE_DOWN_SPRING_BOUNCINESS;
+
+    [view.layer pop_addAnimation:anim forKey:@"size"];
+}
+
+- (void)slideUpPopAnimation:(UIView *)view
+{
+    view.alpha = 1.0;
+    view.hidden = NO;
+    POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    anim.fromValue = @(view.center.y);
+    anim.toValue = @(view.center.y - POP_SLIDE_DISTANCE);
+    anim.springBounciness = POP_SLIDE_UP_SPRING_BOUNCINESS;
+    anim.springSpeed = POP_SLIDE_UP_SPRING_SPEED;
+    
+    [view.layer pop_addAnimation:anim forKey:@"size"];
 }
 
 @end

@@ -27,7 +27,7 @@
 
 @implementation TMWMoviesCollectionViewController
 
-static const NSUInteger TABLE_HEIGHT = 176;
+static const NSUInteger TABLE_HEIGHT = 168;
 static const NSUInteger TITLE_FONT_SIZE = 24;
 
 NSInteger tableViewRows;
