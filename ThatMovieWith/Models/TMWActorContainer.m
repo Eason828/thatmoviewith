@@ -160,4 +160,28 @@ static TMWActorContainer *actorContainer;
     return samePosterArray;
 }
 
+- (NSArray *)sameMoviesReleaseDates
+{
+    TMWActor *firstActor = mutableActorContainer[0];
+    NSMutableArray *sameMoviesReleaseDatesArray = [[NSMutableArray alloc] init];
+    
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    
+    // Get the movie title for all movies in sameMovieIDs
+    for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
+        if ([IDArray containsObject:sameMovieID]) {
+            if ([firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
+                NSString* unknownString = @"N/A";
+                [sameMoviesReleaseDatesArray addObject:unknownString];
+            
+            }
+            else {
+                NSString *releaseDateString = [firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"];
+                [sameMoviesReleaseDatesArray addObject:[releaseDateString substringToIndex:4]];
+            }
+        }
+    }
+    return sameMoviesReleaseDatesArray;
+}
+
 @end

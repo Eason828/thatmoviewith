@@ -15,6 +15,7 @@
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
+		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E58EB17F1925D68200A254C5 /* curtains.png in Resources */ = {isa = PBXBuildFile; fileRef = E58EB17E1925D68200A254C5 /* curtains.png */; };
 		E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E58EB1F519298C5F00A254C5 /* OpenGLES.framework */; };
 		E58EB1FD1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */; };
@@ -88,6 +89,7 @@
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E571EA411901D28A00CB3B31 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
+		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E58EB17E1925D68200A254C5 /* curtains.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curtains.png; sourceTree = "<group>"; };
 		E58EB1F519298C5F00A254C5 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E58EB1F81929CE8F00A254C5 /* broadway.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = broadway.ttf; path = resources/broadway.ttf; sourceTree = SOURCE_ROOT; };
@@ -198,6 +200,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E57B8FC8192F1B5E0086593D /* black.png */,
 				E58EB17E1925D68200A254C5 /* curtains.png */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
@@ -547,6 +550,7 @@
 				E5C915FB1913111600A3DEC6 /* addActor.png in Resources */,
 				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
+				E57B8FC9192F1B5E0086593D /* black.png in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
