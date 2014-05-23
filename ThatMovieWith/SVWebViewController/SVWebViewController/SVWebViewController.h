@@ -13,5 +13,6 @@
 - (id)initWithAddress:(NSString*)urlString;
 - (id)initWithURL:(NSURL*)URL;
 - (void)doneButtonClicked:(id)sender;
+- (void)actionButtonClicked:(UIBarButtonItem *)sender;
 
 @end

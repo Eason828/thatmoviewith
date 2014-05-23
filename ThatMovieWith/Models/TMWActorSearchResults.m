@@ -7,7 +7,7 @@
 //
 
 #import "TMWActorSearchResults.h"
-#import "UIImage+DrawInitialsOnImage.h"
+#import "UIImage+DrawOnImage.h"
 
 @interface TMWActorSearchResults()
 

@@ -14,21 +14,23 @@
 #import <JLTMDbClient.h>
 #import "SVWebViewController.h"
 #import "TMWActorContainer.h"
-#import "UIImage+DrawInitialsOnImage.h" // Actor's without images
+#import "UIImage+DrawOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
 
 @interface TMWMoviesCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, copy) NSArray *photos;
+@property (nonatomic, copy) UIImageView *curtainView;
 
 @end
 
 
 @implementation TMWMoviesCollectionViewController
 
-static const NSUInteger TABLE_HEIGHT = 176;
-static const NSUInteger TITLE_FONT_SIZE = 24;
+// 3 movies: 168    4 movies: 126
+static const NSUInteger TABLE_HEIGHT = 126;
+static const NSUInteger TITLE_FONT_SIZE = 22;
 
 NSInteger tableViewRows;
 CGFloat cellWidth;
@@ -62,36 +64,15 @@ CGFloat cellWidth;
     self.collectionView.alwaysBounceVertical = YES;
     [self.collectionView registerClass:[ParallaxPhotoCell class] forCellWithReuseIdentifier:@"PhotoCell"];
     
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
-    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
-
-    // Set the back button color
-    self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor goldColor];
-    self.navigationController.navigationBar.titleTextAttributes = attributes;
+    // Special attribute set for title text color
+    self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
-    self.navigationController.navigationBar.alpha = 0.95;
+
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
     
-    // Set vertical effect
-    UIInterpolatingMotionEffect *verticalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.y"
-     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-    verticalMotionEffect.minimumRelativeValue = @(-48);
-    verticalMotionEffect.maximumRelativeValue = @(48);
-    
-    // Set horizontal effect
-    UIInterpolatingMotionEffect *horizontalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.x"
-     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-    horizontalMotionEffect.minimumRelativeValue = @(-16);
-    horizontalMotionEffect.maximumRelativeValue = @(16);
-    
-    // Create group to combine both
-    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
-    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+    UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
+    _curtainView.image = blurImage;
+    self.collectionView.backgroundView = _curtainView;
     
     tableViewRows = 0;
     
@@ -106,7 +87,7 @@ CGFloat cellWidth;
     // For when dismissing the view controller
     // TODO: Find a method to put this in before the
     // view is shown. viewWillAppear doesn't work.
-    self.navigationController.navigationBar.alpha = 0.95;
+    //self.navigationController.navigationBar.alpha = 0.95;
 }
 
 
@@ -250,7 +231,7 @@ CGFloat cellWidth;
                 NSLog(@"%@", webURL);
                 SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-                webViewController.barsTintColor = [UIColor blackColor];
+                webViewController.barsTintColor = [UIColor goldColor];
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
             else {

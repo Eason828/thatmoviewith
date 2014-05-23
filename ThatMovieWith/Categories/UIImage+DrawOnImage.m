@@ -6,11 +6,11 @@
 //
 //
 
-#import "UIImage+DrawInitialsOnImage.h"
+#import "UIImage+DrawOnImage.h"
 #import "CALayer+circleLayer.h"
 #import "UIColor+customColors.h"
 
-@implementation UIImage (DrawInitialsOnImage)
+@implementation UIImage (DrawOnImage)
 
 + (UIImage *)imageByDrawingInitialsOnImage:(UIImage *)image withInitials:(NSString *)initials withFontSize:(int)fontSize
 {

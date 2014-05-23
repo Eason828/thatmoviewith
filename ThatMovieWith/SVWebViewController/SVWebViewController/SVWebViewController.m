@@ -32,7 +32,6 @@
 - (void)goForwardClicked:(UIBarButtonItem *)sender;
 - (void)reloadClicked:(UIBarButtonItem *)sender;
 - (void)stopClicked:(UIBarButtonItem *)sender;
-- (void)actionButtonClicked:(UIBarButtonItem *)sender;
 
 @end
 
@@ -82,7 +81,7 @@
 	[super viewWillAppear:animated];
 	
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [self.navigationController setToolbarHidden:NO animated:animated];
+        [self.navigationController setToolbarHidden:YES animated:animated];
     }
 }
 
@@ -245,10 +244,12 @@
 	[self updateToolbarItems];
 }
 
-- (void)actionButtonClicked:(id)sender {
+- (void)actionButtonClicked:(UIBarButtonItem *)sender {
     NSArray *activities = @[[SVWebViewControllerActivityIMDB new], [SVWebViewControllerActivitySafari new], [SVWebViewControllerActivityChrome new]];
     NSURL *url = self.webView.request.URL ? self.webView.request.URL : self.URL;
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:activities];
+    activityController.excludedActivityTypes = @[UIActivityTypeAddToReadingList];
+    
     [self presentViewController:activityController animated:YES completion:nil];
 }
 
