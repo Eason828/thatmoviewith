@@ -59,7 +59,7 @@
 		E5C915FB1913111600A3DEC6 /* addActor.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C915FA1913111600A3DEC6 /* addActor.png */; };
 		E5C91611191333FB00A3DEC6 /* CALayer+circleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */; };
 		E5C91612191333FB00A3DEC6 /* UIColor+customColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */; };
-		E5C91613191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */; };
+		E5C91613191333FB00A3DEC6 /* UIImage+DrawOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C91610191333FB00A3DEC6 /* UIImage+DrawOnImage.m */; };
 		E5C916161913340B00A3DEC6 /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */; };
 		E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9161F1913341F00A3DEC6 /* TMWActor.m */; };
 		E5C916251913341F00A3DEC6 /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916211913341F00A3DEC6 /* TMWActorContainer.m */; };
@@ -155,8 +155,8 @@
 		E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+circleLayer.m"; path = "Categories/CALayer+circleLayer.m"; sourceTree = "<group>"; };
 		E5C9160D191333FB00A3DEC6 /* UIColor+customColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+customColors.h"; path = "Categories/UIColor+customColors.h"; sourceTree = "<group>"; };
 		E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+customColors.m"; path = "Categories/UIColor+customColors.m"; sourceTree = "<group>"; };
-		E5C9160F191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawInitialsOnImage.h"; path = "Categories/UIImage+DrawInitialsOnImage.h"; sourceTree = "<group>"; };
-		E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawInitialsOnImage.m"; path = "Categories/UIImage+DrawInitialsOnImage.m"; sourceTree = "<group>"; };
+		E5C9160F191333FB00A3DEC6 /* UIImage+DrawOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawOnImage.h"; path = "Categories/UIImage+DrawOnImage.h"; sourceTree = "<group>"; };
+		E5C91610191333FB00A3DEC6 /* UIImage+DrawOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawOnImage.m"; path = "Categories/UIImage+DrawOnImage.m"; sourceTree = "<group>"; };
 		E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWActorViewController.xib; path = Views/TMWActorViewController.xib; sourceTree = "<group>"; };
 		E5C9161E1913341F00A3DEC6 /* TMWActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActor.h; path = Models/TMWActor.h; sourceTree = "<group>"; };
 		E5C9161F1913341F00A3DEC6 /* TMWActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActor.m; path = Models/TMWActor.m; sourceTree = "<group>"; };
@@ -228,8 +228,8 @@
 				E5C9160C191333FB00A3DEC6 /* CALayer+circleLayer.m */,
 				E5C9160D191333FB00A3DEC6 /* UIColor+customColors.h */,
 				E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */,
-				E5C9160F191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.h */,
-				E5C91610191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m */,
+				E5C9160F191333FB00A3DEC6 /* UIImage+DrawOnImage.h */,
+				E5C91610191333FB00A3DEC6 /* UIImage+DrawOnImage.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -643,7 +643,7 @@
 				E5C1DEFF19175E900041E31D /* SVWebViewController.m in Sources */,
 				E5BB14F0192589A500B7A738 /* TMWContainerViewController.m in Sources */,
 				E58EB20D1929D00600A254C5 /* TMWMoviesCollectionViewController.m in Sources */,
-				E5C91613191333FB00A3DEC6 /* UIImage+DrawInitialsOnImage.m in Sources */,
+				E5C91613191333FB00A3DEC6 /* UIImage+DrawOnImage.m in Sources */,
 				E58EB2081929CFFD00A254C5 /* ParallaxFlowLayout.m in Sources */,
 				E58EB2011929CF0B00A254C5 /* UIImage+ImageEffects.m in Sources */,
 				E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */,

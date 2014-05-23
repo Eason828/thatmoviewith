@@ -86,7 +86,6 @@ int cnt;
 
 - (void)animateCreditsWithCount:(NSUInteger)count
 {
-    NSLog(@"%i", count);
     if(count > creditText.count-1) {
         count = 0;
     }

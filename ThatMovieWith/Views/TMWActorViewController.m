@@ -19,7 +19,7 @@
 #import "TMWCustomActorCellTableViewCell.h" 
 
 #import "CALayer+circleLayer.h" // Circle layer over actor
-#import "UIImage+DrawInitialsOnImage.h" // Actor's without images
+#import "UIImage+DrawOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h" // For the darkened blur effect
 #import "UIColor+customColors.h"
 
@@ -104,6 +104,7 @@ int tappedActor;
 {
     // Hide the navigation bar
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
 - (void)viewDidLoad
@@ -859,7 +860,7 @@ int tappedActor;
     anim.fromValue = @(view.center.y);
     anim.toValue = @(view.center.y + POP_SLIDE_DISTANCE);
     anim.springBounciness = POP_SLIDE_DOWN_SPRING_BOUNCINESS;
-    anim.springSpeed = POP_SLIDE_DOWN_SPRING_BOUNCINESS;
+    anim.springSpeed = POP_SLIDE_DOWN_SPRING_SPEED;
 
     [view.layer pop_addAnimation:anim forKey:@"size"];
 }
