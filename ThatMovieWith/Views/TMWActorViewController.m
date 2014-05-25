@@ -124,7 +124,7 @@ int tappedActor;
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
     
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtain.jpg"]];
     
     UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
     _curtainView.image = blurImage;
@@ -462,7 +462,7 @@ int tappedActor;
         
             if (request) {
                 [UIView transitionWithView:weakCell.imageView
-                                  duration:0.5f
+                                  duration:0.0f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{[weakCell.imageView setImage:image];}
                                 completion:NULL];
@@ -554,7 +554,6 @@ int tappedActor;
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
-        NSLog(@"%@", urlstring);
         
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];

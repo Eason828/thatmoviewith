@@ -30,7 +30,7 @@
 
 // 3 movies: 168    4 movies: 126
 static const NSUInteger TABLE_HEIGHT = 126;
-static const NSUInteger TITLE_FONT_SIZE = 28;
+static const NSUInteger TITLE_FONT_SIZE = 36;
 
 NSInteger tableViewRows;
 CGFloat cellWidth;
@@ -68,7 +68,7 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
 
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtain.jpg"]];
     
     UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
     _curtainView.image = blurImage;
@@ -83,11 +83,6 @@ CGFloat cellWidth;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    
-    // For when dismissing the view controller
-    // TODO: Find a method to put this in before the
-    // view is shown. viewWillAppear doesn't work.
-    //self.navigationController.navigationBar.alpha = 0.95;
 }
 
 #pragma mark - PrivateMethods
@@ -96,18 +91,17 @@ CGFloat cellWidth;
       withString:(NSString *)string
   inBoundsOfView:(UIView *)view
 {
-    textView.font = [UIFont systemFontOfSize:TITLE_FONT_SIZE];
+    textView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
     
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentCenter;
-    UIFont *textFont = [UIFont systemFontOfSize:TITLE_FONT_SIZE];
+    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
     
     NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
-    NSLog(@"%f", view.bounds.size.height);
     CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-30, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
     
-    textView.numberOfLines = 3;
+    textView.numberOfLines = 2;
     textView.bounds = bound;
     //cell.textView.frame = textRect;
     textView.text = string;

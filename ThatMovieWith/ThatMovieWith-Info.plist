@@ -37,7 +37,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>broadway-1361512189.ttf</string>
+		<string>broadway.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
