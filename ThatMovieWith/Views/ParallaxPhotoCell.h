@@ -11,7 +11,8 @@
 @interface ParallaxPhotoCell : UICollectionViewCell
 
 @property (nonatomic, strong, readonly) UIImageView *imageView;
-@property (nonatomic, strong, readonly) UITextView *textView;
+@property (nonatomic, strong, readonly) UILabel *label;
+@property (nonatomic, strong, readonly) UILabel *secondLabel;
 @property (nonatomic) CGFloat maxParallaxOffset;
 
 @end

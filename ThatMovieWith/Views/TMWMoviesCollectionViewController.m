@@ -30,7 +30,7 @@
 
 // 3 movies: 168    4 movies: 126
 static const NSUInteger TABLE_HEIGHT = 126;
-static const NSUInteger TITLE_FONT_SIZE = 22;
+static const NSUInteger TITLE_FONT_SIZE = 36;
 
 NSInteger tableViewRows;
 CGFloat cellWidth;
@@ -68,7 +68,7 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
 
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtain.jpg"]];
     
     UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
     _curtainView.image = blurImage;
@@ -83,11 +83,28 @@ CGFloat cellWidth;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
+}
+
+#pragma mark - PrivateMethods
+
+- (void)setLabel:(UILabel *)textView
+      withString:(NSString *)string
+  inBoundsOfView:(UIView *)view
+{
+    textView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
     
-    // For when dismissing the view controller
-    // TODO: Find a method to put this in before the
-    // view is shown. viewWillAppear doesn't work.
-    //self.navigationController.navigationBar.alpha = 0.95;
+    NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    textStyle.alignment = NSTextAlignmentCenter;
+    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
+    
+    NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
+    CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-30, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    
+    textView.numberOfLines = 2;
+    textView.bounds = bound;
+    //cell.textView.frame = textRect;
+    textView.text = string;
 }
 
 
@@ -114,18 +131,41 @@ CGFloat cellWidth;
     if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
         
+        
         // Show the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         
         // Get the image from the URL and set it
-        [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"MoviesBackgroundHiRes"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+            NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
             
+            // Darken the image
             UIImage *darkImage = [image applyPosterEffect];
-            UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:TITLE_FONT_SIZE];
-            cell.imageView.image = initialsImage;
+            
+            // Set the image label properties to center it in the cell
+            [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
+            
+            if (request) {
+                
+                [UIView transitionWithView:cell.imageView
+                                  duration:0.5f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{[cell.imageView setImage:darkImage];}
+                                completion:NULL];
+                
+                [UIView transitionWithView:cell.secondLabel
+                                  duration:0.5f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{[cell.secondLabel setText:movieReleaseString];}
+                                completion:NULL];
+            }
+            else {
+                cell.imageView.image = darkImage;
+                cell.secondLabel.text = movieReleaseString;
+            }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Request failed with error: %@", error);
@@ -145,10 +185,16 @@ CGFloat cellWidth;
     else {
         UIImage *defaultImage = [UIImage imageNamed:@"MoviesBackgroundHiRes"];
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+        NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
+        
+        cell.secondLabel.text = movieReleaseString;
         
         UIImage *darkImage = [defaultImage applyPosterEffect];
-        UIImage *initialsImage = [UIImage imageByDrawingMovieNameOnImage:darkImage withMovieName:movieNameString withFontSize:TITLE_FONT_SIZE];
-        cell.imageView.image = initialsImage;
+        
+        cell.imageView.image = darkImage;
+        
+        // Set the image label properties to center it in the cell
+        [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
     }
 
     

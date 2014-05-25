@@ -124,7 +124,7 @@ int tappedActor;
     _thatMovieWithLabel.font = broadwayFont;
     _andLabel.font = broadwayFont;
     
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtains"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtain.jpg"]];
     
     UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
     _curtainView.image = blurImage;
@@ -455,8 +455,27 @@ int tappedActor;
         // Show the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
+        __weak TMWCustomActorCellTableViewCell *weakCell = cell;
+        
         // Get the image from the URL and set it
-        [cell.imageView setImageWithURL:[NSURL URLWithString:urlstring] placeholderImage:[UIImage imageNamed:@"Clear.png"]];
+        [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        
+            if (request) {
+                [UIView transitionWithView:weakCell.imageView
+                                  duration:0.0f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{[weakCell.imageView setImage:image];}
+                                completion:NULL];
+            }
+            else {
+                weakCell.imageView.image = image;
+            }
+            
+        
+        
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            NSLog(@"Request failed with error: %@", error);
+        }];
         
         // Hide the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -538,7 +557,7 @@ int tappedActor;
         
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
-        [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"Clear.png"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
+        [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
             
             // Set the image
             weakActorImage.image = image;

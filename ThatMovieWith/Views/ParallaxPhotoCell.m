@@ -31,6 +31,8 @@
     self.clipsToBounds = YES;
 
     [self setupImageView];
+    [self setupLabel];
+    [self setupSecondLabel];
     [self setupConstraints];
     [self setNeedsUpdateConstraints];
     
@@ -41,7 +43,32 @@
 {
     _imageView = [[UIImageView alloc] initWithImage:nil];
     _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.imageView.bounds = self.contentView.bounds;
     [self.contentView addSubview:_imageView];
+}
+
+- (void)setupLabel
+{
+    _label = [UILabel new];
+    //self.textView.text = @"Movie title here";
+    self.label.textColor = [UIColor whiteColor];
+    self.label.textAlignment = NSTextAlignmentCenter;
+    self.label.backgroundColor = [UIColor clearColor];
+    self.label.frame = self.contentView.bounds;
+    self.label.center = self.contentView.center;
+    [self.contentView addSubview:_label];
+}
+
+- (void)setupSecondLabel
+{
+    _secondLabel = [UILabel new];
+    //self.textView.text = @"Movie title here";
+    self.secondLabel.textColor = [UIColor whiteColor];
+    self.secondLabel.font = [UIFont systemFontOfSize:10];
+    self.secondLabel.textAlignment = NSTextAlignmentRight;
+    self.secondLabel.backgroundColor = [UIColor clearColor];
+    self.secondLabel.frame = CGRectMake(self.contentView.frame.origin.x - 5, self.contentView.frame.origin.y + self.contentView.frame.size.height/2 - 10, self.contentView.frame.size.width, self.contentView.frame.size.height);
+    [self.contentView addSubview:_secondLabel];
 }
 
 - (void)setupConstraints

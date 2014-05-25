@@ -15,6 +15,11 @@
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
+		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
+		E57B8FCB19314C860086593D /* curtain.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCA19314C860086593D /* curtain.jpg */; };
+		E57B8FCC19314EBA0086593D /* broadway.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E58EB1F81929CE8F00A254C5 /* broadway.ttf */; };
+		E57B8FD0193156F40086593D /* TMWMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E57B8FCE193156F40086593D /* TMWMainViewController.m */; };
+		E57B8FD1193156F40086593D /* TMWMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCF193156F40086593D /* TMWMainViewController.xib */; };
 		E58EB17F1925D68200A254C5 /* curtains.png in Resources */ = {isa = PBXBuildFile; fileRef = E58EB17E1925D68200A254C5 /* curtains.png */; };
 		E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E58EB1F519298C5F00A254C5 /* OpenGLES.framework */; };
 		E58EB1FD1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */; };
@@ -88,6 +93,11 @@
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E571EA411901D28A00CB3B31 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
+		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
+		E57B8FCA19314C860086593D /* curtain.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = curtain.jpg; sourceTree = "<group>"; };
+		E57B8FCD193156F40086593D /* TMWMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWMainViewController.h; path = Views/TMWMainViewController.h; sourceTree = "<group>"; };
+		E57B8FCE193156F40086593D /* TMWMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWMainViewController.m; path = Views/TMWMainViewController.m; sourceTree = "<group>"; };
+		E57B8FCF193156F40086593D /* TMWMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWMainViewController.xib; path = Views/TMWMainViewController.xib; sourceTree = "<group>"; };
 		E58EB17E1925D68200A254C5 /* curtains.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curtains.png; sourceTree = "<group>"; };
 		E58EB1F519298C5F00A254C5 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E58EB1F81929CE8F00A254C5 /* broadway.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = broadway.ttf; path = resources/broadway.ttf; sourceTree = SOURCE_ROOT; };
@@ -198,6 +208,8 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E57B8FCA19314C860086593D /* curtain.jpg */,
+				E57B8FC8192F1B5E0086593D /* black.png */,
 				E58EB17E1925D68200A254C5 /* curtains.png */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
@@ -250,6 +262,8 @@
 		E569FF361902F084002928AF /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E57B8FCD193156F40086593D /* TMWMainViewController.h */,
+				E57B8FCE193156F40086593D /* TMWMainViewController.m */,
 				E5BB14E3192589A500B7A738 /* TMWActorViewController.h */,
 				E5BB14E4192589A500B7A738 /* TMWActorViewController.m */,
 				E58EB1F71929CA7300A254C5 /* ParallaxMoviesView */,
@@ -264,6 +278,7 @@
 		E569FF371902F097002928AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E57B8FCF193156F40086593D /* TMWMainViewController.xib */,
 				E5C916141913340B00A3DEC6 /* TMWActorViewController.xib */,
 				E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */,
 			);
@@ -538,17 +553,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E57B8FCC19314EBA0086593D /* broadway.ttf in Resources */,
 				E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,
+				E57B8FCB19314C860086593D /* curtain.jpg in Resources */,
 				E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */,
 				E58EB17F1925D68200A254C5 /* curtains.png in Resources */,
 				E5C915FB1913111600A3DEC6 /* addActor.png in Resources */,
 				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
+				E57B8FC9192F1B5E0086593D /* black.png in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
+				E57B8FD1193156F40086593D /* TMWMainViewController.xib in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
@@ -644,6 +663,7 @@
 				E5BB14F0192589A500B7A738 /* TMWContainerViewController.m in Sources */,
 				E58EB20D1929D00600A254C5 /* TMWMoviesCollectionViewController.m in Sources */,
 				E5C91613191333FB00A3DEC6 /* UIImage+DrawOnImage.m in Sources */,
+				E57B8FD0193156F40086593D /* TMWMainViewController.m in Sources */,
 				E58EB2081929CFFD00A254C5 /* ParallaxFlowLayout.m in Sources */,
 				E58EB2011929CF0B00A254C5 /* UIImage+ImageEffects.m in Sources */,
 				E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */,
