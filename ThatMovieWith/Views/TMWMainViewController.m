@@ -198,12 +198,14 @@ int tappedActor;
     _firstActorLabel.hidden = NO;
     _firstActorLabel.textColor = [UIColor whiteColor];
     _firstActorLabel.backgroundColor = [UIColor clearColor];
+    _firstActorLabel.textAlignment = NSTextAlignmentCenter;
     _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_firstActorScrollView addSubview:_firstActorLabel];
     
     _secondActorLabel = [UILabel new];
     _secondActorLabel.hidden = NO;
     _secondActorLabel.textColor = [UIColor whiteColor];
+    _secondActorLabel.textAlignment = NSTextAlignmentCenter;
     _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_secondActorScrollView addSubview:_secondActorLabel];
     
