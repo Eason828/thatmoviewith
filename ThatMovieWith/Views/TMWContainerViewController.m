@@ -7,7 +7,7 @@
 //
 
 #import "TMWContainerViewController.h"
-#import "TMWActorViewController.h"
+#import "TMWMainViewController.h"
 #import "TMWAboutViewController.h"
 
 #import "UIColor+customColors.h"
@@ -18,7 +18,7 @@
 @interface TMWContainerViewController ()
 
 @property TMWAboutViewController *aboutViewController;
-@property TMWActorViewController *actorViewController;
+@property TMWMainViewController *actorViewController;
 @property (nonatomic, copy) UIButton *infoButton;
 @property (nonatomic, copy) UIButton *doneButton;
 
@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
 //    // Do any additional setup after loading the view.
-    _actorViewController = [TMWActorViewController new];
+    _actorViewController = [TMWMainViewController new];
     _aboutViewController = [TMWAboutViewController new];
     
     _actorViewController.view.frame = self.view.frame;

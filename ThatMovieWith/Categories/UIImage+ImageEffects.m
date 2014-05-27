@@ -131,7 +131,7 @@
 
 - (UIImage *)applyVeryDarkCurtainEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.25];
+    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.75];
     return [self applyBlurWithRadius:5.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
 }
 

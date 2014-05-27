@@ -50,7 +50,6 @@
 - (void)setupLabel
 {
     _label = [UILabel new];
-    //self.textView.text = @"Movie title here";
     self.label.textColor = [UIColor whiteColor];
     self.label.textAlignment = NSTextAlignmentCenter;
     self.label.backgroundColor = [UIColor clearColor];
@@ -62,12 +61,11 @@
 - (void)setupSecondLabel
 {
     _secondLabel = [UILabel new];
-    //self.textView.text = @"Movie title here";
     self.secondLabel.textColor = [UIColor whiteColor];
-    self.secondLabel.font = [UIFont systemFontOfSize:10];
+    self.secondLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:12];
     self.secondLabel.textAlignment = NSTextAlignmentRight;
     self.secondLabel.backgroundColor = [UIColor clearColor];
-    self.secondLabel.frame = CGRectMake(self.contentView.frame.origin.x - 5, self.contentView.frame.origin.y + self.contentView.frame.size.height/2 - 10, self.contentView.frame.size.width, self.contentView.frame.size.height);
+    self.secondLabel.frame = CGRectMake(self.contentView.frame.origin.x - 5, self.contentView.frame.origin.y + self.contentView.frame.size.height/2 - 12, self.contentView.frame.size.width, self.contentView.frame.size.height);
     [self.contentView addSubview:_secondLabel];
 }
 

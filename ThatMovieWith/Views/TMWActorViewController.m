@@ -640,7 +640,6 @@ int tappedActor;
 
 #pragma mark UIButton methods
 
-// For showing the
 -(IBAction)buttonPressed:(id)sender
 {
 
