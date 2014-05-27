@@ -213,7 +213,7 @@ int tappedActor;
     _firstActorContinueView.backgroundColor = [UIColor grayColor];
     
     _secondActorContinueView = [UIView new];
-    _firstActorContinueView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
+    _secondActorContinueView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
     _secondActorContinueView.backgroundColor = [UIColor grayColor];
     
     _firstActorDeleteView = [UIView new];
@@ -423,6 +423,9 @@ int tappedActor;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
     if (scrollView == _bothActorsScrollView) {
+        [_firstActorDeleteView removeFromSuperview];
+        [_secondActorDeleteView removeFromSuperview];
+        
         _firstActorScrollView.scrollEnabled = NO;
         _secondActorScrollView.scrollEnabled = NO;
         
@@ -435,11 +438,11 @@ int tappedActor;
         }
         
         // Set the continue view frame depending on the actors chosen
-        if (_firstActorLabel.text) {
+        if (_firstActorLabel.text && ![_firstActorContinueView isDescendantOfView:_bothActorsScrollView]) {
             _firstActorContinueView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
             [_bothActorsScrollView insertSubview:_firstActorContinueView atIndex:0];
         }
-        if (_secondActorLabel.text) {
+        if (_secondActorLabel.text && ![_secondActorContinueView isDescendantOfView:_bothActorsScrollView]) {
             _secondActorContinueView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
             [_bothActorsScrollView insertSubview:_secondActorContinueView atIndex:0];
         }
@@ -454,7 +457,7 @@ int tappedActor;
             [self animateScrollViewBoundsChange:_secondActorScrollView];
         }
         // Set the delete view frame depending on the actors chosen
-        if (_firstActorLabel.text != nil) {
+        if (_firstActorLabel.text && ![_firstActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
             _firstActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
             [_bothActorsScrollView insertSubview:_firstActorDeleteView atIndex:0];
         }
@@ -468,7 +471,7 @@ int tappedActor;
             [self animateScrollViewBoundsChange:_firstActorScrollView];
         }
         // Set the delete view frame depending on the actors chosen
-        if (_secondActorLabel.text != nil) {
+        if (_secondActorLabel.text && ![_secondActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
             _secondActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
             [_bothActorsScrollView insertSubview:_secondActorDeleteView atIndex:0];
         }
@@ -480,6 +483,7 @@ int tappedActor;
     
     if (scrollView == _bothActorsScrollView) {
         if (scrollView.contentOffset.x > scrollOffset/2) {
+
             // Show the Movies View
             TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
             [self.navigationController pushViewController:moviesViewController animated:YES];
@@ -488,6 +492,7 @@ int tappedActor;
            // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                 [self.firstActorContinueView removeFromSuperview];
                 [self.secondActorContinueView removeFromSuperview];
+            
                 self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
            // });
             
