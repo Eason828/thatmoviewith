@@ -28,6 +28,8 @@
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
+@property (strong, nonatomic) IBOutlet UIButton *thatMovieWithButton;
+@property (strong, nonatomic) IBOutlet UIButton *andButton;
 
 @property (strong, nonatomic) UIButton *firstActorButton;
 @property (strong, nonatomic) UIButton *secondActorButton;
@@ -133,9 +135,9 @@ int tappedActor;
     [self.view insertSubview:_curtainView atIndex:0];
     
     float frameX = self.view.frame.origin.x;
-    float frameY = self.view.frame.origin.y + 20;
+    float frameY = self.view.frame.origin.y;
     float frameW = self.view.frame.size.width;
-    float frameH = self.view.frame.size.height - 20;
+    float frameH = self.view.frame.size.height;
     
     // ScrollView
     CGRect bothActorsScrollViewContentSizeRect = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH);
@@ -192,6 +194,11 @@ int tappedActor;
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
     
+    _thatMovieWithButton.frame = _firstActorButton.frame;
+    _thatMovieWithButton.tag = 1;
+    _andButton.frame = _secondActorButton.frame;
+    _andButton.tag = 2;
+    
     
     // Labels
     _firstActorLabel = [UILabel new];
@@ -225,6 +232,8 @@ int tappedActor;
     _secondActorDeleteView = [UIView new];
     _secondActorDeleteView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
     _secondActorDeleteView.backgroundColor = [UIColor grayColor];
+    
+    _bothActorsScrollView.hidden = YES;
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -293,6 +302,7 @@ int tappedActor;
             _firstActorButton.hidden = NO;
             [self.view bringSubviewToFront:_firstActorButton];
             [self.view bringSubviewToFront:_firstActorLabel];
+            _thatMovieWithButton.hidden = NO;
             break;
         }
         case 2:
@@ -301,6 +311,7 @@ int tappedActor;
             _secondActorButton.hidden = NO;
             [self.view bringSubviewToFront:_secondActorButton];
             [self.view bringSubviewToFront:_secondActorLabel];
+            _andButton.hidden = NO;
             break;
         }
     }
@@ -423,6 +434,33 @@ int tappedActor;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (scrollView == _firstActorScrollView) {
+        
+        // Move the other actor back into its original position
+        if (_secondActorScrollView.contentOffset.x != 0) {
+            [self animateScrollViewBoundsChange:_secondActorScrollView];
+        }
+        // Set the delete view frame depending on the actors chosen
+        if (_firstActorLabel.text && ![_firstActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
+            _firstActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
+            [_bothActorsScrollView insertSubview:_firstActorDeleteView atIndex:0];
+        }
+        
+    }
+    
+    if (scrollView == _secondActorScrollView) {
+        
+        // Move the other actor back into its original position
+        if (_firstActorScrollView.contentOffset.x != 0) {
+            [self animateScrollViewBoundsChange:_firstActorScrollView];
+        }
+        // Set the delete view frame depending on the actors chosen
+        if (_secondActorLabel.text && ![_secondActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
+            _secondActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
+            [_bothActorsScrollView insertSubview:_secondActorDeleteView atIndex:0];
+        }
+        
+    }
     
     if (scrollView == _bothActorsScrollView) {
         [_firstActorDeleteView removeFromSuperview];
@@ -449,34 +487,6 @@ int tappedActor;
             [_bothActorsScrollView insertSubview:_secondActorContinueView atIndex:0];
         }
         
-        
-    }
-    
-    if (scrollView == _firstActorScrollView) {
-        
-        // Move the other actor back into its original position
-        if (_secondActorScrollView.contentOffset.x != 0) {
-            [self animateScrollViewBoundsChange:_secondActorScrollView];
-        }
-        // Set the delete view frame depending on the actors chosen
-        if (_firstActorLabel.text && ![_firstActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
-            _firstActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_firstActorDeleteView atIndex:0];
-        }
-        
-    }
-    
-    if (scrollView == _secondActorScrollView) {
-        
-        // Move the other actor back into its original position
-        if (_firstActorScrollView.contentOffset.x != 0) {
-            [self animateScrollViewBoundsChange:_firstActorScrollView];
-        }
-        // Set the delete view frame depending on the actors chosen
-        if (_secondActorLabel.text && ![_secondActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
-            _secondActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_secondActorDeleteView atIndex:0];
-        }
         
     }
 }
@@ -506,9 +516,11 @@ int tappedActor;
             tappedActor = 1;
             [self removeActor];
             _firstActorButton.imageView.image = nil;
+            _firstActorButton.hidden = YES;
             _firstActorLabel.text = nil;
             scrollView.contentOffset = CGPointMake(scrollOffset, 0);
             [_firstActorDeleteView removeFromSuperview];
+            [self.view bringSubviewToFront:_thatMovieWithButton];
         }
     }
     
@@ -517,8 +529,11 @@ int tappedActor;
             tappedActor = 2;
             [self removeActor];
             _secondActorButton.imageView.image = nil;
+            _secondActorButton.hidden = YES;
             _secondActorLabel.text = nil;
+            scrollView.contentOffset = CGPointMake(scrollOffset, 0);
             [_secondActorDeleteView removeFromSuperview];
+            [self.view bringSubviewToFront:_andButton];
         }
     }
 }
@@ -702,6 +717,8 @@ int tappedActor;
         actor1 = chosenActor;
         //_andLabel.hidden = NO;
         _secondActorButton.hidden = NO;
+        _bothActorsScrollView.hidden = NO;
+        _thatMovieWithButton.hidden = YES;
     }
     else
     {
@@ -714,6 +731,7 @@ int tappedActor;
         // Enable dragging the actor around
         //secondPanGesture.enabled = YES;
         _secondActorButton.hidden = NO;
+        _andButton.hidden = YES;
         actor2 = chosenActor;
     }
 }
@@ -737,7 +755,7 @@ int tappedActor;
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[6]] stringByAppendingString:actor.hiResImageURLEnding];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:actor.hiResImageURLEnding];
         
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];

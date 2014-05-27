@@ -6,9 +6,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TMWMainViewController">
             <connections>
+                <outlet property="andButton" destination="3kf-jf-VUh" id="g7L-V8-Caz"/>
                 <outlet property="searchBar" destination="gqd-7s-htX" id="crv-LP-fq2"/>
                 <outlet property="searchBarController" destination="u4Y-t6-osy" id="nfa-Fx-i4v"/>
                 <outlet property="searchDisplayController" destination="u4Y-t6-osy" id="pbj-zf-ALp"/>
+                <outlet property="thatMovieWithButton" destination="J8Z-F2-0Jd" id="j3i-Rs-C89"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,6 +27,28 @@
                         <outlet property="delegate" destination="-1" id="jOH-2U-By1"/>
                     </connections>
                 </searchBar>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8Z-F2-0Jd">
+                    <rect key="frame" x="20" y="132" width="280" height="61"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="41"/>
+                    <state key="normal" title="That movie with">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="A06-ue-GhJ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kf-jf-VUh">
+                    <rect key="frame" x="20" y="335" width="280" height="61"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="41"/>
+                    <state key="normal" title="and">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="0Nh-xO-FkM"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
