@@ -730,7 +730,7 @@ int tappedActor;
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:actor.hiResImageURLEnding];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[6]] stringByAppendingString:actor.hiResImageURLEnding];
         
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
