@@ -171,7 +171,7 @@ static TMWActorContainer *actorContainer;
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
         if ([IDArray containsObject:sameMovieID]) {
             if ([firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
-                NSString* unknownString = @"N/A";
+                NSString* unknownString = @"";
                 [sameMoviesReleaseDatesArray addObject:unknownString];
             
             }
