@@ -42,13 +42,17 @@
 @property (strong, nonatomic) UIView *firstActorActionView;
 @property (strong, nonatomic) UIView *secondActorActionView;
 
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIGravityBehavior *gravityBehavior;
+@property (strong, nonatomic) UIPushBehavior *pushBehavior;
+
 @end
 
 @implementation TMWMainViewController
 
 static const NSUInteger TABLE_HEIGHT = 66;
 static const NSUInteger ACTOR_FONT_SIZE = 42;
-static const NSUInteger scrollOffset = 200;
+static const NSUInteger scrollOffset = 160;
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
@@ -132,9 +136,9 @@ bool sendingAnotherRequest;
     [self.view insertSubview:_curtainView atIndex:0];
     
     float frameX = self.view.frame.origin.x;
-    float frameY = self.view.frame.origin.y + 20;
+    float frameY = self.view.frame.origin.y;
     float frameW = self.view.frame.size.width;
-    float frameH = self.view.frame.size.height - 20;
+    float frameH = self.view.frame.size.height;
 
     _firstActorScrollView = [UIScrollView new];
     _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
@@ -165,6 +169,7 @@ bool sendingAnotherRequest;
                 forControlEvents:UIControlEventTouchUpInside];
     [_firstActorScrollView addSubview:_firstActorButton];
     _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+     //[self addRightBounceBehavior:self.firstActorButton];
     
     _secondActorButton = [UIButton new];
     [_secondActorButton addTarget:self
@@ -173,18 +178,19 @@ bool sendingAnotherRequest;
     _secondActorButton.hidden = YES;
     [_secondActorScrollView addSubview:_secondActorButton];
     _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+     //[self addRightBounceBehavior:_secondActorButton];
     
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
     
     _thatMovieWithButton.tag = 1;
-    _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
+    _thatMovieWithButton.frame = CGRectMake(frameX, frameY + 20, frameW, frameH/2 - 20);
     _thatMovieWithButton.tintColor = [UIColor goldColor];
     CALayer *thatMovieWithLayer = [_thatMovieWithButton layer];
     [thatMovieWithLayer setMasksToBounds:YES];
     [thatMovieWithLayer setCornerRadius:15.0];
-    [thatMovieWithLayer setBorderWidth:1.0];
+    [thatMovieWithLayer setBorderWidth:2.0];
     [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
     
     _andButton.tag = 2;
@@ -193,7 +199,7 @@ bool sendingAnotherRequest;
     CALayer *andLayer = [_andButton layer];
     [andLayer setMasksToBounds:YES];
     [andLayer setCornerRadius:15.0];
-    [andLayer setBorderWidth:1.0];
+    [andLayer setBorderWidth:2.0];
     [andLayer setBorderColor:[[UIColor goldColor] CGColor]];
     _andButton.hidden = YES;
     
@@ -221,6 +227,10 @@ bool sendingAnotherRequest;
     _secondActorActionView = [UIView new];
     _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
     _secondActorActionView.backgroundColor = [UIColor grayColor];
+    
+    
+    [self addRightBounceBehavior];
+    
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -391,6 +401,28 @@ bool sendingAnotherRequest;
     scrollView.bounds = bounds;
 }
 
+- (void)addRightBounceBehavior
+{
+    
+    _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    UICollisionBehavior *collisionBehaviour = [[UICollisionBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    [collisionBehaviour setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(0, -280, 0, 0)];
+    [_animator addBehavior:collisionBehaviour];
+    
+    self.gravityBehavior = [[UIGravityBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    self.gravityBehavior.gravityDirection = CGVectorMake(1.0f, 0.0f);
+    [_animator addBehavior:self.gravityBehavior];
+    
+    self.pushBehavior = [[UIPushBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView] mode:UIPushBehaviorModeInstantaneous];
+    self.pushBehavior.magnitude = 0.0f;
+    self.pushBehavior.angle = 0.0f;
+    [_animator addBehavior:self.pushBehavior];
+    
+    UIDynamicItemBehavior *itemBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    itemBehaviour.elasticity = 0.6f;
+    [_animator addBehavior:itemBehaviour];
+}
+
 #pragma mark UIScrollView methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -423,14 +455,6 @@ bool sendingAnotherRequest;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
-    // Set the delete view frame depending on the actors chosen
-    if (_firstActorLabel.text && ![_firstActorActionView isDescendantOfView:self.view]) {
-        [self.view insertSubview:_firstActorActionView atIndex:1];
-    }
-    if (_secondActorLabel.text && ![_secondActorActionView isDescendantOfView:self.view]) {
-        [self.view insertSubview:_secondActorActionView atIndex:1];
-    }
-    
     if (scrollView == _firstActorScrollView) {
         
         // Move the other actor back into its original position
@@ -458,13 +482,8 @@ bool sendingAnotherRequest;
             [self.navigationController pushViewController:moviesViewController animated:YES];
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
-           // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [_firstActorActionView removeFromSuperview];
             [_secondActorActionView removeFromSuperview];
-            
-            //self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
-            
-           // });
             
         }
     }
@@ -499,23 +518,6 @@ bool sendingAnotherRequest;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     _firstActorScrollView.contentOffset = CGPointMake(0, 0);
     _secondActorScrollView.contentOffset = CGPointMake(0, 0);
-//    if (scrollView == _bothActorsScrollView) {
-//        if (scrollView.contentOffset.x == 0) {
-//            _firstActorScrollView.scrollEnabled = YES;
-//            _secondActorScrollView.scrollEnabled = YES;
-//            [_firstActorContinueView removeFromSuperview];
-//            [_secondActorContinueView removeFromSuperview];
-//        }
-//
-//    }
-    
-    if (scrollView == _firstActorScrollView) {
-        
-    }
-    
-    if (scrollView == _secondActorScrollView) {
-        
-    }
 }
 
 
@@ -696,24 +698,6 @@ bool sendingAnotherRequest;
         _andButton.hidden = YES;
         actor2 = chosenActor;
     }
-    
-    if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
-        UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-        
-        UIGravityBehavior* gravityBehavior =
-        [[UIGravityBehavior alloc] initWithItems:@[self.firstActorButton]];
-        [animator addBehavior:gravityBehavior];
-        
-        UICollisionBehavior* collisionBehavior =
-        [[UICollisionBehavior alloc] initWithItems:@[self.firstActorButton]];
-        collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
-        [animator addBehavior:collisionBehavior];
-        
-        UIDynamicItemBehavior *elasticityBehavior =
-        [[UIDynamicItemBehavior alloc] initWithItems:@[self.firstActorButton]];
-        elasticityBehavior.elasticity = 0.7f;
-        [animator addBehavior:elasticityBehavior];
-    }
 }
 
 // Set the actor image and all of it's necessary properties
@@ -766,6 +750,19 @@ bool sendingAnotherRequest;
             // Set the image label properties to center it in the cell
             [self setLabel:label withString:actor.name inBoundsOfView:button];
             label.hidden = NO;
+            
+            // Set the delete view frame depending on the actors chosen
+            if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.firstActorActionView atIndex:1];
+                self.firstActorActionView.backgroundColor = [UIColor goldColor];
+            }
+            if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.secondActorActionView atIndex:1];
+                self.secondActorActionView.backgroundColor = [UIColor goldColor];
+            }
+            self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
+            self.pushBehavior.active = YES;
+            
             
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Failed with error: %@", error);
