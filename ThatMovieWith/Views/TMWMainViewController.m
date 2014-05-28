@@ -37,13 +37,10 @@
 @property (strong, nonatomic) UILabel *secondActorLabel;
 @property (strong, nonatomic) UIImageView *blurImageView;
 @property (strong, nonatomic) UIImageView *curtainView;
-@property (strong, nonatomic) UIScrollView *bothActorsScrollView;
 @property (strong, nonatomic) UIScrollView *firstActorScrollView;
 @property (strong, nonatomic) UIScrollView *secondActorScrollView;
-@property (strong, nonatomic) UIView *firstActorContinueView;
-@property (strong, nonatomic) UIView *secondActorContinueView;
-@property (strong, nonatomic) UIView *firstActorDeleteView;
-@property (strong, nonatomic) UIView *secondActorDeleteView;
+@property (strong, nonatomic) UIView *firstActorActionView;
+@property (strong, nonatomic) UIView *secondActorActionView;
 
 @end
 
@@ -138,40 +135,27 @@ int tappedActor;
     float frameY = self.view.frame.origin.y + 20;
     float frameW = self.view.frame.size.width;
     float frameH = self.view.frame.size.height - 20;
-    
-    // ScrollView
-    CGRect bothActorsScrollViewContentSizeRect = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH);
-    _bothActorsScrollView = [UIScrollView new];
-    _bothActorsScrollView.frame = CGRectMake(frameX, frameY, frameW, frameH);
-    _bothActorsScrollView.contentSize = bothActorsScrollViewContentSizeRect.size;
-    _bothActorsScrollView.pagingEnabled = YES;
-    _bothActorsScrollView.showsHorizontalScrollIndicator = NO;
-    _bothActorsScrollView.bounces = NO;
-    _bothActorsScrollView.delegate = self;
-    [self.view addSubview:_bothActorsScrollView];
-    
-    
-    
+
     _firstActorScrollView = [UIScrollView new];
-    _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset + scrollOffset, self.view.frame.size.height/2).size;
+    _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
+    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + scrollOffset + scrollOffset, frameH/2).size;
     _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
     _firstActorScrollView.pagingEnabled = YES;
     _firstActorScrollView.showsHorizontalScrollIndicator = NO;
     _firstActorScrollView.bounces = NO;
     _firstActorScrollView.delegate = self;
-    [_bothActorsScrollView addSubview:_firstActorScrollView];
+    [self.view addSubview:_firstActorScrollView];
 
     
     _secondActorScrollView = [UIScrollView new];
-    _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2).size;
+    _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
+    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + scrollOffset + scrollOffset, frameH/2).size;
     _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
     _secondActorScrollView.pagingEnabled = YES;
     _secondActorScrollView.showsHorizontalScrollIndicator = NO;
     _secondActorScrollView.bounces = NO;
     _secondActorScrollView.delegate = self;
-    [_bothActorsScrollView addSubview:_secondActorScrollView];
+    [self.view addSubview:_secondActorScrollView];
     
     
     // Buttons
@@ -204,7 +188,7 @@ int tappedActor;
     [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
     
     _andButton.tag = 2;
-    _andButton.frame = CGRectMake(frameX, frameY + frameH/2 + 20, frameW, frameH/2 - 20);
+    _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
     _andButton.tintColor = [UIColor goldColor];
     CALayer *andLayer = [_andButton layer];
     [andLayer setMasksToBounds:YES];
@@ -230,24 +214,13 @@ int tappedActor;
     _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_secondActorScrollView addSubview:_secondActorLabel];
     
+    _firstActorActionView = [UIView new];
+    _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
+    _firstActorActionView.backgroundColor = [UIColor grayColor];
     
-    _firstActorContinueView = [UIView new];
-    _firstActorContinueView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
-    _firstActorContinueView.backgroundColor = [UIColor grayColor];
-    
-    _secondActorContinueView = [UIView new];
-    _secondActorContinueView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
-    _secondActorContinueView.backgroundColor = [UIColor grayColor];
-    
-    _firstActorDeleteView = [UIView new];
-    _firstActorDeleteView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
-    _firstActorDeleteView.backgroundColor = [UIColor grayColor];
-    
-    _secondActorDeleteView = [UIView new];
-    _secondActorDeleteView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
-    _secondActorDeleteView.backgroundColor = [UIColor grayColor];
-    
-    _bothActorsScrollView.hidden = YES;
+    _secondActorActionView = [UIView new];
+    _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
+    _secondActorActionView.backgroundColor = [UIColor grayColor];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -417,50 +390,49 @@ int tappedActor;
 #pragma mark UIScrollView methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == _bothActorsScrollView) {
-        if (abs(scrollView.contentOffset.x) > abs(scrollOffset/2)) {
-            _firstActorContinueView.backgroundColor = [UIColor goldColor];
-            _secondActorContinueView.backgroundColor = [UIColor goldColor];
-        }
-        else {
-            _firstActorContinueView.backgroundColor = [UIColor grayColor];
-            _secondActorContinueView.backgroundColor = [UIColor grayColor];
-        }
-    }
-    
     if (scrollView == _firstActorScrollView) {
-        if (abs(scrollView.contentOffset.x) > abs(scrollOffset/2)) {
-            _firstActorDeleteView.backgroundColor = [UIColor redColor];
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _firstActorActionView.backgroundColor = [UIColor redColor];
         }
         else {
-            _firstActorDeleteView.backgroundColor = [UIColor grayColor];
+            _firstActorActionView.backgroundColor = [UIColor grayColor];
         }
     }
     
     if (scrollView == _secondActorScrollView) {
-        if (abs(scrollView.contentOffset.x) > abs(scrollOffset/2)) {
-            _secondActorDeleteView.backgroundColor = [UIColor redColor];
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _secondActorActionView.backgroundColor = [UIColor redColor];
         }
         else {
-            _secondActorDeleteView.backgroundColor = [UIColor grayColor];
+            _secondActorActionView.backgroundColor = [UIColor grayColor];
         }
     }
-
+    if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
+        _secondActorScrollView.contentOffset = scrollView.contentOffset;
+        _firstActorScrollView.contentOffset = scrollView.contentOffset;
+        if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2) || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _firstActorActionView.backgroundColor = [UIColor goldColor];
+            _secondActorActionView.backgroundColor = [UIColor goldColor];
+        }
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    
+    // Set the delete view frame depending on the actors chosen
+    if (_firstActorLabel.text && ![_firstActorActionView isDescendantOfView:self.view]) {
+        [self.view insertSubview:_firstActorActionView atIndex:1];
+    }
+    if (_secondActorLabel.text && ![_secondActorActionView isDescendantOfView:self.view]) {
+        [self.view insertSubview:_secondActorActionView atIndex:1];
+    }
+    
     if (scrollView == _firstActorScrollView) {
         
         // Move the other actor back into its original position
         if (_secondActorScrollView.contentOffset.x != 0) {
             [self animateScrollViewBoundsChange:_secondActorScrollView];
         }
-        // Set the delete view frame depending on the actors chosen
-        if (_firstActorLabel.text && ![_firstActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
-            _firstActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_firstActorDeleteView atIndex:0];
-        }
-        
     }
     
     if (scrollView == _secondActorScrollView) {
@@ -469,46 +441,12 @@ int tappedActor;
         if (_firstActorScrollView.contentOffset.x != 0) {
             [self animateScrollViewBoundsChange:_firstActorScrollView];
         }
-        // Set the delete view frame depending on the actors chosen
-        if (_secondActorLabel.text && ![_secondActorDeleteView isDescendantOfView:_bothActorsScrollView]) {
-            _secondActorDeleteView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_secondActorDeleteView atIndex:0];
-        }
-        
-    }
-    
-    if (scrollView == _bothActorsScrollView) {
-        [_firstActorDeleteView removeFromSuperview];
-        [_secondActorDeleteView removeFromSuperview];
-        
-        _firstActorScrollView.scrollEnabled = NO;
-        _secondActorScrollView.scrollEnabled = NO;
-        
-        // Move the other actors back into their original positions
-        if (_firstActorScrollView.contentOffset.x != 0) {
-            [self animateScrollViewBoundsChange:_firstActorScrollView];
-        }
-        if (_secondActorScrollView.contentOffset.x != 0) {
-            [self animateScrollViewBoundsChange:_secondActorScrollView];
-        }
-        
-        // Set the continue view frame depending on the actors chosen
-        if (_firstActorLabel.text && ![_firstActorContinueView isDescendantOfView:_bothActorsScrollView]) {
-            _firstActorContinueView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_firstActorContinueView atIndex:0];
-        }
-        if (_secondActorLabel.text && ![_secondActorContinueView isDescendantOfView:_bothActorsScrollView]) {
-            _secondActorContinueView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + self.view.frame.size.height/2, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-            [_bothActorsScrollView insertSubview:_secondActorContinueView atIndex:0];
-        }
-        
-        
     }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     
-    if (scrollView == _bothActorsScrollView) {
+    if (scrollView == _firstActorScrollView || scrollView == _secondActorScrollView) {
         if (scrollView.contentOffset.x > scrollOffset/2) {
 
             // Show the Movies View
@@ -517,12 +455,10 @@ int tappedActor;
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
            // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [self.firstActorContinueView removeFromSuperview];
-            [self.secondActorContinueView removeFromSuperview];
-            [_firstActorDeleteView removeFromSuperview];
-            [_secondActorDeleteView removeFromSuperview];
+            [_firstActorActionView removeFromSuperview];
+            [_secondActorActionView removeFromSuperview];
             
-            self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
+            //self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
             
            // });
             
@@ -530,42 +466,44 @@ int tappedActor;
     }
     
     if (scrollView == _firstActorScrollView) {
-        if (abs(scrollView.contentOffset.x) > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
             tappedActor = 1;
             [self removeActor];
             _firstActorButton.imageView.image = nil;
             _firstActorButton.hidden = YES;
             _firstActorLabel.text = nil;
-            scrollView.contentOffset = CGPointMake(scrollOffset, 0);
-            [_firstActorDeleteView removeFromSuperview];
+            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
+            [_firstActorActionView removeFromSuperview];
             [self.view bringSubviewToFront:_thatMovieWithButton];
         }
     }
     
     if (scrollView == _secondActorScrollView) {
-        if (abs(scrollView.contentOffset.x) > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
             tappedActor = 2;
             [self removeActor];
             _secondActorButton.imageView.image = nil;
             _secondActorButton.hidden = YES;
             _secondActorLabel.text = nil;
-            scrollView.contentOffset = CGPointMake(scrollOffset, 0);
-            [_secondActorDeleteView removeFromSuperview];
+            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
+            [_secondActorActionView removeFromSuperview];
             [self.view bringSubviewToFront:_andButton];
         }
     }
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (scrollView == _bothActorsScrollView) {
-        if (scrollView.contentOffset.x == 0) {
-            _firstActorScrollView.scrollEnabled = YES;
-            _secondActorScrollView.scrollEnabled = YES;
-            [_firstActorContinueView removeFromSuperview];
-            [_secondActorContinueView removeFromSuperview];
-        }
-
-    }
+    _firstActorScrollView.contentOffset = CGPointMake(0, 0);
+    _secondActorScrollView.contentOffset = CGPointMake(0, 0);
+//    if (scrollView == _bothActorsScrollView) {
+//        if (scrollView.contentOffset.x == 0) {
+//            _firstActorScrollView.scrollEnabled = YES;
+//            _secondActorScrollView.scrollEnabled = YES;
+//            [_firstActorContinueView removeFromSuperview];
+//            [_secondActorContinueView removeFromSuperview];
+//        }
+//
+//    }
     
     if (scrollView == _firstActorScrollView) {
         
@@ -733,8 +671,6 @@ int tappedActor;
         
         // Show the second actor information
         actor1 = chosenActor;
-        //_andLabel.hidden = NO;
-        _bothActorsScrollView.hidden = NO;
         _thatMovieWithButton.hidden = YES;
         if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
             [self.view bringSubviewToFront:_andButton];
