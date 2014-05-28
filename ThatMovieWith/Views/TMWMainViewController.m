@@ -352,7 +352,7 @@ bool sendingAnotherRequest;
             
             if (sendingAnotherRequest == FALSE) {
                 //dispatch_async(dispatch_get_main_queue(),^{
-                    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 //});
             }
         }
@@ -490,10 +490,6 @@ bool sendingAnotherRequest;
             TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
             [self.navigationController pushViewController:moviesViewController animated:YES];
             [self.navigationController setNavigationBarHidden:NO animated:NO];
-            
-//            [_firstActorActionView removeFromSuperview];
-//            [_secondActorActionView removeFromSuperview];
-            
         }
     }
     
@@ -534,12 +530,13 @@ bool sendingAnotherRequest;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+
     // Delays on making the actor API calls
     if([searchText length] != 0) {
         float delay = 0.6;
         
         if (searchText.length > 3) {
-            delay = 0.3;
+            delay = 0.9;
         }
         
         // Clear any previously queued text changes
@@ -718,8 +715,8 @@ bool sendingAnotherRequest;
     UIImageView *actorImage = [UIImageView new];
     actorImage.contentMode = UIViewContentModeScaleAspectFill;
     
-    // Add a drop shadow
     [button addSubview:actorImage];
+    
     actorImage.frame = button.bounds;
     button.clipsToBounds = NO;
     
@@ -736,7 +733,8 @@ bool sendingAnotherRequest;
             
             // Set the image
             weakActorImage.image = image;
-            // Get the actor circle image with layer and set it to the button background
+            
+            // Set the image to the correct context
             UIGraphicsBeginImageContextWithOptions(weakActorImage.bounds.size, weakActorImage.opaque, 0.0);
             CGContextRef context = UIGraphicsGetCurrentContext();
             [weakActorImage.layer renderInContext:context];
@@ -744,9 +742,13 @@ bool sendingAnotherRequest;
             UIGraphicsEndImageContext();
             
             // Darken the image
-            UIImage *darkImage = [screenShot applyPosterEffect];
+            UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, weakActorImage.frame.size.width, weakActorImage.frame.size.height)];
+            [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]];
+            NSArray *viewsToRemove = [weakActorImage subviews];
+            for (UIView *v in viewsToRemove) [v removeFromSuperview];
+            [button addSubview:overlay];
             
-            [button setBackgroundImage:darkImage forState:UIControlStateNormal];
+            [button setBackgroundImage:screenShot forState:UIControlStateNormal];
             [weakActorImage removeFromSuperview];
             
 //            POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
@@ -788,9 +790,13 @@ bool sendingAnotherRequest;
         UIGraphicsEndImageContext();
         
         // Darken the image
-        UIImage *darkImage = [screenShot applyPosterEffect];
+        UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, actorImage.frame.size.width, actorImage.frame.size.height)];
+        [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]];
+        NSArray *viewsToRemove = [actorImage subviews];
+        for (UIView *v in viewsToRemove) [v removeFromSuperview];
+        [button addSubview:overlay];
         
-        [button setBackgroundImage:darkImage forState:UIControlStateNormal];
+        [button setBackgroundImage:screenShot forState:UIControlStateNormal];
         [actorImage removeFromSuperview];
         
         // Set the image label properties to center it in the cell

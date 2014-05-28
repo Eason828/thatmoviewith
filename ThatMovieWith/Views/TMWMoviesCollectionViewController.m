@@ -103,7 +103,6 @@ CGFloat cellWidth;
     
     textView.numberOfLines = 2;
     textView.bounds = bound;
-    //cell.textView.frame = textRect;
     textView.text = string;
 }
 
@@ -122,7 +121,8 @@ CGFloat cellWidth;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    __weak ParallaxPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
+    static NSString *cellIdentifier = @"PhotoCell";
+    __weak ParallaxPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     // grab bound for contentView
     CGRect contentViewBound = cell.imageView.bounds;
@@ -135,7 +135,8 @@ CGFloat cellWidth;
         // Show the network activity icon
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
-        
+        cell.label.text = nil;
+        cell.secondLabel.text = nil;
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
@@ -143,17 +144,24 @@ CGFloat cellWidth;
             NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
             
             // Darken the image
-            UIImage *darkImage = [image applyPosterEffect];
-            
-            // Set the image label properties to center it in the cell
-            [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
+            UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
+            [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+            NSArray *viewsToRemove = [cell.imageView subviews];
+            for (UIView *v in viewsToRemove) [v removeFromSuperview];
+            [cell.imageView addSubview:overlay];
             
             if (request) {
-                
                 [UIView transitionWithView:cell.imageView
                                   duration:0.5f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{[cell.imageView setImage:darkImage];}
+                                animations:^{[cell.imageView setImage:image];}
+                                completion:NULL];
+                
+                [UIView transitionWithView:cell.label
+                                  duration:0.5f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{// Set the image label properties to center it in the cell
+                                    [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];}
                                 completion:NULL];
                 
                 [UIView transitionWithView:cell.secondLabel
@@ -163,7 +171,9 @@ CGFloat cellWidth;
                                 completion:NULL];
             }
             else {
-                cell.imageView.image = darkImage;
+                // Set the image label properties to center it in the cell
+                [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
+                cell.imageView.image = image;
                 cell.secondLabel.text = movieReleaseString;
             }
             
@@ -189,9 +199,14 @@ CGFloat cellWidth;
         
         cell.secondLabel.text = movieReleaseString;
         
-        UIImage *darkImage = [defaultImage applyPosterEffect];
+        // Darken the image
+        UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
+        [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
+        NSArray *viewsToRemove = [cell.imageView subviews];
+        for (UIView *v in viewsToRemove) [v removeFromSuperview];
+        [cell.imageView addSubview:overlay];
         
-        cell.imageView.image = darkImage;
+        cell.imageView.image = defaultImage;
         
         // Set the image label properties to center it in the cell
         [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
