@@ -135,9 +135,9 @@ int tappedActor;
     [self.view insertSubview:_curtainView atIndex:0];
     
     float frameX = self.view.frame.origin.x;
-    float frameY = self.view.frame.origin.y;
+    float frameY = self.view.frame.origin.y + 20;
     float frameW = self.view.frame.size.width;
-    float frameH = self.view.frame.size.height;
+    float frameH = self.view.frame.size.height - 20;
     
     // ScrollView
     CGRect bothActorsScrollViewContentSizeRect = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH);
@@ -154,7 +154,7 @@ int tappedActor;
     
     _firstActorScrollView = [UIScrollView new];
     _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2);
-    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset, self.view.frame.size.height/2).size;
+    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width + scrollOffset + scrollOffset, self.view.frame.size.height/2).size;
     _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
     _firstActorScrollView.pagingEnabled = YES;
     _firstActorScrollView.showsHorizontalScrollIndicator = NO;
@@ -194,10 +194,24 @@ int tappedActor;
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
     
-    _thatMovieWithButton.frame = _firstActorButton.frame;
     _thatMovieWithButton.tag = 1;
-    _andButton.frame = _secondActorButton.frame;
+    _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
+    _thatMovieWithButton.tintColor = [UIColor goldColor];
+    CALayer *thatMovieWithLayer = [_thatMovieWithButton layer];
+    [thatMovieWithLayer setMasksToBounds:YES];
+    [thatMovieWithLayer setCornerRadius:15.0];
+    [thatMovieWithLayer setBorderWidth:1.0];
+    [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    
     _andButton.tag = 2;
+    _andButton.frame = CGRectMake(frameX, frameY + frameH/2 + 20, frameW, frameH/2 - 20);
+    _andButton.tintColor = [UIColor goldColor];
+    CALayer *andLayer = [_andButton layer];
+    [andLayer setMasksToBounds:YES];
+    [andLayer setCornerRadius:15.0];
+    [andLayer setBorderWidth:1.0];
+    [andLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    _andButton.hidden = YES;
     
     
     // Labels
@@ -318,6 +332,7 @@ int tappedActor;
     // // Only hide the continue button if there are not actors
     if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
     {
+        _andButton.hidden = YES;
         // Reset the view back to the default load view
     }
 }
@@ -502,10 +517,13 @@ int tappedActor;
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
            // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                [self.firstActorContinueView removeFromSuperview];
-                [self.secondActorContinueView removeFromSuperview];
+            [self.firstActorContinueView removeFromSuperview];
+            [self.secondActorContinueView removeFromSuperview];
+            [_firstActorDeleteView removeFromSuperview];
+            [_secondActorDeleteView removeFromSuperview];
             
-                self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
+            self.bothActorsScrollView.contentOffset = CGPointMake(0, 0);
+            
            // });
             
         }
@@ -716,9 +734,13 @@ int tappedActor;
         // Show the second actor information
         actor1 = chosenActor;
         //_andLabel.hidden = NO;
-        _secondActorButton.hidden = NO;
         _bothActorsScrollView.hidden = NO;
         _thatMovieWithButton.hidden = YES;
+        if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
+            [self.view bringSubviewToFront:_andButton];
+            _andButton.hidden = NO;
+            _secondActorButton.hidden = YES;
+        }
     }
     else
     {
@@ -733,6 +755,24 @@ int tappedActor;
         _secondActorButton.hidden = NO;
         _andButton.hidden = YES;
         actor2 = chosenActor;
+    }
+    
+    if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
+        UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+        
+        UIGravityBehavior* gravityBehavior =
+        [[UIGravityBehavior alloc] initWithItems:@[self.firstActorButton]];
+        [animator addBehavior:gravityBehavior];
+        
+        UICollisionBehavior* collisionBehavior =
+        [[UICollisionBehavior alloc] initWithItems:@[self.firstActorButton]];
+        collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+        [animator addBehavior:collisionBehavior];
+        
+        UIDynamicItemBehavior *elasticityBehavior =
+        [[UIDynamicItemBehavior alloc] initWithItems:@[self.firstActorButton]];
+        elasticityBehavior.elasticity = 0.7f;
+        [animator addBehavior:elasticityBehavior];
     }
 }
 
