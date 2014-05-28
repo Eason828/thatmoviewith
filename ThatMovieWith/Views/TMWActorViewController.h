@@ -1,8 +1,8 @@
 //
-//  TMWViewController.h
+//  TMWMainViewController.h
 //  ThatMovieWith
 //
-//  Created by johnrhickey on 4/15/14.
+//  Created by johnrhickey on 5/24/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 

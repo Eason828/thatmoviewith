@@ -6,116 +6,62 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TMWActorViewController">
             <connections>
-                <outlet property="andLabel" destination="z5e-Hx-riI" id="nKg-Hb-jwu"/>
-                <outlet property="continueButton" destination="TcH-RB-otG" id="D5t-zX-c08"/>
-                <outlet property="deleteGradientView" destination="MKL-yK-S5o" id="pbz-NK-iDP"/>
-                <outlet property="deleteLabel" destination="yEx-fM-xho" id="aYe-tq-fMF"/>
-                <outlet property="firstActorButton" destination="MBa-lb-G7T" id="KUE-7d-0lc"/>
-                <outlet property="firstActorImage" destination="17O-NN-qn3" id="OmH-gT-CdY"/>
-                <outlet property="searchBar" destination="hpu-Ls-tL3" id="Tfy-Te-dyH"/>
-                <outlet property="searchBarController" destination="aZt-um-9EG" id="5F2-i5-ks0"/>
-                <outlet property="searchDisplayController" destination="aZt-um-9EG" id="PSy-oF-VuH"/>
-                <outlet property="secondActorButton" destination="5su-cV-Ecx" id="OIz-R4-f7r"/>
-                <outlet property="secondActorImage" destination="IJI-es-uex" id="BVy-Do-MYx"/>
-                <outlet property="thatMovieWithLabel" destination="Jkg-Pm-WM4" id="3C1-Xf-kWr"/>
+                <outlet property="andButton" destination="3kf-jf-VUh" id="g7L-V8-Caz"/>
+                <outlet property="searchBar" destination="gqd-7s-htX" id="crv-LP-fq2"/>
+                <outlet property="searchBarController" destination="u4Y-t6-osy" id="nfa-Fx-i4v"/>
+                <outlet property="searchDisplayController" destination="u4Y-t6-osy" id="pbj-zf-ALp"/>
+                <outlet property="thatMovieWithButton" destination="J8Z-F2-0Jd" id="j3i-Rs-C89"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" propertyAccessControl="none">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TcH-RB-otG" userLabel="ContinueButton" customClass="FUIButton">
-                    <rect key="frame" x="80" y="499" width="161" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="Find Movies">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="ESJ-lm-dCq"/>
-                    </connections>
-                </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="THAT MOVIE WITH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jkg-Pm-WM4">
-                    <rect key="frame" x="0.0" y="38" width="320" height="51"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Baskerville" family="Baskerville" pointSize="36"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="17O-NN-qn3" userLabel="First Actor Image">
-                    <rect key="frame" x="80" y="93" width="160" height="160"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="IJI-es-uex" userLabel="Second Actor Image">
-                    <rect key="frame" x="80" y="315" width="160" height="160"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AND" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="z5e-Hx-riI">
-                    <rect key="frame" x="80" y="262" width="161" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Baskerville" family="Baskerville" pointSize="36"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <searchBar hidden="YES" opaque="NO" contentMode="redraw" barStyle="black" id="hpu-Ls-tL3">
+                <searchBar hidden="YES" opaque="NO" contentMode="redraw" barStyle="black" id="gqd-7s-htX">
                     <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
-                        <outlet property="delegate" destination="-1" id="umV-cw-PBb"/>
+                        <outlet property="delegate" destination="-1" id="jOH-2U-By1"/>
                     </connections>
                 </searchBar>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MBa-lb-G7T" userLabel="firstActorButton">
-                    <rect key="frame" x="80" y="93" width="160" height="160"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="J8Z-F2-0Jd">
+                    <rect key="frame" x="20" y="20" width="280" height="274"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="addActor.png">
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="43"/>
+                    <state key="normal" title="That movie with">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="QM4-WI-z2w"/>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="A06-ue-GhJ"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5su-cV-Ecx" userLabel="secondActorButton">
-                    <rect key="frame" x="80" y="315" width="160" height="160"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3kf-jf-VUh">
+                    <rect key="frame" x="20" y="302" width="280" height="266"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="addActor.png">
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="43"/>
+                    <state key="normal" title="and">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="i5J-mT-vtf"/>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="0Nh-xO-FkM"/>
                     </connections>
                 </button>
-                <view hidden="YES" opaque="NO" contentMode="scaleToFill" id="MKL-yK-S5o" userLabel="deleteGradient">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flick to remove" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yEx-fM-xho" userLabel="deleteLabel">
-                            <rect key="frame" x="76" y="23" width="169" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <searchDisplayController id="aZt-um-9EG">
+        <searchDisplayController id="u4Y-t6-osy">
             <connections>
-                <outlet property="delegate" destination="-1" id="Iw1-IL-4yR"/>
-                <outlet property="searchBar" destination="hpu-Ls-tL3" id="WeJ-tK-3jw"/>
-                <outlet property="searchContentsController" destination="-1" id="lz0-ff-Tza"/>
-                <outlet property="searchResultsDataSource" destination="-1" id="ZOU-dL-HRC"/>
-                <outlet property="searchResultsDelegate" destination="-1" id="B0q-3v-meU"/>
+                <outlet property="delegate" destination="-1" id="ulO-V3-YRy"/>
+                <outlet property="searchBar" destination="gqd-7s-htX" id="vs1-hm-glG"/>
+                <outlet property="searchContentsController" destination="-1" id="KCi-2X-nPz"/>
+                <outlet property="searchResultsDataSource" destination="-1" id="IKP-QI-ptL"/>
+                <outlet property="searchResultsDelegate" destination="-1" id="cEA-qz-7Kx"/>
             </connections>
         </searchDisplayController>
     </objects>
-    <resources>
-        <image name="addActor.png" width="608" height="608"/>
-    </resources>
 </document>
