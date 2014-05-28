@@ -68,11 +68,10 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
 
-    _curtainView = [UIImageView new];
-    //_curtainView.image = [UIImage imageNamed:@"curtain.jpg"];
+    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blurCurtain" ofType:@"png"]];
     
-    UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
-    _curtainView.image = blurImage;
+    _curtainView = [[UIImageView alloc] initWithImage:productImage];
+
     self.collectionView.backgroundView = _curtainView;
     
     tableViewRows = 0;

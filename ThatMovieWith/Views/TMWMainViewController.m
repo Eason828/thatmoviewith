@@ -54,6 +54,7 @@ TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
+bool sendingAnotherRequest;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -95,10 +96,9 @@ int tappedActor;
     // Make the search bar text white
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor goldColor]];
     
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"black"]];
+    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blurCurtain" ofType:@"png"]];
     
-    UIImage *blurImage = [_curtainView.image applyVeryDarkCurtainEffect];
-    _curtainView.image = blurImage;
+    _curtainView = [[UIImageView alloc] initWithImage:productImage];
     
     // Make the frame a little bit bigger for the parallax effect
     _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
@@ -335,12 +335,16 @@ int tappedActor;
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         
+        sendingAnotherRequest = FALSE;
+        
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
             
-            dispatch_async(dispatch_get_main_queue(),^{
-                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            });
+            if (sendingAnotherRequest == FALSE) {
+                //dispatch_async(dispatch_get_main_queue(),^{
+                    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                //});
+            }
         }
         else {
             [errorAlertView show];
@@ -529,7 +533,7 @@ int tappedActor;
         
         // Clear any previously queued text changes
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        
+        sendingAnotherRequest = TRUE;
         [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
                    withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
                    afterDelay:delay];
