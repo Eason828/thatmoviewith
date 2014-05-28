@@ -459,6 +459,11 @@ bool sendingAnotherRequest;
         
         // Move the other actor back into its original position
         if (_secondActorScrollView.contentOffset.x != 0) {
+            // Set the delete view frame depending on the actors chosen
+            if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.firstActorActionView atIndex:1];
+                self.firstActorActionView.backgroundColor = [UIColor goldColor];
+            }
             [self animateScrollViewBoundsChange:_secondActorScrollView];
         }
     }
@@ -467,6 +472,10 @@ bool sendingAnotherRequest;
         
         // Move the other actor back into its original position
         if (_firstActorScrollView.contentOffset.x != 0) {
+            if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.secondActorActionView atIndex:1];
+                self.secondActorActionView.backgroundColor = [UIColor goldColor];
+            }
             [self animateScrollViewBoundsChange:_firstActorScrollView];
         }
     }
@@ -482,8 +491,8 @@ bool sendingAnotherRequest;
             [self.navigationController pushViewController:moviesViewController animated:YES];
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             
-            [_firstActorActionView removeFromSuperview];
-            [_secondActorActionView removeFromSuperview];
+//            [_firstActorActionView removeFromSuperview];
+//            [_secondActorActionView removeFromSuperview];
             
         }
     }
@@ -751,14 +760,14 @@ bool sendingAnotherRequest;
             [self setLabel:label withString:actor.name inBoundsOfView:button];
             label.hidden = NO;
             
+            self.firstActorActionView.backgroundColor = [UIColor goldColor];
+            self.secondActorActionView.backgroundColor = [UIColor goldColor];
             // Set the delete view frame depending on the actors chosen
             if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.firstActorActionView atIndex:1];
-                self.firstActorActionView.backgroundColor = [UIColor goldColor];
             }
             if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.secondActorActionView atIndex:1];
-                self.secondActorActionView.backgroundColor = [UIColor goldColor];
             }
             self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
             self.pushBehavior.active = YES;
