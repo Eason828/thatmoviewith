@@ -41,6 +41,10 @@
 @property (strong, nonatomic) UIScrollView *secondActorScrollView;
 @property (strong, nonatomic) UIView *firstActorActionView;
 @property (strong, nonatomic) UIView *secondActorActionView;
+@property (strong, nonatomic) UILabel *firstActorActionLabel;
+@property (strong, nonatomic) UILabel *secondActorActionLabel;
+@property (strong, nonatomic) UILabel *firstActorDeleteLabel;
+@property (strong, nonatomic) UILabel *secondActorDeleteLabel;
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIGravityBehavior *gravityBehavior;
@@ -52,13 +56,15 @@
 
 static const NSUInteger TABLE_HEIGHT = 66;
 static const NSUInteger ACTOR_FONT_SIZE = 42;
-static const NSUInteger scrollOffset = 160;
+NSUInteger scrollOffset;
+
+NSString *moviesSlideString = @"Show\nmovies";
+NSString *deleteSlideString = @"Remove\nActor";
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
-bool sendingAnotherRequest;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -94,6 +100,8 @@ bool sendingAnotherRequest;
     
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    scrollOffset = (self.view.frame.size.width/2) - 20;
     
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
@@ -142,7 +150,7 @@ bool sendingAnotherRequest;
 
     _firstActorScrollView = [UIScrollView new];
     _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
-    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + scrollOffset + scrollOffset, frameH/2).size;
+    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
     _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
     _firstActorScrollView.pagingEnabled = YES;
     _firstActorScrollView.showsHorizontalScrollIndicator = NO;
@@ -153,7 +161,7 @@ bool sendingAnotherRequest;
     
     _secondActorScrollView = [UIScrollView new];
     _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
-    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + scrollOffset + scrollOffset, frameH/2).size;
+    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
     _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
     _secondActorScrollView.pagingEnabled = YES;
     _secondActorScrollView.showsHorizontalScrollIndicator = NO;
@@ -169,7 +177,6 @@ bool sendingAnotherRequest;
                 forControlEvents:UIControlEventTouchUpInside];
     [_firstActorScrollView addSubview:_firstActorButton];
     _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
-     //[self addRightBounceBehavior:self.firstActorButton];
     
     _secondActorButton = [UIButton new];
     [_secondActorButton addTarget:self
@@ -178,7 +185,6 @@ bool sendingAnotherRequest;
     _secondActorButton.hidden = YES;
     [_secondActorScrollView addSubview:_secondActorButton];
     _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
-     //[self addRightBounceBehavior:_secondActorButton];
     
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
@@ -220,6 +226,8 @@ bool sendingAnotherRequest;
     _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_secondActorScrollView addSubview:_secondActorLabel];
     
+    
+    // Action slide views and labels
     _firstActorActionView = [UIView new];
     _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
     _firstActorActionView.backgroundColor = [UIColor grayColor];
@@ -228,9 +236,39 @@ bool sendingAnotherRequest;
     _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
     _secondActorActionView.backgroundColor = [UIColor grayColor];
     
+    _firstActorActionLabel = [UILabel new];
+    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 80, frameY, 80, frameH/2);
+    _firstActorActionLabel.text = moviesSlideString;
+    _firstActorActionLabel.numberOfLines = 2;
+    _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
+    [_firstActorActionView addSubview:_firstActorActionLabel];
+    
+    _secondActorActionLabel = [UILabel new];
+    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 80, frameY, 80, frameH/2);
+    _secondActorActionLabel.text = moviesSlideString;
+    _secondActorActionLabel.numberOfLines = 2;
+    _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
+    [_secondActorActionView addSubview:_secondActorActionLabel];
+
+    _firstActorDeleteLabel = [UILabel new];
+    _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 80, frameH/2);
+    _firstActorDeleteLabel.text = deleteSlideString;
+    _firstActorDeleteLabel.numberOfLines = 2;
+    _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+    [_firstActorActionView addSubview:_firstActorDeleteLabel];
+    
+    _secondActorDeleteLabel = [UILabel new];
+    _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 80, frameH/2);
+    _secondActorDeleteLabel.text = deleteSlideString;
+    _secondActorDeleteLabel.numberOfLines = 2;
+    _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _secondActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+    [_secondActorActionView addSubview:_secondActorDeleteLabel];
     
     [self addRightBounceBehavior];
-    
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -344,17 +382,12 @@ bool sendingAnotherRequest;
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
-        
-        sendingAnotherRequest = FALSE;
-        
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-            
-            if (sendingAnotherRequest == FALSE) {
+            //[[self.searchBarController searchResultsTableView] reloadData];
                 //dispatch_async(dispatch_get_main_queue(),^{
                     [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 //});
-            }
         }
         else {
             [errorAlertView show];
@@ -406,7 +439,8 @@ bool sendingAnotherRequest;
     
     _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     UICollisionBehavior *collisionBehaviour = [[UICollisionBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
-    [collisionBehaviour setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(0, -280, 0, 0)];
+    // Using 0.5 for right inset due to edgeInsets bug
+    [collisionBehaviour setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(0, -280, 0, 0.5)];
     [_animator addBehavior:collisionBehaviour];
     
     self.gravityBehavior = [[UIGravityBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
@@ -426,7 +460,9 @@ bool sendingAnotherRequest;
 #pragma mark UIScrollView methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    int x = abs(floor(scrollView.contentOffset.x*moviesSlideString.length*2/scrollOffset));
     if (scrollView == _firstActorScrollView) {
+        _firstActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
         if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
             _firstActorActionView.backgroundColor = [UIColor redColor];
         }
@@ -436,6 +472,7 @@ bool sendingAnotherRequest;
     }
     
     if (scrollView == _secondActorScrollView) {
+        _secondActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
         if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
             _secondActorActionView.backgroundColor = [UIColor redColor];
         }
@@ -444,9 +481,15 @@ bool sendingAnotherRequest;
         }
     }
     if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
+        
         _secondActorScrollView.contentOffset = scrollView.contentOffset;
         _firstActorScrollView.contentOffset = scrollView.contentOffset;
-        if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2) || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
+        //int x = ceil(_firstActorScrollView.contentOffset.x*moviesSlideString.length*2/scrollOffset);
+        _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+        _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+
+        if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2)
+            || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
             _firstActorActionView.backgroundColor = [UIColor goldColor];
             _secondActorActionView.backgroundColor = [UIColor goldColor];
         }
@@ -541,7 +584,7 @@ bool sendingAnotherRequest;
         
         // Clear any previously queued text changes
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        sendingAnotherRequest = TRUE;
+
         [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
                    withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
                    afterDelay:delay];
@@ -750,13 +793,6 @@ bool sendingAnotherRequest;
             
             [button setBackgroundImage:screenShot forState:UIControlStateNormal];
             [weakActorImage removeFromSuperview];
-            
-//            POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-//            anim.springSpeed = 15;
-//            anim.springBounciness = 22;
-//            anim.fromValue  = [NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
-//            anim.toValue  = [NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
-//            [button.layer pop_addAnimation:anim forKey:@"scaleAnimation"];
             
             // Set the image label properties to center it in the cell
             [self setLabel:label withString:actor.name inBoundsOfView:button];
