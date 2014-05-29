@@ -62,6 +62,10 @@ TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
+float frameX;
+float frameY;
+float frameW;
+float frameH;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -140,10 +144,10 @@ int tappedActor;
 
     [self.view insertSubview:_curtainView atIndex:0];
     
-    float frameX = self.view.frame.origin.x;
-    float frameY = self.view.frame.origin.y;
-    float frameW = self.view.frame.size.width;
-    float frameH = self.view.frame.size.height;
+    frameX = self.view.frame.origin.x;
+    frameY = self.view.frame.origin.y;
+    frameW = self.view.frame.size.width;
+    frameH = self.view.frame.size.height;
 
     _firstActorScrollView = [UIScrollView new];
     _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
@@ -172,6 +176,7 @@ int tappedActor;
     [_firstActorButton addTarget:self
                           action:@selector(buttonPressed:)
                 forControlEvents:UIControlEventTouchUpInside];
+    _firstActorButton.hidden = YES;
     [_firstActorScrollView addSubview:_firstActorButton];
     _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
     
@@ -195,7 +200,8 @@ int tappedActor;
     [thatMovieWithLayer setCornerRadius:15.0];
     [thatMovieWithLayer setBorderWidth:2.0];
     [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
-    
+    [self.view bringSubviewToFront:_thatMovieWithButton];
+
     _andButton.tag = 2;
     _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
     _andButton.tintColor = [UIColor goldColor];
@@ -234,34 +240,34 @@ int tappedActor;
     _secondActorActionView.backgroundColor = [UIColor grayColor];
     
     _firstActorActionLabel = [UILabel new];
-    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 80, frameY, 80, frameH/2);
+    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
     _firstActorActionLabel.text = moviesSlideString;
     _firstActorActionLabel.numberOfLines = 2;
-    _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
     [_firstActorActionView addSubview:_firstActorActionLabel];
     
     _secondActorActionLabel = [UILabel new];
-    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 80, frameY, 80, frameH/2);
+    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
     _secondActorActionLabel.text = moviesSlideString;
     _secondActorActionLabel.numberOfLines = 2;
-    _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
     [_secondActorActionView addSubview:_secondActorActionLabel];
 
     _firstActorDeleteLabel = [UILabel new];
-    _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 80, frameH/2);
+    _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
     _firstActorDeleteLabel.text = deleteSlideString;
     _firstActorDeleteLabel.numberOfLines = 2;
-    _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
     [_firstActorActionView addSubview:_firstActorDeleteLabel];
     
     _secondActorDeleteLabel = [UILabel new];
-    _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 80, frameH/2);
+    _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
     _secondActorDeleteLabel.text = deleteSlideString;
     _secondActorDeleteLabel.numberOfLines = 2;
-    _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+    _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _secondActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
     [_secondActorActionView addSubview:_secondActorDeleteLabel];
     
@@ -482,8 +488,19 @@ int tappedActor;
         _secondActorScrollView.contentOffset = scrollView.contentOffset;
         _firstActorScrollView.contentOffset = scrollView.contentOffset;
         
-        _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
-        _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+        if (!_firstActorButton.isHidden && !_secondActorButton.isHidden) {
+            NSString *firstText = @"Common movies";
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, _firstActorScrollView.frame.size.height/2, 100, _firstActorScrollView.frame.size.height);
+            _firstActorActionLabel.text = [firstText substringToIndex:(MIN(x, (int)firstText.length))];
+            _secondActorActionLabel.text = nil;
+            
+        }
+        else {
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+            _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+        }
         
         if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2)
             || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
@@ -810,7 +827,7 @@ int tappedActor;
         }];
     }
     else {
-        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundHiRes.png"] withInitials:actor.name withFontSize:48];
+        UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes.png"];
         [actorImage setImage:defaultImage];
         // Get the actor circle initials image with layer and set it to the button background
         UIGraphicsBeginImageContextWithOptions(actorImage.bounds.size, actorImage.opaque, 0.0);
@@ -819,7 +836,6 @@ int tappedActor;
         UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        // Darken the image
         // Darken the image
         UIImage *darkImage = [screenShot applyPosterEffect];
         
