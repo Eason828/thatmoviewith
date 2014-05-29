@@ -1,110 +1,98 @@
 //
-//  TMWViewController.m
+//  TMWMainViewController.m
 //  ThatMovieWith
 //
-//  Created by johnrhickey on 4/15/14.
+//  Created by johnrhickey on 5/24/14.
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
-#import <FlatUIKit.h>
-#import <POP.h>
 
 #import "TMWActorViewController.h"
-#import "TMWMoviesCollectionViewController.h"
 #import "TMWActor.h"
-#import "TMWActorSearchResults.h"
 #import "TMWActorContainer.h"
-#import "TMWCustomActorCellTableViewCell.h" 
+#import "TMWActorSearchResults.h"
+#import "TMWMoviesCollectionViewController.h"
+#import "TMWCustomActorCellTableViewCell.h"
 
-#import "CALayer+circleLayer.h" // Circle layer over actor
-#import "UIImage+DrawOnImage.h" // Actor's without images
-#import "UIImage+ImageEffects.h" // For the darkened blur effect
+#import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
+#import "UIImage+DrawOnImage.h"
+#import "CALayer+circleLayer.h"
 
-#import <QuartzCore/QuartzCore.h>
-
-@interface TMWActorViewController () {
-    // Gesture recgonizers for dragging the actor images around
-    UIPanGestureRecognizer *firstPanGesture;
-    UIPanGestureRecognizer *secondPanGesture;
-}
+@interface TMWActorViewController () <UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchBarController;
-@property (strong, nonatomic) IBOutlet UIImageView *firstActorImage;
-@property (strong, nonatomic) IBOutlet UIImageView *secondActorImage;
-@property (strong, nonatomic) IBOutlet UIButton *firstActorButton;
-@property (strong, nonatomic) IBOutlet UIButton *secondActorButton;
-@property (strong, nonatomic) IBOutlet FUIButton *continueButton;
-@property (strong, nonatomic) IBOutlet UILabel *thatMovieWithLabel;
-@property (strong, nonatomic) IBOutlet UILabel *andLabel;
-@property (strong, nonatomic) IBOutlet UILabel *deleteLabel;
-@property (strong, nonatomic) IBOutlet UIView *deleteGradientView;
+@property (strong, nonatomic) IBOutlet UIButton *thatMovieWithButton;
+@property (strong, nonatomic) IBOutlet UIButton *andButton;
 
-// Animation stuff
-@property (strong, nonatomic) UIDynamicAnimator *animator;
-@property (strong, nonatomic) UIAttachmentBehavior *attachmentBehavior;
-@property (strong, nonatomic) UIPushBehavior *pushBehavior;
-@property (strong, nonatomic) UISnapBehavior *snapBehavior;
-@property (strong, nonatomic) UICollisionBehavior *collisionBehavior;
-
+@property (strong, nonatomic) UIButton *firstActorButton;
+@property (strong, nonatomic) UIButton *secondActorButton;
+@property (strong, nonatomic) UILabel *firstActorLabel;
+@property (strong, nonatomic) UILabel *secondActorLabel;
 @property (strong, nonatomic) UIImageView *blurImageView;
 @property (strong, nonatomic) UIImageView *curtainView;
+@property (strong, nonatomic) UIScrollView *firstActorScrollView;
+@property (strong, nonatomic) UIScrollView *secondActorScrollView;
+@property (strong, nonatomic) UIView *firstActorActionView;
+@property (strong, nonatomic) UIView *secondActorActionView;
+@property (strong, nonatomic) UILabel *firstActorActionLabel;
+@property (strong, nonatomic) UILabel *secondActorActionLabel;
+@property (strong, nonatomic) UILabel *firstActorDeleteLabel;
+@property (strong, nonatomic) UILabel *secondActorDeleteLabel;
+
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIGravityBehavior *gravityBehavior;
+@property (strong, nonatomic) UIPushBehavior *pushBehavior;
 
 @end
 
 @implementation TMWActorViewController
 
-static const NSUInteger ALPHA_FULL = 1;
 static const NSUInteger TABLE_HEIGHT = 66;
-static const double ALPHA_EMPTY = 0.0;
-static const double FADE_DURATION = 0.3;
-static const int POP_SLIDE_DISTANCE = 75;
-static const int POP_ACTOR_SPRING_BOUNCINESS = 22;
-static const int POP_ACTOR_SPRING_SPEED = 15;
-static const int POP_SLIDE_UP_SPRING_BOUNCINESS = 18;
-static const int POP_SLIDE_UP_SPRING_SPEED = 20;
-static const int POP_SLIDE_DOWN_SPRING_BOUNCINESS = 20;
-static const int POP_SLIDE_DOWN_SPRING_SPEED = 20;
+static const NSUInteger ACTOR_FONT_SIZE = 42;
+NSUInteger scrollOffset;
 
+NSString *moviesSlideString = @"Show\nmovies";
+NSString *deleteSlideString = @"Remove\nActor";
 
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
+float frameX;
+float frameY;
+float frameW;
+float frameH;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Custom initialization
+        
         // Set the cancel button color in the search bar
         [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor goldColor]];
         
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
-
+        
         NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
         
         NSString *APIKeyValueDirty = [NSString stringWithContentsOfFile:APIKeyPath
-                                                       encoding:NSUTF8StringEncoding
-                                                          error:NULL];
-
+                                                               encoding:NSUTF8StringEncoding
+                                                                  error:NULL];
+        
         // Strip whitespace to clean the API key stdin
         NSString *APIKeyValue = [APIKeyValueDirty stringByTrimmingCharactersInSet:
-                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                                 [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
+        
     }
     return self;
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    // Hide the navigation bar
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
 - (void)viewDidLoad
@@ -113,35 +101,31 @@ int tappedActor;
     
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
-
+    
+    scrollOffset = (self.view.frame.size.width/2) - 20;
+    
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     // Make the search bar text white
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor goldColor]];
     
-    // Custom Fonts
-    UIFont* broadwayFont = [UIFont fontWithName:@"Broadway" size:30];
-    _thatMovieWithLabel.font = broadwayFont;
-    _andLabel.font = broadwayFont;
+    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blurCurtain" ofType:@"png"]];
     
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"curtain.jpg"]];
-    
-    UIImage *blurImage = [_curtainView.image applyDarkCurtainEffect];
-    _curtainView.image = blurImage;
+    _curtainView = [[UIImageView alloc] initWithImage:productImage];
     
     // Make the frame a little bit bigger for the parallax effect
     _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
-                                    _curtainView.frame.origin.y-48,
+                                    _curtainView.frame.origin.y-16,
                                     self.view.frame.size.width+32,
-                                    self.view.frame.size.height+96);
+                                    self.view.frame.size.height+32);
     
     // Set vertical effect
     UIInterpolatingMotionEffect *verticalMotionEffect =
     [[UIInterpolatingMotionEffect alloc]
      initWithKeyPath:@"center.y"
      type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-    verticalMotionEffect.minimumRelativeValue = @(-48);
-    verticalMotionEffect.maximumRelativeValue = @(48);
+    verticalMotionEffect.minimumRelativeValue = @(-16);
+    verticalMotionEffect.maximumRelativeValue = @(16);
     
     // Set horizontal effect
     UIInterpolatingMotionEffect *horizontalMotionEffect =
@@ -157,66 +141,137 @@ int tappedActor;
     
     // Add both effects to your view
     [_curtainView addMotionEffect:group];
-    
-    
+
     [self.view insertSubview:_curtainView atIndex:0];
     
-    // Set the text color and dropshadows
-    _thatMovieWithLabel.textColor = [UIColor goldColor];
-    [CALayer dropShadowLayer:_thatMovieWithLabel.layer];
-    
-    _andLabel.textColor = [UIColor goldColor];
-    [CALayer dropShadowLayer:_andLabel.layer];
+    frameX = self.view.frame.origin.x;
+    frameY = self.view.frame.origin.y;
+    frameW = self.view.frame.size.width;
+    frameH = self.view.frame.size.height;
 
-    // Custom dropshadows for the buttons
-    [CALayer dropShadowLayer:_firstActorButton.layer];
-    [CALayer dropShadowLayer:_secondActorButton.layer];
-    [CALayer dropShadowLayer:_continueButton.layer];
+    _firstActorScrollView = [UIScrollView new];
+    _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
+    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+    _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
+    _firstActorScrollView.pagingEnabled = YES;
+    _firstActorScrollView.showsHorizontalScrollIndicator = NO;
+    _firstActorScrollView.bounces = NO;
+    _firstActorScrollView.delegate = self;
+    [self.view addSubview:_firstActorScrollView];
+
+    
+    _secondActorScrollView = [UIScrollView new];
+    _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
+    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+    _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
+    _secondActorScrollView.pagingEnabled = YES;
+    _secondActorScrollView.showsHorizontalScrollIndicator = NO;
+    _secondActorScrollView.bounces = NO;
+    _secondActorScrollView.delegate = self;
+    [self.view addSubview:_secondActorScrollView];
+    
+    
+    // Buttons
+    _firstActorButton = [UIButton new];
+    [_firstActorButton addTarget:self
+                          action:@selector(buttonPressed:)
+                forControlEvents:UIControlEventTouchUpInside];
+    _firstActorButton.hidden = YES;
+    [_firstActorScrollView addSubview:_firstActorButton];
+    _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+    
+    _secondActorButton = [UIButton new];
+    [_secondActorButton addTarget:self
+                           action:@selector(buttonPressed:)
+                 forControlEvents:UIControlEventTouchUpInside];
+    _secondActorButton.hidden = YES;
+    [_secondActorScrollView addSubview:_secondActorButton];
+    _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
     
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
     
-    _continueButton.tag = 3;
+    _thatMovieWithButton.tag = 1;
+    _thatMovieWithButton.frame = CGRectMake(frameX, frameY + 20, frameW, frameH/2 - 20);
+    _thatMovieWithButton.tintColor = [UIColor goldColor];
+    CALayer *thatMovieWithLayer = [_thatMovieWithButton layer];
+    [thatMovieWithLayer setMasksToBounds:YES];
+    [thatMovieWithLayer setCornerRadius:15.0];
+    [thatMovieWithLayer setBorderWidth:2.0];
+    [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    [self.view bringSubviewToFront:_thatMovieWithButton];
+
+    _andButton.tag = 2;
+    _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
+    _andButton.tintColor = [UIColor goldColor];
+    CALayer *andLayer = [_andButton layer];
+    [andLayer setMasksToBounds:YES];
+    [andLayer setCornerRadius:15.0];
+    [andLayer setBorderWidth:2.0];
+    [andLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    _andButton.hidden = YES;
     
-    // Hide the "and" and second actor
-    _andLabel.hidden = YES;
-    _secondActorButton.hidden = YES;
     
-    // Setup for dragging the actors around
-    firstPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    secondPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [_firstActorButton addGestureRecognizer:firstPanGesture];
-    [_secondActorButton addGestureRecognizer:secondPanGesture];
-    firstPanGesture.enabled = NO;
-    secondPanGesture.enabled = NO;
+    // Labels
+    _firstActorLabel = [UILabel new];
+    _firstActorLabel.hidden = NO;
+    _firstActorLabel.textColor = [UIColor whiteColor];
+    _firstActorLabel.backgroundColor = [UIColor clearColor];
+    _firstActorLabel.textAlignment = NSTextAlignmentCenter;
+    _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
+    [_firstActorScrollView addSubview:_firstActorLabel];
     
-    // Move the delete label outside of the view
-    _deleteLabel.center = CGPointMake(_deleteLabel.center.x, _deleteLabel.center.y - POP_SLIDE_DISTANCE);
+    _secondActorLabel = [UILabel new];
+    _secondActorLabel.hidden = NO;
+    _secondActorLabel.textColor = [UIColor whiteColor];
+    _secondActorLabel.textAlignment = NSTextAlignmentCenter;
+    _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
+    [_secondActorScrollView addSubview:_secondActorLabel];
     
     
-    // Add the gradient to the delete gradient view
-    _deleteGradientView.backgroundColor = [UIColor clearColor];
-    UIColor *colorOne = [UIColor colorWithRed:(0/255.0)  green:(0/255.0)  blue:(0/255.0)  alpha:0.6];
-    UIColor *colorTwo = [UIColor clearColor];
+    // Action slide views and labels
+    _firstActorActionView = [UIView new];
+    _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
+    _firstActorActionView.backgroundColor = [UIColor grayColor];
     
-    NSArray *colors = [NSArray arrayWithObjects:(id)colorOne.CGColor, colorTwo.CGColor, nil];
-    NSNumber *stopOne = [NSNumber numberWithFloat:0.0];
-    NSNumber *stopTwo = [NSNumber numberWithFloat:1.0];
+    _secondActorActionView = [UIView new];
+    _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
+    _secondActorActionView.backgroundColor = [UIColor grayColor];
     
-    NSArray *locations = [NSArray arrayWithObjects:stopOne, stopTwo, nil];
+    _firstActorActionLabel = [UILabel new];
+    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+    _firstActorActionLabel.text = moviesSlideString;
+    _firstActorActionLabel.numberOfLines = 2;
+    _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+    _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
+    [_firstActorActionView addSubview:_firstActorActionLabel];
     
-    CAGradientLayer *headerLayer = [CAGradientLayer layer];
-    headerLayer.frame = _deleteGradientView.frame;
-    headerLayer.colors = colors;
-    headerLayer.locations = locations;
-    [_deleteGradientView.layer insertSublayer:headerLayer atIndex:0];
+    _secondActorActionLabel = [UILabel new];
+    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+    _secondActorActionLabel.text = moviesSlideString;
+    _secondActorActionLabel.numberOfLines = 2;
+    _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+    _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
+    [_secondActorActionView addSubview:_secondActorActionLabel];
+
+    _firstActorDeleteLabel = [UILabel new];
+    _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
+    _firstActorDeleteLabel.text = deleteSlideString;
+    _firstActorDeleteLabel.numberOfLines = 2;
+    _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+    _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+    [_firstActorActionView addSubview:_firstActorDeleteLabel];
     
-    // Custom continue button
-    _continueButton.buttonColor = [UIColor goldColor];
-    _continueButton.cornerRadius = 6.0f;
-    _continueButton.titleLabel.font = [UIFont fontWithName:@"Broadway" size:20];
-    [_continueButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _secondActorDeleteLabel = [UILabel new];
+    _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
+    _secondActorDeleteLabel.text = deleteSlideString;
+    _secondActorDeleteLabel.numberOfLines = 2;
+    _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+    _secondActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+    [_secondActorActionView addSubview:_secondActorDeleteLabel];
+    
+    [self addRightBounceBehavior];
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -224,6 +279,35 @@ int tappedActor;
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    // Hide the navigation bar
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+}
+
+// Captures the current screen and blurs it
+- (void)blurScreen {
+    
+    UIScreen *screen = [UIScreen mainScreen];
+    UIGraphicsBeginImageContextWithOptions(self.view.frame.size, YES, screen.scale);
+    
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:NO];
+    
+    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *blurImage = [snapshot applyDarkEffect];
+    UIGraphicsEndImageContext();
+    
+    // Blur the current screen
+    _blurImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    _blurImageView.image = blurImage;
+    _blurImageView.contentMode = UIViewContentModeBottom;
+    _blurImageView.clipsToBounds = YES;
+    [self.view addSubview:_blurImageView];
+    
 }
 
 #pragma mark Private Methods
@@ -248,46 +332,42 @@ int tappedActor;
 
 - (void)removeActor
 {
-   switch (tappedActor) {
-       
-       case 1:
-       {
-           [[TMWActorContainer actorContainer] removeActorObject:actor1];
-           _firstActorButton.hidden = NO;
-           [_firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
-           [self.view bringSubviewToFront:_firstActorButton];
-           firstPanGesture.enabled = NO;
-           break;
-       }
-       case 2:
-       {
-           [[TMWActorContainer actorContainer] removeActorObject:actor2];
-           _secondActorButton.hidden = NO;
-           [_secondActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
-           [self.view bringSubviewToFront:_secondActorButton];
-           secondPanGesture.enabled = NO;
-           break;
-       }
-   }
-   // // Only hide the continue button if there are not actors
-   if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
-   {
-       // Reset the view back to the default load view
-       [_firstActorButton setBackgroundImage:[UIImage imageNamed:@"addActor"] forState:UIControlStateNormal];
-       secondPanGesture.enabled = NO;
-       _continueButton.hidden = YES;
-       _secondActorButton.hidden = YES;
-       _andLabel.hidden = YES;
-   }
+    switch (tappedActor) {
+            
+        case 1:
+        {
+            [[TMWActorContainer actorContainer] removeActorObject:actor1];
+            _firstActorButton.hidden = NO;
+            [self.view bringSubviewToFront:_firstActorButton];
+            [self.view bringSubviewToFront:_firstActorLabel];
+            _thatMovieWithButton.hidden = NO;
+            break;
+        }
+        case 2:
+        {
+            [[TMWActorContainer actorContainer] removeActorObject:actor2];
+            _secondActorButton.hidden = NO;
+            [self.view bringSubviewToFront:_secondActorButton];
+            [self.view bringSubviewToFront:_secondActorLabel];
+            _andButton.hidden = NO;
+            break;
+        }
+    }
+    // // Only hide the continue button if there are not actors
+    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
+    {
+        _andButton.hidden = YES;
+        // Reset the view back to the default load view
+    }
 }
 
-- (void) loadImageConfiguration
+- (void)loadImageConfiguration
 {
     
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
-
+        
         if (!error) {
             [TMWActorContainer actorContainer].backdropSizes = response[@"images"][@"logo_sizes"];
             [TMWActorContainer actorContainer].imagesBaseURLString = [response[@"images"][@"base_url"] stringByAppendingString:[TMWActorContainer actorContainer].backdropSizes[1]];
@@ -298,20 +378,19 @@ int tappedActor;
     }];
 }
 
-- (void) refreshActorResponseWithJLTMDBcall:(NSDictionary *)call
+- (void)refreshActorResponseWithJLTMDBcall:(NSDictionary *)call
 {
     NSString *JLTMDBCall = call[@"JLTMDBCall"];
     NSDictionary *parameters = call[@"parameters"];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
-        
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-            
-            dispatch_async(dispatch_get_main_queue(),^{
-                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            });
+            //[[self.searchBarController searchResultsTableView] reloadData];
+                //dispatch_async(dispatch_get_main_queue(),^{
+                    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+                //});
         }
         else {
             [errorAlertView show];
@@ -319,57 +398,207 @@ int tappedActor;
     }];
 }
 
-
--(void)showImage:(UIView*)image
+- (void)setLabel:(UILabel *)textView
+      withString:(NSString *)string
+  inBoundsOfView:(UIView *)view
 {
-    // Slowly make the image appear in animateWithDuration seconds
-    image.hidden = YES;
-    image.alpha = 0.0f;
-    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-        // Animate the alpha value of your imageView from 1.0 to 0.0 here
-        image.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-        image.hidden = NO;
-    }];
+    textView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:ACTOR_FONT_SIZE];
+    
+    NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    textStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    textStyle.alignment = NSTextAlignmentCenter;
+    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:ACTOR_FONT_SIZE];
+    
+    NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
+    CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-20, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    
+    textView.numberOfLines = 4;
+    textView.bounds = bound;
+    textView.text = string;
 }
 
-// Captures the current screen and blurs it
-- (void)blurScreen {
 
-    UIScreen *screen = [UIScreen mainScreen];
-    UIGraphicsBeginImageContextWithOptions(self.view.frame.size, YES, screen.scale);
+- (void)animateScrollViewBoundsChange:(UIScrollView *)scrollView
+{
+    CGRect bounds = scrollView.bounds;
     
-    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:NO];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+    animation.duration = 0.5;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
-    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *blurImage = [snapshot applyDarkEffect];
-    UIGraphicsEndImageContext();
-
-    // Blur the current screen
-    _blurImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    _blurImageView.image = blurImage;
-    _blurImageView.contentMode = UIViewContentModeBottom;
-    _blurImageView.clipsToBounds = YES;
-    [self.view addSubview:_blurImageView];
-
+    animation.fromValue = [NSValue valueWithCGRect:bounds];
+    
+    bounds.origin.x += scrollOffset;
+    
+    animation.toValue = [NSValue valueWithCGRect:bounds];
+    
+    [scrollView.layer addAnimation:animation forKey:@"bounds"];
+    
+    scrollView.bounds = bounds;
 }
+
+- (void)addRightBounceBehavior
+{
+    
+    _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    UICollisionBehavior *collisionBehaviour = [[UICollisionBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    // Using 0.5 for right inset due to edgeInsets bug
+    [collisionBehaviour setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(0, -280, 0, 0.5)];
+    [_animator addBehavior:collisionBehaviour];
+    
+    self.gravityBehavior = [[UIGravityBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    self.gravityBehavior.gravityDirection = CGVectorMake(1.0f, 0.0f);
+    [_animator addBehavior:self.gravityBehavior];
+    
+    self.pushBehavior = [[UIPushBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView] mode:UIPushBehaviorModeInstantaneous];
+    self.pushBehavior.magnitude = 0.0f;
+    self.pushBehavior.angle = 0.0f;
+    [_animator addBehavior:self.pushBehavior];
+    
+    UIDynamicItemBehavior *itemBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
+    itemBehaviour.elasticity = 0.6f;
+    [_animator addBehavior:itemBehaviour];
+}
+
+#pragma mark UIScrollView methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    int x = abs(floor(scrollView.contentOffset.x*moviesSlideString.length*2/scrollOffset));
+    if (scrollView == _firstActorScrollView) {
+        _firstActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _firstActorActionView.backgroundColor = [UIColor redColor];
+        }
+        else {
+            _firstActorActionView.backgroundColor = [UIColor grayColor];
+        }
+    }
+    
+    if (scrollView == _secondActorScrollView) {
+        _secondActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _secondActorActionView.backgroundColor = [UIColor redColor];
+        }
+        else {
+            _secondActorActionView.backgroundColor = [UIColor grayColor];
+        }
+    }
+    if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
+
+        _secondActorScrollView.contentOffset = scrollView.contentOffset;
+        _firstActorScrollView.contentOffset = scrollView.contentOffset;
+        
+        if (!_firstActorButton.isHidden && !_secondActorButton.isHidden) {
+            NSString *firstText = @"Common movies";
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, _firstActorScrollView.frame.size.height/2, 100, _firstActorScrollView.frame.size.height);
+            _firstActorActionLabel.text = [firstText substringToIndex:(MIN(x, (int)firstText.length))];
+            _secondActorActionLabel.text = nil;
+            
+        }
+        else {
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+            _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
+        }
+        
+        if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2)
+            || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
+            _firstActorActionView.backgroundColor = [UIColor goldColor];
+            _secondActorActionView.backgroundColor = [UIColor goldColor];
+        }
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    
+    if (scrollView == _firstActorScrollView) {
+        
+        // Move the other actor back into its original position
+        if (_secondActorScrollView.contentOffset.x != 0) {
+            // Set the delete view frame depending on the actors chosen
+            if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.firstActorActionView atIndex:1];
+                self.firstActorActionView.backgroundColor = [UIColor goldColor];
+            }
+            [self animateScrollViewBoundsChange:_secondActorScrollView];
+        }
+    }
+    
+    if (scrollView == _secondActorScrollView) {
+        
+        // Move the other actor back into its original position
+        if (_firstActorScrollView.contentOffset.x != 0) {
+            if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.secondActorActionView atIndex:1];
+                self.secondActorActionView.backgroundColor = [UIColor goldColor];
+            }
+            [self animateScrollViewBoundsChange:_firstActorScrollView];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+    if (scrollView == _firstActorScrollView || scrollView == _secondActorScrollView) {
+        if (scrollView.contentOffset.x > scrollOffset/2) {
+
+            // Show the Movies View
+            TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
+            [self.navigationController pushViewController:moviesViewController animated:YES];
+            [self.navigationController setNavigationBarHidden:NO animated:NO];
+        }
+    }
+    
+    if (scrollView == _firstActorScrollView) {
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            tappedActor = 1;
+            [self removeActor];
+            _firstActorButton.imageView.image = nil;
+            _firstActorButton.hidden = YES;
+            _firstActorLabel.text = nil;
+            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
+            [_firstActorActionView removeFromSuperview];
+            [self.view bringSubviewToFront:_thatMovieWithButton];
+        }
+    }
+    
+    if (scrollView == _secondActorScrollView) {
+        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+            tappedActor = 2;
+            [self removeActor];
+            _secondActorButton.imageView.image = nil;
+            _secondActorButton.hidden = YES;
+            _secondActorLabel.text = nil;
+            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
+            [_secondActorActionView removeFromSuperview];
+            [self.view bringSubviewToFront:_andButton];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    _firstActorScrollView.contentOffset = CGPointMake(0, 0);
+    _secondActorScrollView.contentOffset = CGPointMake(0, 0);
+}
+
 
 #pragma mark UISearchBar methods
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+
     // Delays on making the actor API calls
     if([searchText length] != 0) {
         float delay = 0.6;
         
         if (searchText.length > 3) {
-            delay = 0.3;
+            delay = 0.9;
         }
         
         // Clear any previously queued text changes
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        
+
         [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
                    withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
                    afterDelay:delay];
@@ -388,7 +617,7 @@ int tappedActor;
 #pragma mark UISearchDisplayController methods
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{   
+{
     // Make the background of the search results transparent
     UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
     backView.backgroundColor = [UIColor clearColor];
@@ -423,14 +652,15 @@ int tappedActor;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    
     [[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
     
     TMWCustomActorCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
         
         cell = [[TMWCustomActorCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                                 reuseIdentifier:CellIdentifier];
+                                                      reuseIdentifier:CellIdentifier];
+        
         [cell layoutSubviews];
         
         // Set the line separator left offset to start after the image
@@ -459,7 +689,7 @@ int tappedActor;
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        
+            
             if (request) {
                 [UIView transitionWithView:weakCell.imageView
                                   duration:0.0f
@@ -471,8 +701,8 @@ int tappedActor;
                 weakCell.imageView.image = image;
             }
             
-        
-        
+            
+            
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Request failed with error: %@", error);
         }];
@@ -491,12 +721,12 @@ int tappedActor;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.searchDisplayController setActive:NO animated:NO];
-
+    
     TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
     
     // Remove an actor if one was chosen
     [self removeActor];
-
+    
     // Add the chosen actor to the array of chosen actors
     [[TMWActorContainer actorContainer] addActorObject:chosenActor];
     
@@ -504,56 +734,56 @@ int tappedActor;
     {
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
-             ImageVisibility:self.firstActorImage
-              withButton:_firstActorButton
+                  withButton:_firstActorButton
+                    andLabel:_firstActorLabel
                  atIndexPath:indexPath];
-        
-        // Enable dragging the actor around
-        firstPanGesture.enabled = YES;
         
         // Show the second actor information
         actor1 = chosenActor;
-        _andLabel.hidden = NO;
-        _secondActorButton.hidden = NO;
+        _thatMovieWithButton.hidden = YES;
+        //_firstActorLabel.hidden = YES;
+        if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
+            [self.view bringSubviewToFront:_andButton];
+            _andButton.hidden = NO;
+            _secondActorButton.hidden = YES;
+        }
     }
     else
     {
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
-             ImageVisibility:self.secondActorImage
-               withButton:_secondActorButton
+                  withButton:_secondActorButton
+                    andLabel:_secondActorLabel
                  atIndexPath:indexPath];
         
         // Enable dragging the actor around
-        secondPanGesture.enabled = YES;
+        //secondPanGesture.enabled = YES;
         _secondActorButton.hidden = NO;
+        _andButton.hidden = YES;
         actor2 = chosenActor;
     }
-
-    _continueButton.hidden = NO; 
 }
 
 // Set the actor image and all of it's necessary properties
 - (void)configureActor:(TMWActor *)actor
-       ImageVisibility:(UIImageView *)actorImage
             withButton:(UIButton *)button
+              andLabel:(UILabel *)label
            atIndexPath:(NSIndexPath *)indexPath
 {
-    // Make the image a circle
-    [CALayer circleLayer:actorImage.layer];
+    UIImageView *actorImage = [UIImageView new];
     actorImage.contentMode = UIViewContentModeScaleAspectFill;
-    actorImage.layer.cornerRadius = actorImage.frame.size.height/2;
-    actorImage.layer.masksToBounds = YES;
-
-    // Add a drop shadow
+    
     [button addSubview:actorImage];
+    
     actorImage.frame = button.bounds;
     button.clipsToBounds = NO;
     
+    label.hidden = YES;
+
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
-        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[4]] stringByAppendingString:actor.hiResImageURLEnding];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:actor.hiResImageURLEnding];
         
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
@@ -561,31 +791,43 @@ int tappedActor;
             
             // Set the image
             weakActorImage.image = image;
-            // Get the actor circle image with layer and set it to the button background
+            
+            // Set the image to the correct context
             UIGraphicsBeginImageContextWithOptions(weakActorImage.bounds.size, weakActorImage.opaque, 0.0);
             CGContextRef context = UIGraphicsGetCurrentContext();
             [weakActorImage.layer renderInContext:context];
             UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
-            [button setBackgroundImage:screenShot forState:UIControlStateNormal];
+            
+            // Darken the image
+            UIImage *darkImage = [screenShot applyPosterEffect];
+            
+            [button setBackgroundImage:darkImage forState:UIControlStateNormal];
             [weakActorImage removeFromSuperview];
             
-            POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-            anim.springSpeed = 15;
-            anim.springBounciness = 22;
-            anim.fromValue  = [NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
-            anim.toValue  = [NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
-            [button.layer pop_addAnimation:anim forKey:@"scaleAnimation"];
+            // Set the image label properties to center it in the cell
+            [self setLabel:label withString:actor.name inBoundsOfView:button];
+            label.hidden = NO;
             
+            self.firstActorActionView.backgroundColor = [UIColor goldColor];
+            self.secondActorActionView.backgroundColor = [UIColor goldColor];
+            // Set the delete view frame depending on the actors chosen
+            if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.firstActorActionView atIndex:1];
+            }
+            if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
+                [self.view insertSubview:self.secondActorActionView atIndex:1];
+            }
+            self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
+            self.pushBehavior.active = YES;
             
-           // [button.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
             
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Failed with error: %@", error);
         }];
     }
     else {
-        UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundHiRes.png"] withInitials:actor.name withFontSize:48];
+        UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes.png"];
         [actorImage setImage:defaultImage];
         // Get the actor circle initials image with layer and set it to the button background
         UIGraphicsBeginImageContextWithOptions(actorImage.bounds.size, actorImage.opaque, 0.0);
@@ -593,21 +835,30 @@ int tappedActor;
         [actorImage.layer renderInContext:context];
         UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        [button setBackgroundImage:screenShot forState:UIControlStateNormal];
+        
+        // Darken the image
+        UIImage *darkImage = [screenShot applyPosterEffect];
+        
+        [button setBackgroundImage:darkImage forState:UIControlStateNormal];
         [actorImage removeFromSuperview];
         
-        POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-        anim.springSpeed = POP_ACTOR_SPRING_SPEED;
-        anim.springBounciness = POP_ACTOR_SPRING_BOUNCINESS;
-        anim.fromValue  = [NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
-        anim.toValue  = [NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
-        [button.layer pop_addAnimation:anim forKey:@"scaleAnimation"];
+        // Set the image label properties to center it in the cell
+        [self setLabel:label withString:actor.name inBoundsOfView:button];
+        label.hidden = NO;
+        
+        self.firstActorActionView.backgroundColor = [UIColor goldColor];
+        self.secondActorActionView.backgroundColor = [UIColor goldColor];
+        // Set the delete view frame depending on the actors chosen
+        if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
+            [self.view insertSubview:self.firstActorActionView atIndex:1];
+        }
+        if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
+            [self.view insertSubview:self.secondActorActionView atIndex:1];
+        }
+        self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
+        self.pushBehavior.active = YES;
         
     }
-    [self showImage:button];
-
-    button.userInteractionEnabled = YES;
-    _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
 }
 
 #pragma mark UISearchDisplayController methods
@@ -622,7 +873,7 @@ int tappedActor;
 - (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
-
+    
     // If you scroll down in the search table view, this puts it back to the top next time you search
     [self.searchDisplayController.searchResultsTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     
@@ -638,11 +889,12 @@ int tappedActor;
     [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
+
 #pragma mark UIButton methods
 
 -(IBAction)buttonPressed:(id)sender
 {
-
+    NSLog(@"Button Pressed");
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
@@ -650,7 +902,7 @@ int tappedActor;
         {
             tappedActor = 1;
             [self searchForActor];
-            break;            
+            break;
         }
             
         case 2: // Second actor button
@@ -672,228 +924,5 @@ int tappedActor;
     }
 }
 
-#pragma mark UIPanGestureRecognizer Methods
-
-- (void)handlePan:(UIPanGestureRecognizer *)gesture
-{
-    static UIAttachmentBehavior *attachment;
-    static CGPoint               startCenter;
-
-    // variables for calculating angular velocity
-
-    static CFAbsoluteTime        lastTime;
-    static CGFloat               lastAngle;
-    static CGFloat               angularVelocity;
-    
-    [self.view bringSubviewToFront:gesture.view];
-
-    if (gesture.state == UIGestureRecognizerStateBegan)
-    {
-        
-        [_animator removeAllBehaviors];
-        
-        // Fade out/in the necessary images and text
-        [self startGestureFade:gesture];
-
-        startCenter = gesture.view.center;
-
-        // calculate the center offset and anchor point
-
-        CGPoint pointWithinAnimatedView = [gesture locationInView:gesture.view];
-
-        UIOffset offset = UIOffsetMake(pointWithinAnimatedView.x - gesture.view.bounds.size.width / 2.0,
-                                       pointWithinAnimatedView.y - gesture.view.bounds.size.height / 2.0);
-
-        CGPoint anchor = [gesture locationInView:gesture.view.superview];
-
-        // create attachment behavior
-
-        attachment = [[UIAttachmentBehavior alloc] initWithItem:gesture.view
-                                               offsetFromCenter:offset
-                                               attachedToAnchor:anchor];
-
-        // code to calculate angular velocity (seems curious that I have to calculate this myself, but I can if I have to)
-
-        lastTime = CFAbsoluteTimeGetCurrent();
-        lastAngle = [self angleOfView:gesture.view];
-
-        attachment.action = ^{
-            CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
-            CGFloat angle = [self angleOfView:gesture.view];
-            if (time > lastTime) {
-                angularVelocity = (angle - lastAngle) / (time - lastTime);
-                lastTime = time;
-                lastAngle = angle;
-            }
-        };
-
-        // add attachment behavior
-
-        [_animator addBehavior:attachment];
-    }
-    else if (gesture.state == UIGestureRecognizerStateChanged)
-    {
-        // as user makes gesture, update attachment behavior's anchor point, achieving drag 'n' rotate
-
-        CGPoint anchor = [gesture locationInView:gesture.view.superview];
-        attachment.anchorPoint = anchor;
-    }
-    else if (gesture.state == UIGestureRecognizerStateEnded)
-    {
-        [_animator removeAllBehaviors];
-
-        // if we aren't dragging it down, just snap it back and quit
-        CGPoint velocity = [gesture velocityInView:self.view];
-        CGFloat velocityMagnitude = hypot(velocity.x, velocity.y);
-        CGFloat triggerVelocity = 800;
-        if (velocityMagnitude<triggerVelocity) {
-            // Fade out/in the necessary images and text
-            [self endGestureFade:gesture];
-            
-            UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
-            [_animator addBehavior:snap];
-
-            return;
-        }
-
-        // otherwise, create UIDynamicItemBehavior that carries on animation from where the gesture left off (notably linear and angular velocity)
-
-        UIDynamicItemBehavior *dynamic = [[UIDynamicItemBehavior alloc] initWithItems:@[gesture.view]];
-        [dynamic addLinearVelocity:velocity forItem:gesture.view];
-        [dynamic addAngularVelocity:angularVelocity forItem:gesture.view];
-        [dynamic setAngularResistance:2];
-
-        // when the view no longer intersects with its superview, go ahead and remove it
-        dynamic.action = ^{
-            if (!CGRectIntersectsRect(gesture.view.superview.bounds, gesture.view.frame)) {
-                // Fade out/in the necessary images and text
-                [self endGestureFade:gesture];
-                
-                [self.animator removeAllBehaviors];
-                for (UIView *view in gesture.view.subviews) {
-                    view.hidden = YES;
-                }
-                gesture.view.hidden = YES;
-                UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
-                [self.animator addBehavior:snap];
-                tappedActor = (int)gesture.view.tag;
-                [self removeActor];
-            }
-        };
-        
-        [_animator addBehavior:dynamic];
-
-        // add a little gravity so it accelerates off the screen (in case user gesture was slow)
-
-        UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[gesture.view]];
-        gravity.magnitude = 0.1;
-        [_animator addBehavior:gravity];
-    }
-}
-
-- (CGFloat)angleOfView:(UIView *)view
-{
-    return atan2(view.transform.b, view.transform.a);
-}
-
-// Fades the necessary views when an actor is dragged around
-- (void)startGestureFade:(UIGestureRecognizer *)gesture
-{
-    // Add the drop shadow effect to the view
-    gesture.view.layer.cornerRadius = gesture.view.frame.size.height/2;
-    gesture.view.layer.shadowColor = [[UIColor goldColor] CGColor];
-    gesture.view.layer.shadowOpacity = 1.0;
-    gesture.view.layer.shadowRadius = 5.0;
-    gesture.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-    
-    [gesture.view setNeedsDisplay];
-    
-    [self slideDownPopAnimation:_deleteLabel];
-    [self slideDownAnimation:_deleteGradientView];
-}
-
-// Fades the necessary views when an actor is dragged around
-- (void)endGestureFade:(UIGestureRecognizer *)gesture
-{
-    // Remove the drop shadow effect from the actor image
-    gesture.view.layer.shadowOpacity = 0.0;
-    
-    // Add the original drop shadow effect
-    [CALayer dropShadowLayer:gesture.view.layer];
-    
-    [self slideUpPopAnimation:_deleteLabel];
-    [self slideUpAnimation:_deleteGradientView];
-}
-
-- (void)fadeAnimation:(UIView *)view
-{
-    view.alpha = ALPHA_FULL;
-    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-        view.alpha = ALPHA_EMPTY;
-    } completion:^(BOOL finished) {
-        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-    }];
-    
-}
-
-- (void)appearAnimation:(UIView *)view
-{
-    view.alpha = ALPHA_EMPTY;
-    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0 animations:^{
-        view.alpha = ALPHA_FULL;
-    } completion:^(BOOL finished) {
-        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
-    }];
-}
-
-- (void)slideDownAnimation:(UIView *)view
-{
-    view.center = CGPointMake(view.center.x, view.center.y - POP_SLIDE_DISTANCE);
-    view.alpha = 1.0;
-    view.hidden = NO;
-    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
-                     animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y + POP_SLIDE_DISTANCE);
-                     } completion:nil];
-}
-
-- (void)slideUpAnimation:(UIView *)view
-{
-    [UIView animateWithDuration:FADE_DURATION delay:0.0 options:0
-                     animations:^{
-                         view.center = CGPointMake(view.center.x, view.center.y - POP_SLIDE_DISTANCE);
-                     } completion:^(BOOL finished) {
-                         // Move the view back
-                         view.center = CGPointMake(view.center.x, view.center.y + POP_SLIDE_DISTANCE);
-                         view.alpha = 0.0;
-                         view.hidden = YES;
-                     }];
-}
-
-- (void)slideDownPopAnimation:(UIView *)view
-{
-    view.alpha = 1.0;
-    view.hidden = NO;
-    POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    anim.fromValue = @(view.center.y);
-    anim.toValue = @(view.center.y + POP_SLIDE_DISTANCE);
-    anim.springBounciness = POP_SLIDE_DOWN_SPRING_BOUNCINESS;
-    anim.springSpeed = POP_SLIDE_DOWN_SPRING_SPEED;
-
-    [view.layer pop_addAnimation:anim forKey:@"size"];
-}
-
-- (void)slideUpPopAnimation:(UIView *)view
-{
-    view.alpha = 1.0;
-    view.hidden = NO;
-    POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    anim.fromValue = @(view.center.y);
-    anim.toValue = @(view.center.y - POP_SLIDE_DISTANCE);
-    anim.springBounciness = POP_SLIDE_UP_SPRING_BOUNCINESS;
-    anim.springSpeed = POP_SLIDE_UP_SPRING_SPEED;
-    
-    [view.layer pop_addAnimation:anim forKey:@"size"];
-}
 
 @end
