@@ -99,8 +99,6 @@ float frameH;
 {
     [super viewDidLoad];
     
-    // Calls perferredStatusBarStyle
-    [self setNeedsStatusBarAppearanceUpdate];
     
     scrollOffset = (self.view.frame.size.width/2) - 20;
     
@@ -193,7 +191,7 @@ float frameH;
     _secondActorButton.tag = 2;
     
     _thatMovieWithButton.tag = 1;
-    _thatMovieWithButton.frame = CGRectMake(frameX, frameY + 20, frameW, frameH/2 - 20);
+    _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
     _thatMovieWithButton.tintColor = [UIColor goldColor];
     CALayer *thatMovieWithLayer = [_thatMovieWithButton layer];
     [thatMovieWithLayer setMasksToBounds:YES];
@@ -275,10 +273,6 @@ float frameH;
     
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
-}
-
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleLightContent;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -466,7 +460,7 @@ float frameH;
     int x = abs(floor(scrollView.contentOffset.x*moviesSlideString.length*2/scrollOffset));
     if (scrollView == _firstActorScrollView) {
         _firstActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
-        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             _firstActorActionView.backgroundColor = [UIColor redColor];
         }
         else {
@@ -476,7 +470,7 @@ float frameH;
     
     if (scrollView == _secondActorScrollView) {
         _secondActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
-        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             _secondActorActionView.backgroundColor = [UIColor redColor];
         }
         else {
@@ -502,8 +496,8 @@ float frameH;
             _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
         }
         
-        if (_firstActorScrollView.contentOffset.x > abs(scrollOffset/2)
-            || _secondActorScrollView.contentOffset.x > abs(scrollOffset/2)) {
+        if (_firstActorScrollView.contentOffset.x > abs((int)scrollOffset/2)
+            || _secondActorScrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             _firstActorActionView.backgroundColor = [UIColor goldColor];
             _secondActorActionView.backgroundColor = [UIColor goldColor];
         }
@@ -551,7 +545,7 @@ float frameH;
     }
     
     if (scrollView == _firstActorScrollView) {
-        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             tappedActor = 1;
             [self removeActor];
             _firstActorButton.imageView.image = nil;
@@ -564,7 +558,7 @@ float frameH;
     }
     
     if (scrollView == _secondActorScrollView) {
-        if (-1 * scrollView.contentOffset.x > abs(scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             tappedActor = 2;
             [self removeActor];
             _secondActorButton.imageView.image = nil;

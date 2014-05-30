@@ -67,8 +67,6 @@
     [_doneButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_aboutViewController.view addSubview:_doneButton];
     
-    // To call perferredStatusBarStyle
-    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 // This is called after autolayout has set the views
@@ -77,12 +75,6 @@
      _infoButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-47);
     _doneButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-47);
 }
-
--(UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
 
 -(IBAction)buttonPressed:(id)sender
 {
