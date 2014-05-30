@@ -33,6 +33,9 @@
     self.view = view;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
 
 - (void)viewDidLoad
 {

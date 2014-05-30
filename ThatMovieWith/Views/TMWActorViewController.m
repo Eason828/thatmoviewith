@@ -99,7 +99,6 @@ float frameH;
 {
     [super viewDidLoad];
     
-    
     scrollOffset = (self.view.frame.size.width/2) - 20;
     
     // Make the keyboard black

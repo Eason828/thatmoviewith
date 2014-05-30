@@ -61,6 +61,10 @@ CGFloat cellWidth;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Calls perferredStatusBarStyle
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     self.collectionView.alwaysBounceVertical = YES;
     [self.collectionView registerClass:[ParallaxPhotoCell class] forCellWithReuseIdentifier:@"PhotoCell"];
     
@@ -78,6 +82,11 @@ CGFloat cellWidth;
     
     // Refresh the table view
     [self refresh];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidAppear:(BOOL)animated
