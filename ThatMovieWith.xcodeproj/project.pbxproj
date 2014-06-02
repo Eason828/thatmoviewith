@@ -303,8 +303,8 @@
 		E58EB1F71929CA7300A254C5 /* ParallaxMoviesView */ = {
 			isa = PBXGroup;
 			children = (
-				E58EB20C1929D00600A254C5 /* TMWMoviesCollectionViewController.m */,
 				E58EB20B1929D00600A254C5 /* TMWMoviesCollectionViewController.h */,
+				E58EB20C1929D00600A254C5 /* TMWMoviesCollectionViewController.m */,
 				E58EB2021929CFFD00A254C5 /* ParallaxFlowLayout.h */,
 				E58EB2031929CFFD00A254C5 /* ParallaxFlowLayout.m */,
 				E58EB2041929CFFD00A254C5 /* ParallaxLayoutAttributes.h */,

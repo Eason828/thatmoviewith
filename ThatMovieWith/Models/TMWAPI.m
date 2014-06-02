@@ -36,9 +36,4 @@ NSArray *APIKeyArray;
     return APIKeyArray[0];
 }
 
-- (NSString *)rottenTomatoesKey
-{
-    return APIKeyArray[1];
-}
-
 @end

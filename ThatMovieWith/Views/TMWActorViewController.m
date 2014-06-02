@@ -842,7 +842,6 @@ float frameH;
 
 -(IBAction)buttonPressed:(id)sender
 {
-    NSLog(@"Button Pressed");
     UIButton *button = (UIButton *)sender;
     
     switch ([button tag]) {
