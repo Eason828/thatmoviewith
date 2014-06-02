@@ -8,7 +8,6 @@
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
-#import <FlatUIKit.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -99,9 +98,6 @@ float frameH;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Calls perferredStatusBarStyle
-    //[self setNeedsStatusBarAppearanceUpdate];
     
     scrollOffset = (self.view.frame.size.width/2) - 20;
     
@@ -240,11 +236,6 @@ float frameH;
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
-
--(UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
