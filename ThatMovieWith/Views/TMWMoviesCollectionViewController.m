@@ -267,6 +267,7 @@ CGFloat cellWidth;
                 actor.movies = [[NSArray alloc] initWithArray:response[@"cast"]];
                 if (i == [[TMWActorContainer actorContainer].allActorObjects count]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                         tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
                             self.noResultsView.hidden = NO;
@@ -279,6 +280,7 @@ CGFloat cellWidth;
                 i++;
             }
             else {
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 [errorAlertView show];
             }
         }];

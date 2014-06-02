@@ -10,4 +10,7 @@
 
 @interface TMWAPI : NSObject
 
+@property (nonatomic, copy, readonly) NSString *IMDBKey;
+@property (nonatomic, copy, readonly) NSString *rottenTomatoesKey;
+
 @end

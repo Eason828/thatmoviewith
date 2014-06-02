@@ -16,6 +16,7 @@
 @property(nonatomic, copy, readonly) NSArray *sameMoviesPosterUrlEndings;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesReleaseDates;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesIDs;
+@property(nonatomic, copy, readonly) NSArray *sameMoviesRottenTomatoes;
 @property(nonatomic, copy) NSString *imagesBaseURLString;
 @property(nonatomic, copy) NSArray *backdropSizes;
 // "w45", "w92", "w154", "w185", "w300", "w500", "original"

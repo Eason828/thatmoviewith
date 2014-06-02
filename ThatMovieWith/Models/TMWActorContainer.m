@@ -184,4 +184,9 @@ static TMWActorContainer *actorContainer;
     return sameMoviesReleaseDatesArray;
 }
 
+- (NSArray *)sameMoviesRottenTomatoes
+{
+    return 0;
+}
+
 @end

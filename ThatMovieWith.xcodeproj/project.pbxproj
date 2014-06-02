@@ -15,6 +15,7 @@
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E56A042B193C37BF00FC6F23 /* red-blur.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E56A042A193C37BF00FC6F23 /* red-blur.jpg */; };
+		E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E56A042D193C44E700FC6F23 /* TMWAPI.m */; };
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
 		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E57B8FCC19314EBA0086593D /* broadway.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E58EB1F81929CE8F00A254C5 /* broadway.ttf */; };
@@ -89,6 +90,8 @@
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E56A042A193C37BF00FC6F23 /* red-blur.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "red-blur.jpg"; sourceTree = "<group>"; };
+		E56A042C193C44E700FC6F23 /* TMWAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAPI.h; path = Models/TMWAPI.h; sourceTree = "<group>"; };
+		E56A042D193C44E700FC6F23 /* TMWAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAPI.m; path = Models/TMWAPI.m; sourceTree = "<group>"; };
 		E571EA411901D28A00CB3B31 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
 		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E57B8FCD193156F40086593D /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = Views/TMWActorViewController.h; sourceTree = "<group>"; };
@@ -238,6 +241,8 @@
 		E569FF351902F075002928AF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E56A042C193C44E700FC6F23 /* TMWAPI.h */,
+				E56A042D193C44E700FC6F23 /* TMWAPI.m */,
 				E5C9161E1913341F00A3DEC6 /* TMWActor.h */,
 				E5C9161F1913341F00A3DEC6 /* TMWActor.m */,
 				E5C916201913341F00A3DEC6 /* TMWActorContainer.h */,
@@ -298,8 +303,8 @@
 		E58EB1F71929CA7300A254C5 /* ParallaxMoviesView */ = {
 			isa = PBXGroup;
 			children = (
-				E58EB20B1929D00600A254C5 /* TMWMoviesCollectionViewController.h */,
 				E58EB20C1929D00600A254C5 /* TMWMoviesCollectionViewController.m */,
+				E58EB20B1929D00600A254C5 /* TMWMoviesCollectionViewController.h */,
 				E58EB2021929CFFD00A254C5 /* ParallaxFlowLayout.h */,
 				E58EB2031929CFFD00A254C5 /* ParallaxFlowLayout.m */,
 				E58EB2041929CFFD00A254C5 /* ParallaxLayoutAttributes.h */,
@@ -651,6 +656,7 @@
 				E58EB2011929CF0B00A254C5 /* UIImage+ImageEffects.m in Sources */,
 				E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */,
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,
+				E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */,
 				E5C1DF0419175E900041E31D /* SVWebViewControllerActivityIMDB.m in Sources */,
 				E5C1DF0919175E900041E31D /* SVWebViewControllerActivity.m in Sources */,
 				E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */,

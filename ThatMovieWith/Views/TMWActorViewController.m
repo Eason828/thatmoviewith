@@ -15,6 +15,7 @@
 #import "TMWActorSearchResults.h"
 #import "TMWMoviesCollectionViewController.h"
 #import "TMWCustomActorCellTableViewCell.h"
+#import "TMWAPI.h"
 
 #import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
@@ -79,17 +80,9 @@ float frameH;
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
         
-        NSString *APIKeyPath = [[NSBundle mainBundle] pathForResource:@"TMDB_API_KEY" ofType:@""];
+        TMWAPI *api = [TMWAPI new];
         
-        NSString *APIKeyValueDirty = [NSString stringWithContentsOfFile:APIKeyPath
-                                                               encoding:NSUTF8StringEncoding
-                                                                  error:NULL];
-        
-        // Strip whitespace to clean the API key stdin
-        NSString *APIKeyValue = [APIKeyValueDirty stringByTrimmingCharactersInSet:
-                                 [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        [[JLTMDbClient sharedAPIInstance] setAPIKey:APIKeyValue];
+        [[JLTMDbClient sharedAPIInstance] setAPIKey:api.IMDBKey];
         
     }
     return self;

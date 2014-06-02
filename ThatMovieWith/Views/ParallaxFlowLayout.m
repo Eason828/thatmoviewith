@@ -9,7 +9,7 @@
 #import "ParallaxFlowLayout.h"
 #import "ParallaxLayoutAttributes.h"
 
-static const CGFloat MaxParallaxOffset = 60.0;
+static const CGFloat MaxParallaxOffset = 50.0;
 
 @implementation ParallaxFlowLayout
 
