@@ -47,7 +47,7 @@
     
     // Special attribute set for title text color
     NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+                                               [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     self.webViewController.title = self.title;
    

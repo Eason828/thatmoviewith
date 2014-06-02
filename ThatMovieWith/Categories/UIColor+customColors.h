@@ -10,9 +10,9 @@
 
 @interface UIColor (customColors)
 
-+ (UIColor *)ringBlueColor;
-+ (UIColor *)movieRedColor;
-+ (UIColor *)navyBlueColor;
++ (UIColor *)flatRedColor;
++ (UIColor *)flatGreenColor;
++ (UIColor *)flatBlueColor;
 + (UIColor *)goldColor;
 
 @end

@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		E362CE1BB44647348FF7D152 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B616B934567416C996DB201 /* libPods.a */; };
-		E50249771935991800504A48 /* blurCurtain.png in Resources */ = {isa = PBXBuildFile; fileRef = E50249761935991800504A48 /* blurCurtain.png */; };
 		E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */; };
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
 		E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */; };
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
+		E56A042B193C37BF00FC6F23 /* red-blur.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E56A042A193C37BF00FC6F23 /* red-blur.jpg */; };
 		E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E571EA411901D28A00CB3B31 /* TMDB_API_KEY */; };
 		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E57B8FCC19314EBA0086593D /* broadway.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E58EB1F81929CE8F00A254C5 /* broadway.ttf */; };
@@ -82,13 +82,13 @@
 /* Begin PBXFileReference section */
 		7B616B934567416C996DB201 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A0F378FCD476DA5B74C48 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		E50249761935991800504A48 /* blurCurtain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blurCurtain.png; sourceTree = "<group>"; };
 		E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundHiRes.png; sourceTree = "<group>"; };
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
 		E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundLowRes@2x.png"; sourceTree = "<group>"; };
 		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E56A042A193C37BF00FC6F23 /* red-blur.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "red-blur.jpg"; sourceTree = "<group>"; };
 		E571EA411901D28A00CB3B31 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
 		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E57B8FCD193156F40086593D /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = Views/TMWActorViewController.h; sourceTree = "<group>"; };
@@ -199,7 +199,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
-				E50249761935991800504A48 /* blurCurtain.png */,
+				E56A042A193C37BF00FC6F23 /* red-blur.jpg */,
 				E57B8FC8192F1B5E0086593D /* black.png */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
 				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
@@ -544,7 +544,6 @@
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,
-				E50249771935991800504A48 /* blurCurtain.png in Resources */,
 				E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */,
 				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
@@ -553,6 +552,7 @@
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
+				E56A042B193C37BF00FC6F23 /* red-blur.jpg in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
 				E571EA421901D28A00CB3B31 /* TMDB_API_KEY in Resources */,

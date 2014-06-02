@@ -8,6 +8,7 @@
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
+#import <FlatUIKit.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -99,6 +100,9 @@ float frameH;
 {
     [super viewDidLoad];
     
+    // Calls perferredStatusBarStyle
+    //[self setNeedsStatusBarAppearanceUpdate];
+    
     scrollOffset = (self.view.frame.size.width/2) - 20;
     
     // Make the keyboard black
@@ -106,45 +110,20 @@ float frameH;
     // Make the search bar text white
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor goldColor]];
     
-    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blurCurtain" ofType:@"png"]];
-    
-    _curtainView = [[UIImageView alloc] initWithImage:productImage];
-    
-    // Make the frame a little bit bigger for the parallax effect
-    _curtainView.frame = CGRectMake(_curtainView.frame.origin.x-16,
-                                    _curtainView.frame.origin.y-16,
-                                    self.view.frame.size.width+32,
-                                    self.view.frame.size.height+32);
-    
-    // Set vertical effect
-    UIInterpolatingMotionEffect *verticalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.y"
-     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-    verticalMotionEffect.minimumRelativeValue = @(-16);
-    verticalMotionEffect.maximumRelativeValue = @(16);
-    
-    // Set horizontal effect
-    UIInterpolatingMotionEffect *horizontalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.x"
-     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-    horizontalMotionEffect.minimumRelativeValue = @(-16);
-    horizontalMotionEffect.maximumRelativeValue = @(16);
-    
-    // Create group to combine both
-    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
-    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
-    
-    // Add both effects to your view
-    [_curtainView addMotionEffect:group];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
+    _curtainView.frame = self.view.frame;
 
     [self.view insertSubview:_curtainView atIndex:0];
     
+    UIView *statusBarView = [UIView new];
+    statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
+    statusBarView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, 20);
+    [self.view insertSubview:statusBarView aboveSubview:_curtainView];
+    
     frameX = self.view.frame.origin.x;
-    frameY = self.view.frame.origin.y;
+    frameY = self.view.frame.origin.y+20;
     frameW = self.view.frame.size.width;
-    frameH = self.view.frame.size.height;
+    frameH = self.view.frame.size.height-20;
 
     _firstActorScrollView = [UIScrollView new];
     _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
@@ -190,23 +169,12 @@ float frameH;
     _secondActorButton.tag = 2;
     
     _thatMovieWithButton.tag = 1;
-    _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
-    _thatMovieWithButton.tintColor = [UIColor goldColor];
-    CALayer *thatMovieWithLayer = [_thatMovieWithButton layer];
-    [thatMovieWithLayer setMasksToBounds:YES];
-    [thatMovieWithLayer setCornerRadius:15.0];
-    [thatMovieWithLayer setBorderWidth:2.0];
-    [thatMovieWithLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    _thatMovieWithButton.tintColor = [UIColor whiteColor];
     [self.view bringSubviewToFront:_thatMovieWithButton];
 
     _andButton.tag = 2;
     _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
-    _andButton.tintColor = [UIColor goldColor];
-    CALayer *andLayer = [_andButton layer];
-    [andLayer setMasksToBounds:YES];
-    [andLayer setCornerRadius:15.0];
-    [andLayer setBorderWidth:2.0];
-    [andLayer setBorderColor:[[UIColor goldColor] CGColor]];
+    _andButton.tintColor = [UIColor whiteColor];
     _andButton.hidden = YES;
     
     
@@ -214,16 +182,15 @@ float frameH;
     _firstActorLabel = [UILabel new];
     _firstActorLabel.hidden = NO;
     _firstActorLabel.textColor = [UIColor whiteColor];
-    _firstActorLabel.backgroundColor = [UIColor clearColor];
     _firstActorLabel.textAlignment = NSTextAlignmentCenter;
-    _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
+    _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_firstActorScrollView addSubview:_firstActorLabel];
     
     _secondActorLabel = [UILabel new];
     _secondActorLabel.hidden = NO;
     _secondActorLabel.textColor = [UIColor whiteColor];
     _secondActorLabel.textAlignment = NSTextAlignmentCenter;
-    _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height/2);
+    _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
     [_secondActorScrollView addSubview:_secondActorLabel];
     
     
@@ -274,12 +241,16 @@ float frameH;
     [self loadImageConfiguration];
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+
 -(void)viewWillAppear:(BOOL)animated
 {
     // Hide the navigation bar
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
 }
 
 // Captures the current screen and blurs it
@@ -395,12 +366,12 @@ float frameH;
       withString:(NSString *)string
   inBoundsOfView:(UIView *)view
 {
-    textView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:ACTOR_FONT_SIZE];
+    textView.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE];
     
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentCenter;
-    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:ACTOR_FONT_SIZE];
+    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE];
     
     NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
     CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-20, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
@@ -460,7 +431,7 @@ float frameH;
     if (scrollView == _firstActorScrollView) {
         _firstActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
-            _firstActorActionView.backgroundColor = [UIColor redColor];
+            _firstActorActionView.backgroundColor = [UIColor flatRedColor];
         }
         else {
             _firstActorActionView.backgroundColor = [UIColor grayColor];
@@ -470,7 +441,7 @@ float frameH;
     if (scrollView == _secondActorScrollView) {
         _secondActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
-            _secondActorActionView.backgroundColor = [UIColor redColor];
+            _secondActorActionView.backgroundColor = [UIColor flatRedColor];
         }
         else {
             _secondActorActionView.backgroundColor = [UIColor grayColor];
@@ -497,8 +468,8 @@ float frameH;
         
         if (_firstActorScrollView.contentOffset.x > abs((int)scrollOffset/2)
             || _secondActorScrollView.contentOffset.x > abs((int)scrollOffset/2)) {
-            _firstActorActionView.backgroundColor = [UIColor goldColor];
-            _secondActorActionView.backgroundColor = [UIColor goldColor];
+            _firstActorActionView.backgroundColor = [UIColor flatGreenColor];
+            _secondActorActionView.backgroundColor = [UIColor flatGreenColor];
         }
     }
 }
@@ -512,7 +483,7 @@ float frameH;
             // Set the delete view frame depending on the actors chosen
             if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.firstActorActionView atIndex:1];
-                self.firstActorActionView.backgroundColor = [UIColor goldColor];
+                self.firstActorActionView.backgroundColor = [UIColor flatGreenColor];
             }
             [self animateScrollViewBoundsChange:_secondActorScrollView];
         }
@@ -524,7 +495,7 @@ float frameH;
         if (_firstActorScrollView.contentOffset.x != 0) {
             if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.secondActorActionView atIndex:1];
-                self.secondActorActionView.backgroundColor = [UIColor goldColor];
+                self.secondActorActionView.backgroundColor = [UIColor flatGreenColor];
             }
             [self animateScrollViewBoundsChange:_firstActorScrollView];
         }
@@ -802,8 +773,8 @@ float frameH;
             [self setLabel:label withString:actor.name inBoundsOfView:button];
             label.hidden = NO;
             
-            self.firstActorActionView.backgroundColor = [UIColor goldColor];
-            self.secondActorActionView.backgroundColor = [UIColor goldColor];
+            self.firstActorActionView.backgroundColor = [UIColor flatGreenColor];
+            self.secondActorActionView.backgroundColor = [UIColor flatGreenColor];
             // Set the delete view frame depending on the actors chosen
             if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.firstActorActionView atIndex:1];

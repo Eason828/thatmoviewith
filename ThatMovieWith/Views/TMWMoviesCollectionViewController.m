@@ -49,6 +49,11 @@ CGFloat cellWidth;
     }
     
     self.title = @"Movies";
+    NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName,nil];
+    [[UINavigationBar appearance] setTitleTextAttributes: fontDict];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
     
     return self;
 }
@@ -72,7 +77,7 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
 
-    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blurCurtain" ofType:@"png"]];
+    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"red-blur" ofType:@"jpg"]];
     
     _curtainView = [[UIImageView alloc] initWithImage:productImage];
 
@@ -84,8 +89,7 @@ CGFloat cellWidth;
     [self refresh];
 }
 
--(UIStatusBarStyle)preferredStatusBarStyle
-{
+-(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 
@@ -138,7 +142,7 @@ CGFloat cellWidth;
     
     // If an image exists, fetch it. Else use the generated UIImage
     if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
-        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[6]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
         
         
         // Show the network activity icon
