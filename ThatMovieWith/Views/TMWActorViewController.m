@@ -200,7 +200,7 @@ float frameH;
     _secondActorActionView.backgroundColor = [UIColor grayColor];
     
     _firstActorActionLabel = [UILabel new];
-    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
     _firstActorActionLabel.text = moviesSlideString;
     _firstActorActionLabel.numberOfLines = 2;
     _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
@@ -208,7 +208,7 @@ float frameH;
     [_firstActorActionView addSubview:_firstActorActionLabel];
     
     _secondActorActionLabel = [UILabel new];
-    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
     _secondActorActionLabel.text = moviesSlideString;
     _secondActorActionLabel.numberOfLines = 2;
     _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
@@ -216,7 +216,7 @@ float frameH;
     [_secondActorActionView addSubview:_secondActorActionLabel];
 
     _firstActorDeleteLabel = [UILabel new];
-    _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
+    _firstActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
     _firstActorDeleteLabel.text = deleteSlideString;
     _firstActorDeleteLabel.numberOfLines = 2;
     _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
@@ -224,7 +224,7 @@ float frameH;
     [_firstActorActionView addSubview:_firstActorDeleteLabel];
     
     _secondActorDeleteLabel = [UILabel new];
-    _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
+    _secondActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
     _secondActorDeleteLabel.text = deleteSlideString;
     _secondActorDeleteLabel.numberOfLines = 2;
     _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
@@ -451,8 +451,8 @@ float frameH;
             
         }
         else {
-            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
-            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
             _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
             _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
         }

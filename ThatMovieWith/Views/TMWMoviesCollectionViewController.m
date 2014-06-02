@@ -22,6 +22,8 @@
 
 @property (nonatomic, copy) NSArray *photos;
 @property (nonatomic, copy) UIImageView *curtainView;
+@property (nonatomic, strong) UIView *noResultsView;
+@property (nonatomic, strong) UILabel *noResultsLabel;
 
 @end
 
@@ -67,6 +69,19 @@ CGFloat cellWidth;
 {
     [super viewDidLoad];
     
+    _noResultsView = [UIView new];
+    _noResultsView.frame = self.view.frame;
+    [self.view addSubview:_noResultsView];
+    
+    _noResultsLabel = [UILabel new];
+    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
+    _noResultsLabel.textAlignment = NSTextAlignmentCenter;
+    _noResultsLabel.textColor = [UIColor whiteColor];
+    _noResultsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+    _noResultsLabel.numberOfLines = 0;
+    _noResultsLabel.text = @"No Movies";
+    [_noResultsView addSubview:_noResultsLabel];
+    
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -104,12 +119,13 @@ CGFloat cellWidth;
       withString:(NSString *)string
   inBoundsOfView:(UIView *)view
 {
-    textView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
+    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
+    
+    textView.font = textFont;
     
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentCenter;
-    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
     
     NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
     CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-30, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
@@ -253,12 +269,9 @@ CGFloat cellWidth;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
-                            // TODO: Fix no results view
-                            //self.collectionView.hidden = YES;
-//                            self.noResultsView.hidden = NO;
+                            self.noResultsView.hidden = NO;
                         } else {
-//                            self.moviesTableView.hidden = NO;
-//                            self.noResultsView.hidden = YES;
+                            self.noResultsView.hidden = YES;
                         }
                         [self.collectionView reloadData];
                     });
