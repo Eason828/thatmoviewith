@@ -50,6 +50,19 @@ int cnt;
     [self.view addSubview:self.firstLabel];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self addInfoButton];
+
+}
+
+- (void)addInfoButton
+{
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"addInfoButton"
+     object:self];
+}
+
 // TODO: Use NSNotificationCenter to alert when this
 // view enters the foreground in the container view
 - (void)viewDidAppear:(BOOL)animated

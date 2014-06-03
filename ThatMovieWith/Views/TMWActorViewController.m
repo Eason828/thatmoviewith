@@ -8,10 +8,12 @@
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
+#import <FBShimmeringView.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
 #import "TMWActorContainer.h"
+#import "TMWContainerViewController.h"
 #import "TMWActorSearchResults.h"
 #import "TMWMoviesCollectionViewController.h"
 #import "TMWCustomActorCellTableViewCell.h"
@@ -43,6 +45,8 @@
 @property (strong, nonatomic) UILabel *secondActorActionLabel;
 @property (strong, nonatomic) UILabel *firstActorDeleteLabel;
 @property (strong, nonatomic) UILabel *secondActorDeleteLabel;
+@property (strong, nonatomic) FBShimmeringView *thatMovieShimmeringView;
+@property (strong, nonatomic) FBShimmeringView *andShimmeringView;
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIGravityBehavior *gravityBehavior;
@@ -74,8 +78,7 @@ float frameH;
     if (self) {
         // Custom initialization
         
-        // Set the cancel button color in the search bar
-        [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor goldColor]];
+
         
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
@@ -83,7 +86,6 @@ float frameH;
         TMWAPI *api = [TMWAPI new];
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:api.IMDBKey];
-        
     }
     return self;
 }
@@ -92,14 +94,12 @@ float frameH;
 {
     [super viewDidLoad];
     
-    scrollOffset = (self.view.frame.size.width/2) - 20;
-    
-    // Make the keyboard black
-    [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
-    // Make the search bar text white
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor goldColor]];
+    scrollOffset = (self.view.frame.size.width/2) - 55;
     
     _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
+   // _curtainView.contentMode = UIViewContentModeCenter;
+    _curtainView.contentMode = UIViewContentModeScaleAspectFill;
+    [_curtainView.image applyVeryDarkCurtainEffect];
     _curtainView.frame = self.view.frame;
 
     [self.view insertSubview:_curtainView atIndex:0];
@@ -133,7 +133,7 @@ float frameH;
     _secondActorScrollView.showsHorizontalScrollIndicator = NO;
     _secondActorScrollView.bounces = NO;
     _secondActorScrollView.delegate = self;
-    [self.view addSubview:_secondActorScrollView];
+    [self.view insertSubview:_secondActorScrollView belowSubview:_firstActorScrollView];
     
     
     // Buttons
@@ -158,12 +158,25 @@ float frameH;
     _secondActorButton.tag = 2;
     
     _thatMovieWithButton.tag = 1;
+    _thatMovieWithButton.frame = self.view.frame;
+    _thatMovieShimmeringView = [[FBShimmeringView alloc] initWithFrame:self.view.frame];
+    _thatMovieShimmeringView.shimmeringPauseDuration = 0.6;
+    _thatMovieShimmeringView.shimmeringSpeed = 100;
+    [self.view addSubview:_thatMovieShimmeringView];
     _thatMovieWithButton.tintColor = [UIColor whiteColor];
+    _thatMovieShimmeringView.contentView = _thatMovieWithButton;
+    _thatMovieShimmeringView.shimmering = YES;
     [self.view bringSubviewToFront:_thatMovieWithButton];
 
     _andButton.tag = 2;
     _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
+    _andShimmeringView = [[FBShimmeringView alloc] initWithFrame:_andButton.frame];
+    _andShimmeringView.shimmeringPauseDuration = 0.6;
+    _andShimmeringView.shimmeringSpeed = 100;
+    [self.view insertSubview:_andShimmeringView belowSubview:_thatMovieShimmeringView];
     _andButton.tintColor = [UIColor whiteColor];
+    _andShimmeringView.contentView = _andButton;
+    _andShimmeringView.shimmering = YES;
     _andButton.hidden = YES;
     
     
@@ -235,6 +248,17 @@ float frameH;
     // Hide the navigation bar
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    // Make the keyboard black
+    [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    // Make the search bar text white
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor grayColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor goldColor]];
+    // Cancel button
+    [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor goldColor]];
+    NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
 }
 
 // Captures the current screen and blurs it
@@ -260,6 +284,20 @@ float frameH;
 
 #pragma mark Private Methods
 
+- (void)removeInfoButton
+{
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"removeInfoButton"
+     object:self];
+}
+
+- (void)addInfoButton
+{
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"addInfoButton"
+     object:self];
+}
+
 // Blur the background and bring up the search bar
 - (void)searchForActor
 {
@@ -284,28 +322,48 @@ float frameH;
             
         case 1:
         {
+            if ([self.firstActorActionView isDescendantOfView:self.view]) {
+                [self.firstActorActionView removeFromSuperview];
+            }
             [[TMWActorContainer actorContainer] removeActorObject:actor1];
             _firstActorButton.hidden = NO;
             [self.view bringSubviewToFront:_firstActorButton];
             [self.view bringSubviewToFront:_firstActorLabel];
+            [self.view bringSubviewToFront:_thatMovieWithButton];
+            [self.view bringSubviewToFront:_thatMovieShimmeringView];
+            _firstActorActionView.hidden = YES;
             _thatMovieWithButton.hidden = NO;
+            _thatMovieShimmeringView.hidden = NO;
             break;
         }
         case 2:
         {
+            if ([self.secondActorActionView isDescendantOfView:self.view]) {
+                [self.secondActorActionView removeFromSuperview];
+            }
             [[TMWActorContainer actorContainer] removeActorObject:actor2];
             _secondActorButton.hidden = NO;
             [self.view bringSubviewToFront:_secondActorButton];
             [self.view bringSubviewToFront:_secondActorLabel];
+            [self.view bringSubviewToFront:_andButton];
+            [self.view bringSubviewToFront:_andShimmeringView];
+            _secondActorActionView.hidden = YES;
             _andButton.hidden = NO;
+            _andShimmeringView.hidden = NO;
             break;
         }
     }
     // // Only hide the continue button if there are not actors
-    if ([TMWActorContainer actorContainer].allActorObjects.count == 0)
-    {
+    if ([TMWActorContainer actorContainer].allActorObjects.count == 0) {
         _andButton.hidden = YES;
-        // Reset the view back to the default load view
+        _thatMovieWithButton.frame = self.view.frame;
+        _thatMovieShimmeringView.frame = self.view.frame;
+        _firstActorActionView.hidden = YES;
+        _secondActorActionView.hidden = YES;
+    }
+    else {
+        _thatMovieWithButton.frame = CGRectMake(frameX, frameY - 10, frameW, frameH/2);
+        _thatMovieShimmeringView.frame = CGRectMake(frameX, frameY - 10, frameW, frameH/2);
     }
 }
 
@@ -387,7 +445,6 @@ float frameH;
 
 - (void)addRightBounceBehavior
 {
-    
     _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     UICollisionBehavior *collisionBehaviour = [[UICollisionBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
     // Using 0.5 for right inset due to edgeInsets bug
@@ -411,49 +468,64 @@ float frameH;
 #pragma mark UIScrollView methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    int x = abs(floor(scrollView.contentOffset.x*moviesSlideString.length*2/scrollOffset));
     if (scrollView == _firstActorScrollView) {
-        _firstActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
+        _firstActorActionView.hidden = NO;
+        _firstActorDeleteLabel.text = deleteSlideString;
+        _firstActorActionLabel.text = moviesSlideString;
+        _firstActorDeleteLabel.alpha = fabs((scrollView.contentOffset.x)/100.0);
+        _firstActorActionView.alpha = fabs((scrollView.contentOffset.x)/100.0);
+        _firstActorActionLabel.alpha = fabs((scrollView.contentOffset.x)/100.0);
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             _firstActorActionView.backgroundColor = [UIColor flatRedColor];
         }
         else {
-            _firstActorActionView.backgroundColor = [UIColor grayColor];
+            _firstActorActionView.backgroundColor = [UIColor flatRedColor];
         }
     }
     
-    if (scrollView == _secondActorScrollView) {
-        _secondActorDeleteLabel.text = [deleteSlideString substringToIndex:(MIN(x, (int)deleteSlideString.length))];
+    else if (scrollView == _secondActorScrollView) {
+        _secondActorActionView.hidden = NO;
+        _secondActorDeleteLabel.text = deleteSlideString;
+        _secondActorActionLabel.text = moviesSlideString;
+        _secondActorDeleteLabel.alpha = fabs((scrollView.contentOffset.x)/100.0);
+        _secondActorActionView.alpha = fabs((scrollView.contentOffset.x)/100.0);
+        _secondActorActionLabel.alpha = fabs((scrollView.contentOffset.x)/100.0);
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
             _secondActorActionView.backgroundColor = [UIColor flatRedColor];
         }
         else {
-            _secondActorActionView.backgroundColor = [UIColor grayColor];
+            _secondActorActionView.backgroundColor = [UIColor flatRedColor];
         }
     }
+    
     if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
-
         _secondActorScrollView.contentOffset = scrollView.contentOffset;
         _firstActorScrollView.contentOffset = scrollView.contentOffset;
+        _firstActorActionView.backgroundColor = [UIColor flatGreenColor];
+        _secondActorActionView.backgroundColor = [UIColor flatGreenColor];
         
         if (!_firstActorButton.isHidden && !_secondActorButton.isHidden) {
-            NSString *firstText = @"Common movies";
+            _firstActorActionView.hidden = NO;
+            _secondActorActionView.hidden = NO;
             _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, _firstActorScrollView.frame.size.height/2, 100, _firstActorScrollView.frame.size.height);
-            _firstActorActionLabel.text = [firstText substringToIndex:(MIN(x, (int)firstText.length))];
-            _secondActorActionLabel.text = nil;
+            _firstActorActionLabel.text = @"Common movies";
             
+            // Rearrange all the subviews again
+            [self.view bringSubviewToFront:_secondActorActionView];
+            [self.view bringSubviewToFront:_firstActorActionView];
+            [self.view bringSubviewToFront:_secondActorScrollView];
+            [self.view bringSubviewToFront:_firstActorScrollView];
+
+            [_secondActorScrollView bringSubviewToFront:_secondActorButton];
+            [_secondActorScrollView bringSubviewToFront:_secondActorLabel];
+            [_firstActorScrollView bringSubviewToFront:_firstActorButton];
+            [_firstActorScrollView bringSubviewToFront:_firstActorLabel];
+            _secondActorActionLabel.text = nil;
+
         }
         else {
             _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
             _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
-            _firstActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
-            _secondActorActionLabel.text = [moviesSlideString substringToIndex:(MIN(x, (int)moviesSlideString.length))];
-        }
-        
-        if (_firstActorScrollView.contentOffset.x > abs((int)scrollOffset/2)
-            || _secondActorScrollView.contentOffset.x > abs((int)scrollOffset/2)) {
-            _firstActorActionView.backgroundColor = [UIColor flatGreenColor];
-            _secondActorActionView.backgroundColor = [UIColor flatGreenColor];
         }
     }
 }
@@ -467,6 +539,7 @@ float frameH;
             // Set the delete view frame depending on the actors chosen
             if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
                 [self.view insertSubview:self.firstActorActionView atIndex:1];
+                self.firstActorActionView.alpha = 1.0;
                 self.firstActorActionView.backgroundColor = [UIColor flatGreenColor];
             }
             [self animateScrollViewBoundsChange:_secondActorScrollView];
@@ -478,7 +551,8 @@ float frameH;
         // Move the other actor back into its original position
         if (_firstActorScrollView.contentOffset.x != 0) {
             if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
-                [self.view insertSubview:self.secondActorActionView atIndex:1];
+                [self.view insertSubview:self.secondActorActionView belowSubview:self.firstActorActionView];
+                self.secondActorActionLabel.alpha = 1.0;
                 self.secondActorActionView.backgroundColor = [UIColor flatGreenColor];
             }
             [self animateScrollViewBoundsChange:_firstActorScrollView];
@@ -489,7 +563,7 @@ float frameH;
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     
     if (scrollView == _firstActorScrollView || scrollView == _secondActorScrollView) {
-        if (scrollView.contentOffset.x > scrollOffset/2) {
+        if (scrollView.contentOffset.x > scrollOffset - 20) {
 
             // Show the Movies View
             TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
@@ -499,27 +573,54 @@ float frameH;
     }
     
     if (scrollView == _firstActorScrollView) {
-        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) {
             tappedActor = 1;
             [self removeActor];
-            _firstActorButton.imageView.image = nil;
-            _firstActorButton.hidden = YES;
-            _firstActorLabel.text = nil;
-            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
-            [_firstActorActionView removeFromSuperview];
+            self.thatMovieWithButton.alpha = 0.0;
+            [UIView animateWithDuration:1.0
+                                  delay:0
+                                options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                             animations:^(void) {
+                                    self.firstActorButton.alpha = 0.0;
+                                 self.firstActorScrollView.alpha = 0.0;
+                             }
+                             completion:^(BOOL finished)
+            {
+                self.firstActorButton.imageView.image = nil;
+                self.firstActorButton.hidden = YES;
+                self.firstActorLabel.text = nil;
+                self.thatMovieWithButton.alpha = 1.0;
+                self.firstActorScrollView.alpha = 1.0;
+                self.firstActorButton.alpha = 1.0;
+                self.firstActorActionView.hidden = YES;
+             }];
             [self.view bringSubviewToFront:_thatMovieWithButton];
         }
     }
     
     if (scrollView == _secondActorScrollView) {
-        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset/2)) {
+        if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) {
             tappedActor = 2;
             [self removeActor];
-            _secondActorButton.imageView.image = nil;
-            _secondActorButton.hidden = YES;
-            _secondActorLabel.text = nil;
-            //scrollView.contentOffset = CGPointMake(scrollOffset, 0);
-            [_secondActorActionView removeFromSuperview];
+            self.andButton.alpha = 0.0;
+            [UIView animateWithDuration:1.0
+                                  delay:0
+                                options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                             animations:^(void) {
+                                 self.secondActorButton.alpha = 0.0;
+                                 self.secondActorScrollView.alpha = 0.0;
+                             }
+                             completion:^(BOOL finished)
+             {
+                 self.secondActorButton.imageView.image = nil;
+                 self.secondActorButton.hidden = YES;
+                 self.secondActorLabel.text = nil;
+                 self.andButton.alpha = 1.0;
+                 self.secondActorScrollView.alpha = 1.0;
+                 self.secondActorButton.alpha = 1.0;
+                 self.secondActorActionView.hidden = YES;
+                 [self addInfoButton];
+             }];
             [self.view bringSubviewToFront:_andButton];
         }
     }
@@ -672,11 +773,11 @@ float frameH;
     
     TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
     
-    // Remove an actor if one was chosen
-    [self removeActor];
-    
     // Add the chosen actor to the array of chosen actors
     [[TMWActorContainer actorContainer] addActorObject:chosenActor];
+    
+    // Remove an actor if one was chosen
+    [self removeActor];
     
     if (tappedActor == 1)
     {
@@ -689,6 +790,8 @@ float frameH;
         // Show the second actor information
         actor1 = chosenActor;
         _thatMovieWithButton.hidden = YES;
+        _thatMovieShimmeringView.hidden = YES;
+        _firstActorScrollView.hidden = NO;
         //_firstActorLabel.hidden = YES;
         if ([TMWActorContainer actorContainer].allActorObjects.count == 1) {
             [self.view bringSubviewToFront:_andButton];
@@ -707,6 +810,9 @@ float frameH;
         // Enable dragging the actor around
         //secondPanGesture.enabled = YES;
         _secondActorButton.hidden = NO;
+        _secondActorScrollView.hidden = NO;
+        _andShimmeringView.hidden = YES;
+        [self removeInfoButton];
         _andButton.hidden = YES;
         actor2 = chosenActor;
     }
@@ -764,7 +870,7 @@ float frameH;
                 [self.view insertSubview:self.firstActorActionView atIndex:1];
             }
             if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
-                [self.view insertSubview:self.secondActorActionView atIndex:1];
+                [self.view insertSubview:self.secondActorActionView belowSubview:self.firstActorActionView];
             }
             self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
             self.pushBehavior.active = YES;
@@ -794,14 +900,12 @@ float frameH;
         [self setLabel:label withString:actor.name inBoundsOfView:button];
         label.hidden = NO;
         
-        self.firstActorActionView.backgroundColor = [UIColor goldColor];
-        self.secondActorActionView.backgroundColor = [UIColor goldColor];
         // Set the delete view frame depending on the actors chosen
         if (self.firstActorLabel.text && ![self.firstActorActionView isDescendantOfView:self.view]) {
             [self.view insertSubview:self.firstActorActionView atIndex:1];
         }
         if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
-            [self.view insertSubview:self.secondActorActionView atIndex:1];
+            [self.view insertSubview:self.secondActorActionView belowSubview:self.firstActorActionView];
         }
         self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
         self.pushBehavior.active = YES;

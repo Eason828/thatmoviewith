@@ -26,4 +26,8 @@
     return [UIColor colorWithRed:255.0/255 green:215.0/255 blue:0.0/255 alpha:1.0];
 }
 
++ (UIColor *)offWhiteColor {
+    return [UIColor colorWithRed:247.0/255 green:247.0/255 blue:247.0/255 alpha:1.0];
+}
+
 @end

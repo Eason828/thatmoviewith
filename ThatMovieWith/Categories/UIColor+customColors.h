@@ -14,5 +14,6 @@
 + (UIColor *)flatGreenColor;
 + (UIColor *)flatBlueColor;
 + (UIColor *)goldColor;
++ (UIColor *)offWhiteColor;
 
 @end

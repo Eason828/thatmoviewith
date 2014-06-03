@@ -19,8 +19,8 @@
 
 @property TMWAboutViewController *aboutViewController;
 @property TMWActorViewController *actorViewController;
-@property (nonatomic, copy) UIButton *infoButton;
 @property (nonatomic, copy) UIButton *doneButton;
+@property (nonatomic, copy) UIButton *infoButton;
 
 @end
 
@@ -31,6 +31,17 @@
     UIView *view = [UIView new];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view = view;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeInfoButton:)
+                                                 name:@"removeInfoButton"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addInfoButton:)
+                                                 name:@"addInfoButton"
+                                               object:nil];
+    
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -54,13 +65,10 @@
     // The info button to flip to the about view
     _infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
     _infoButton.showsTouchWhenHighlighted = TRUE;
-    [_infoButton setTintColor:[UIColor goldColor]];
+    [_infoButton setTintColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5]];
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //[_actorViewController.view addSubview:_infoButton];
-    
-    // Add dropshadow to the info button
-    [CALayer dropShadowLayer:_infoButton.layer];
+    [_actorViewController.view addSubview:_infoButton];
     
     // Done button to flip back to the main view
     _doneButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -69,7 +77,17 @@
     _doneButton.tag = 2;
     [_doneButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_aboutViewController.view addSubview:_doneButton];
-    
+}
+
+- (void)removeInfoButton:(NSNotification *)notification
+{
+    [_infoButton removeFromSuperview];
+    [self.view setNeedsLayout];
+}
+
+- (void)addInfoButton:(NSNotification *)notification
+{
+    [self.view addSubview:_infoButton];
 }
 
 // This is called after autolayout has set the views
