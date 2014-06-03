@@ -239,6 +239,15 @@ float frameH;
     
     [self addRightBounceBehavior];
     
+    _thatMovieWithButton.alpha = 0.0;
+    [UIView animateWithDuration:3.0
+                          delay:0
+                        options:0
+                     animations:^(void) {
+                         self.thatMovieWithButton.alpha = 1.0;
+                     }
+                     completion:nil];
+
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
@@ -589,11 +598,18 @@ float frameH;
                 self.firstActorButton.imageView.image = nil;
                 self.firstActorButton.hidden = YES;
                 self.firstActorLabel.text = nil;
-                self.thatMovieWithButton.alpha = 1.0;
                 self.firstActorScrollView.alpha = 1.0;
                 self.firstActorButton.alpha = 1.0;
                 self.firstActorActionView.hidden = YES;
+                [UIView animateWithDuration:1.0
+                                      delay:0
+                                    options:0
+                                 animations:^(void) {
+                                     self.thatMovieWithButton.alpha = 1.0;
+                                 }
+                                 completion:nil];
              }];
+            
             [self.view bringSubviewToFront:_thatMovieWithButton];
         }
     }
@@ -615,12 +631,19 @@ float frameH;
                  self.secondActorButton.imageView.image = nil;
                  self.secondActorButton.hidden = YES;
                  self.secondActorLabel.text = nil;
-                 self.andButton.alpha = 1.0;
                  self.secondActorScrollView.alpha = 1.0;
                  self.secondActorButton.alpha = 1.0;
                  self.secondActorActionView.hidden = YES;
                  [self addInfoButton];
+                 [UIView animateWithDuration:1.0
+                                       delay:0
+                                     options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                                  animations:^(void) {
+                                      self.andButton.alpha = 1.0;
+                                  }
+                                  completion:nil];
              }];
+            
             [self.view bringSubviewToFront:_andButton];
         }
     }
