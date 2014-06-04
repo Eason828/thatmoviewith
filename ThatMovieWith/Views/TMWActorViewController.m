@@ -45,6 +45,7 @@
 @property (strong, nonatomic) UILabel *secondActorActionLabel;
 @property (strong, nonatomic) UILabel *firstActorDeleteLabel;
 @property (strong, nonatomic) UILabel *secondActorDeleteLabel;
+@property (strong, nonatomic) UIView *statusBarView;
 @property (strong, nonatomic) FBShimmeringView *thatMovieShimmeringView;
 @property (strong, nonatomic) FBShimmeringView *andShimmeringView;
 
@@ -67,6 +68,7 @@ TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
+bool hasSearched;
 float frameX;
 float frameY;
 float frameW;
@@ -78,175 +80,188 @@ float frameH;
     if (self) {
         // Custom initialization
         
-
-        
         UINavigationItem *navItem = self.navigationItem;
         navItem.title = @"Actors";
         
         TMWAPI *api = [TMWAPI new];
+        hasSearched = NO;
         
         [[JLTMDbClient sharedAPIInstance] setAPIKey:api.IMDBKey];
     }
     return self;
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    // Layout only on the first load
+    if (!hasSearched) {
+        NSLog(@"%f", self.view.frame.size.height);
+        scrollOffset = (self.view.frame.size.width/2) - 55;
+        _curtainView.frame = self.view.frame;
+        _statusBarView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, 20);
+        
+        frameX = self.view.frame.origin.x;
+        frameY = self.view.frame.origin.y+20;
+        frameW = self.view.frame.size.width;
+        frameH = self.view.frame.size.height-20;
+        
+        _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
+        _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+        _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
+        _firstActorScrollView.pagingEnabled = YES;
+        _firstActorScrollView.showsHorizontalScrollIndicator = NO;
+        _firstActorScrollView.bounces = NO;
+        _firstActorScrollView.delegate = self;
+        
+        _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
+        _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+        _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
+        _secondActorScrollView.pagingEnabled = YES;
+        _secondActorScrollView.showsHorizontalScrollIndicator = NO;
+        _secondActorScrollView.bounces = NO;
+        _secondActorScrollView.delegate = self;
+
+        // Buttons
+        _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+        _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+        
+        _thatMovieWithButton.frame = self.view.frame;
+        _thatMovieShimmeringView.frame = self.view.frame;
+        _thatMovieWithButton.tintColor = [UIColor whiteColor];
+        
+        _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
+        _andShimmeringView.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
+        _andButton.tintColor = [UIColor whiteColor];
+        
+        _thatMovieShimmeringView.shimmeringPauseDuration = 0.6;
+        _thatMovieShimmeringView.shimmeringSpeed = 100;
+        _thatMovieShimmeringView.contentView = _thatMovieWithButton;
+        _thatMovieShimmeringView.shimmering = YES;
+        _andShimmeringView.shimmeringPauseDuration = 0.6;
+        _andShimmeringView.shimmeringSpeed = 100;
+        _andShimmeringView.contentView = _andButton;
+        _andShimmeringView.shimmering = YES;
+        _andButton.hidden = YES;
+        
+        
+        // Labels
+        _firstActorLabel.hidden = NO;
+        _firstActorLabel.textColor = [UIColor whiteColor];
+        _firstActorLabel.textAlignment = NSTextAlignmentCenter;
+        _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
+
+        _secondActorLabel.hidden = NO;
+        _secondActorLabel.textColor = [UIColor whiteColor];
+        _secondActorLabel.textAlignment = NSTextAlignmentCenter;
+        _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
+
+        // Action slide views and labels
+        _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
+        _firstActorActionView.backgroundColor = [UIColor grayColor];
+        
+        _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
+        _secondActorActionView.backgroundColor = [UIColor grayColor];
+
+        _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+        _firstActorActionLabel.text = moviesSlideString;
+        _firstActorActionLabel.numberOfLines = 2;
+        _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+        _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
+        
+        _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+        _secondActorActionLabel.text = moviesSlideString;
+        _secondActorActionLabel.numberOfLines = 2;
+        _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+        _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
+  
+        _firstActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
+        _firstActorDeleteLabel.text = deleteSlideString;
+        _firstActorDeleteLabel.numberOfLines = 2;
+        _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+        _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+        
+        _secondActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
+        _secondActorDeleteLabel.text = deleteSlideString;
+        _secondActorDeleteLabel.numberOfLines = 2;
+        _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
+        _secondActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+        
+        // Make the buttons bounce when added
+        [self addRightBounceBehavior];
+    }
+    
+
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    scrollOffset = (self.view.frame.size.width/2) - 55;
-    
     _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
-   // _curtainView.contentMode = UIViewContentModeCenter;
-    _curtainView.contentMode = UIViewContentModeScaleAspectFill;
-    [_curtainView.image applyVeryDarkCurtainEffect];
-    _curtainView.frame = self.view.frame;
-
-    [self.view insertSubview:_curtainView atIndex:0];
-    
-    UIView *statusBarView = [UIView new];
-    statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
-    statusBarView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, 20);
-    [self.view insertSubview:statusBarView aboveSubview:_curtainView];
-    
-    frameX = self.view.frame.origin.x;
-    frameY = self.view.frame.origin.y+20;
-    frameW = self.view.frame.size.width;
-    frameH = self.view.frame.size.height-20;
-
+    _statusBarView = [UIView new];
     _firstActorScrollView = [UIScrollView new];
-    _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
-    _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
-    _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
-    _firstActorScrollView.pagingEnabled = YES;
-    _firstActorScrollView.showsHorizontalScrollIndicator = NO;
-    _firstActorScrollView.bounces = NO;
-    _firstActorScrollView.delegate = self;
-    [self.view addSubview:_firstActorScrollView];
-
-    
     _secondActorScrollView = [UIScrollView new];
-    _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
-    _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
-    _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
-    _secondActorScrollView.pagingEnabled = YES;
-    _secondActorScrollView.showsHorizontalScrollIndicator = NO;
-    _secondActorScrollView.bounces = NO;
-    _secondActorScrollView.delegate = self;
-    [self.view insertSubview:_secondActorScrollView belowSubview:_firstActorScrollView];
+    _firstActorButton = [UIButton new];
+    _secondActorButton = [UIButton new];
+    _thatMovieShimmeringView = [FBShimmeringView new];
+    _andShimmeringView = [FBShimmeringView new];
+    _firstActorLabel = [UILabel new];
+    _secondActorLabel = [UILabel new];
+    _firstActorActionView = [UIView new];
+    _secondActorActionView = [UIView new];
+    _firstActorActionLabel = [UILabel new];
+    _secondActorActionLabel = [UILabel new];
+    _firstActorDeleteLabel = [UILabel new];
+    _secondActorDeleteLabel = [UILabel new];
     
+    //_curtainView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    _curtainView.contentMode = UIViewContentModeScaleAspectFill;
+    [_curtainView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [_curtainView.image applyVeryDarkCurtainEffect];
+    _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
     
     // Buttons
-    _firstActorButton = [UIButton new];
     [_firstActorButton addTarget:self
                           action:@selector(buttonPressed:)
                 forControlEvents:UIControlEventTouchUpInside];
     _firstActorButton.hidden = YES;
-    [_firstActorScrollView addSubview:_firstActorButton];
-    _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
-    
-    _secondActorButton = [UIButton new];
     [_secondActorButton addTarget:self
                            action:@selector(buttonPressed:)
                  forControlEvents:UIControlEventTouchUpInside];
     _secondActorButton.hidden = YES;
-    [_secondActorScrollView addSubview:_secondActorButton];
-    _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
     
     // Tag the actor buttons so they can be identified when pressed
     _firstActorButton.tag = 1;
     _secondActorButton.tag = 2;
-    
     _thatMovieWithButton.tag = 1;
-    _thatMovieWithButton.frame = self.view.frame;
-    _thatMovieShimmeringView = [[FBShimmeringView alloc] initWithFrame:self.view.frame];
-    _thatMovieShimmeringView.shimmeringPauseDuration = 0.6;
-    _thatMovieShimmeringView.shimmeringSpeed = 100;
-    [self.view addSubview:_thatMovieShimmeringView];
-    _thatMovieWithButton.tintColor = [UIColor whiteColor];
-    _thatMovieShimmeringView.contentView = _thatMovieWithButton;
-    _thatMovieShimmeringView.shimmering = YES;
-    [self.view bringSubviewToFront:_thatMovieWithButton];
-
     _andButton.tag = 2;
-    _andButton.frame = CGRectMake(frameX, frameY + frameH/2, frameW, frameH/2);
-    _andShimmeringView = [[FBShimmeringView alloc] initWithFrame:_andButton.frame];
-    _andShimmeringView.shimmeringPauseDuration = 0.6;
-    _andShimmeringView.shimmeringSpeed = 100;
-    [self.view insertSubview:_andShimmeringView belowSubview:_thatMovieShimmeringView];
-    _andButton.tintColor = [UIColor whiteColor];
-    _andShimmeringView.contentView = _andButton;
-    _andShimmeringView.shimmering = YES;
-    _andButton.hidden = YES;
-    
-    
-    // Labels
-    _firstActorLabel = [UILabel new];
-    _firstActorLabel.hidden = NO;
-    _firstActorLabel.textColor = [UIColor whiteColor];
-    _firstActorLabel.textAlignment = NSTextAlignmentCenter;
-    _firstActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
-    [_firstActorScrollView addSubview:_firstActorLabel];
-    
-    _secondActorLabel = [UILabel new];
-    _secondActorLabel.hidden = NO;
-    _secondActorLabel.textColor = [UIColor whiteColor];
-    _secondActorLabel.textAlignment = NSTextAlignmentCenter;
-    _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
-    [_secondActorScrollView addSubview:_secondActorLabel];
-    
-    
-    // Action slide views and labels
-    _firstActorActionView = [UIView new];
-    _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
-    _firstActorActionView.backgroundColor = [UIColor grayColor];
-    
-    _secondActorActionView = [UIView new];
-    _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
-    _secondActorActionView.backgroundColor = [UIColor grayColor];
-    
-    _firstActorActionLabel = [UILabel new];
-    _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
-    _firstActorActionLabel.text = moviesSlideString;
-    _firstActorActionLabel.numberOfLines = 2;
-    _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
-    _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
-    [_firstActorActionView addSubview:_firstActorActionLabel];
-    
-    _secondActorActionLabel = [UILabel new];
-    _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
-    _secondActorActionLabel.text = moviesSlideString;
-    _secondActorActionLabel.numberOfLines = 2;
-    _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
-    _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
-    [_secondActorActionView addSubview:_secondActorActionLabel];
 
-    _firstActorDeleteLabel = [UILabel new];
-    _firstActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
-    _firstActorDeleteLabel.text = deleteSlideString;
-    _firstActorDeleteLabel.numberOfLines = 2;
-    _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
-    _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view insertSubview:_curtainView atIndex:0];
+    [self.view insertSubview:_statusBarView aboveSubview:_curtainView];
+    [self.view addSubview:_firstActorScrollView];
+    [self.view insertSubview:_secondActorScrollView belowSubview:_firstActorScrollView];
+    [_firstActorScrollView addSubview:_firstActorButton];
+    [_secondActorScrollView addSubview:_secondActorButton];
+    [self.view addSubview:_thatMovieShimmeringView];
+    [self.view bringSubviewToFront:_thatMovieWithButton];
+    [self.view insertSubview:_andShimmeringView belowSubview:_thatMovieShimmeringView];
+    [_firstActorScrollView addSubview:_firstActorLabel];
+    [_secondActorScrollView addSubview:_secondActorLabel];
+    [_firstActorActionView addSubview:_firstActorActionLabel];
+    [_secondActorActionView addSubview:_secondActorActionLabel];
     [_firstActorActionView addSubview:_firstActorDeleteLabel];
-    
-    _secondActorDeleteLabel = [UILabel new];
-    _secondActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
-    _secondActorDeleteLabel.text = deleteSlideString;
-    _secondActorDeleteLabel.numberOfLines = 2;
-    _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
-    _secondActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
     [_secondActorActionView addSubview:_secondActorDeleteLabel];
     
-    [self addRightBounceBehavior];
-    
     _thatMovieWithButton.alpha = 0.0;
-    [UIView animateWithDuration:3.0
+    [UIView animateWithDuration:2.0
                           delay:0
                         options:0
                      animations:^(void) {
                          self.thatMovieWithButton.alpha = 1.0;
                      }
                      completion:nil];
+
 
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
@@ -268,6 +283,8 @@ float frameH;
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
+    
+    [self removeInfoButton];
 }
 
 // Captures the current screen and blurs it
@@ -310,6 +327,7 @@ float frameH;
 // Blur the background and bring up the search bar
 - (void)searchForActor
 {
+    hasSearched = YES;
     // Blur the current screen
     [self blurScreen];
     // Put the search bar in front of the blurred view
@@ -369,6 +387,7 @@ float frameH;
         _thatMovieShimmeringView.frame = self.view.frame;
         _firstActorActionView.hidden = YES;
         _secondActorActionView.hidden = YES;
+        [self.view bringSubviewToFront:_thatMovieShimmeringView];
     }
     else {
         _thatMovieWithButton.frame = CGRectMake(frameX, frameY - 10, frameW, frameH/2);

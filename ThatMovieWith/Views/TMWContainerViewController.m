@@ -68,7 +68,7 @@
     [_infoButton setTintColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5]];
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //[_actorViewController.view addSubview:_infoButton];
+    [_actorViewController.view addSubview:_infoButton];
     
     // Done button to flip back to the main view
     _doneButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
