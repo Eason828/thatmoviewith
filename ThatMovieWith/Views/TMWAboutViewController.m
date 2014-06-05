@@ -43,7 +43,6 @@ int cnt;
     _firstLabel.frame = self.view.frame;
     _firstLabel.textAlignment = NSTextAlignmentCenter;
     _firstLabel.numberOfLines = 2;
-    //self.firstLabel.text = @"Directed by\nJay Hickey";
     _firstLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:30];
     _firstLabel.alpha = 0;
     _firstLabel.textColor = [UIColor whiteColor];
@@ -73,12 +72,11 @@ int cnt;
     
     // Get the version info
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *appDisplayName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
     NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
     
-    _versionLabel.text = [NSString stringWithFormat:@"%@, Version %@ (%@)",
-            appDisplayName, majorVersion, minorVersion];
+    _versionLabel.text = [NSString stringWithFormat:@"That Movie With, Version %@ (%@)",
+            majorVersion, minorVersion];
 
     
     //[self performSelector:@selector(delayAnimateCreditsWithCount) withObject:nil afterDelay:5.0];
@@ -117,11 +115,11 @@ int cnt;
     
     _firstLabel.alpha = 1.0;
     
-    [UIView animateWithDuration:0 delay:3.0 options:0 animations:^{
-        self.firstLabel.alpha = 0.0;
-    } completion:^(BOOL completion) {
-        //[self animateCreditsWithCount:count+1];
-    }];
+//    [UIView animateWithDuration:0 delay:3.0 options:0 animations:^{
+//        self.firstLabel.alpha = 0.0;
+//    } completion:^(BOOL completion) {
+//        //[self animateCreditsWithCount:count+1];
+//    }];
 }
 
 
