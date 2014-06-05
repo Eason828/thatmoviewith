@@ -69,6 +69,7 @@
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_actorViewController.view addSubview:_infoButton];
+    [self addInfoButton:[NSNotification notificationWithName:@"addInfoButton" object:self]];
     
     // Done button to flip back to the main view
     _doneButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -88,13 +89,21 @@
 - (void)addInfoButton:(NSNotification *)notification
 {
     [self.view addSubview:_infoButton];
+    _infoButton.alpha = 0.0;
+    [UIView animateWithDuration:2.0
+                          delay:0
+                        options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                     animations:^(void) {
+                         self.infoButton.alpha = 0.75;
+                     }
+                     completion:nil];
 }
 
 // This is called after autolayout has set the views
 - (void)viewDidLayoutSubviews
 {
-     _infoButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-47);
-    _doneButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-47);
+     _infoButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-32);
+    _doneButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-32);
 }
 
 -(IBAction)buttonPressed:(id)sender

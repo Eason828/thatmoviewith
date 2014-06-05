@@ -15,6 +15,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *movieScrollView;
 
 @property (nonatomic, retain) UILabel *firstLabel;
+@property (nonatomic, retain) IBOutlet UILabel *versionLabel;
 
 @end
 
@@ -38,16 +39,15 @@ int cnt;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.firstLabel = [UILabel new];
-    self.firstLabel.frame = self.view.frame;
-    self.firstLabel.textAlignment = NSTextAlignmentCenter;
-    self.firstLabel.numberOfLines = 2;
+    _firstLabel = [UILabel new];
+    _firstLabel.frame = self.view.frame;
+    _firstLabel.textAlignment = NSTextAlignmentCenter;
+    _firstLabel.numberOfLines = 2;
     //self.firstLabel.text = @"Directed by\nJay Hickey";
-    UIFont* broadwayFont = [UIFont systemFontOfSize:30];
-    self.firstLabel.font = broadwayFont;
-    self.firstLabel.alpha = 0;
-    self.firstLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:self.firstLabel];
+    _firstLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:30];
+    _firstLabel.alpha = 0;
+    _firstLabel.textColor = [UIColor whiteColor];
+    [self.view addSubview:_firstLabel];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -70,6 +70,16 @@ int cnt;
     creditsLength = 0;
     creditText = @[@"Directed by\nJay Hickey", @"Produced by\nJay Hickey",
                    @"Beta Testers\n"];
+    
+    // Get the version info
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appDisplayName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    _versionLabel.text = [NSString stringWithFormat:@"%@, Version %@ (%@)",
+            appDisplayName, majorVersion, minorVersion];
+
     
     //[self performSelector:@selector(delayAnimateCreditsWithCount) withObject:nil afterDelay:5.0];
     
@@ -103,9 +113,9 @@ int cnt;
         count = 0;
     }
 
-    self.firstLabel.text = creditText[count];
+    _firstLabel.text = creditText[count];
     
-    self.firstLabel.alpha = 1.0;
+    _firstLabel.alpha = 1.0;
     
     [UIView animateWithDuration:0 delay:3.0 options:0 animations:^{
         self.firstLabel.alpha = 0.0;
