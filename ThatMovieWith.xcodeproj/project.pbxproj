@@ -125,7 +125,6 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
-		E5A2F6DC1947DF92004DFEC4 /* broadway.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = broadway.ttf; sourceTree = "<group>"; };
 		E5A2F6DF1947DFE8004DFEC4 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TMDB_API_KEY; path = ThatMovieWith/TMDB_API_KEY; sourceTree = SOURCE_ROOT; };
 		E5BB14E6192589A500B7A738 /* TMWContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWContainerViewController.h; path = Views/TMWContainerViewController.h; sourceTree = "<group>"; };
 		E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWContainerViewController.m; path = Views/TMWContainerViewController.m; sourceTree = "<group>"; };
@@ -291,7 +290,6 @@
 		E571EA481901D90000CB3B31 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E5A2F6DC1947DF92004DFEC4 /* broadway.ttf */,
 				E539DCFA1900CD6E0027661C /* api */,
 				E5994D0318FDE85100A5B79F /* Images.xcassets */,
 				E539DC67190080F20027661C /* images */,
