@@ -380,7 +380,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	.fader .flexslider1{ top: 89px;; left: 209px; margin-right: 0; margin-left: 0; }
 	.fader{ padding-bottom: 348px; margin: 0; background: none;}
 	.fader:before {
-		background: url(../img/iphone.png) 0 0; /*Image of iphone 5 in hand */ 
+		background: url(../img/iphone_nohand.png) 0 0; /*Image of iphone 5 in hand */ 
 		background-size: 100%;
 		left: 188px; 
 		width: 286px;
