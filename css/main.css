@@ -333,7 +333,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 .footer-container li:first-child{
 	margin-left: 0;
 }
-.footer-container li a{
+.footer-container a{
 	font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 400;
 	color: #aabdcd; /* Change colour of footer links */
@@ -344,7 +344,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	-o-transition: all 300ms ease-in-out;
 	transition: all 300ms ease-in-out;
 }
-.footer-container li a:hover{
+.footer-container a:hover{
 	color: #fbfdff; /* Change colour of footer links on hover */
 }
 .footer-container footer {
