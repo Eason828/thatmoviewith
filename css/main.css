@@ -276,7 +276,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	}
 .footer-container {
     background: #363d42;  /* Adjust Background colour of Footer Area */
-    font-size: .8em;
+    font-size: 1em;
     padding-bottom: 100px;
     padding-top: 40px;
 }
@@ -289,7 +289,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 400;
 	/*text-indent: -10000em;*/
-	font-size: 1.2em;
+	font-size: 1em;
 	position: relative;
 	/*width: 142px;  Adjust Width for Logo if needed */
 	text-align: center;
