@@ -26,9 +26,10 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
    	font-weight: 100;
     background: #f3f8fc;  /*Adjust Background colour of header */
     background-image: url(../img/background.jpg);
+    background-size: cover;
     color: #525b60;  /* Adjust colour of header text */
 	/*text-shadow: 1px 1px 0 #ffffff;*/
-	padding-top: 50px;
+	/*padding-top: 50px;*/
 }
 
 
@@ -42,7 +43,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	color: #ffffff;
 	position: relative;
 	background-size: 100%;
-	font-size: 77px;
+	font-size: 55px;
 	line-height: 1.2;
 	margin: 0 auto;
 }
@@ -371,7 +372,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
    Media Queries
    ========================================================================== */
 
-@media only screen and (min-width: 480px) { }
+@media only screen and (min-width: 480px) { .header-container h1 {font-size: 77px;} }
 @media only screen and (min-width: 680px) {
 	.wrapper { width: 90%; margin: 0 5% 0 5%; }
 	.ctaColumn input[type="text"]{ text-align: left; }
