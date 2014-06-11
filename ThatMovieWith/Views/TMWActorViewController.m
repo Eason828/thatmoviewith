@@ -9,6 +9,7 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <FBShimmeringView.h>
+#import <NZAlertView.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -785,6 +786,15 @@ float frameH;
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{[weakCell.imageView setImage:image];}
                                 completion:NULL];
+                NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
+                                                                  title:@"Error Fetching Images"
+                                                                message:@"Could not get actor images from database"
+                                                               delegate:nil];
+                alert.alertDuration = 4.0;
+                
+                [alert setTextAlignment:NSTextAlignmentCenter];
+                
+                [alert show];
             }
             else {
                 weakCell.imageView.image = image;
@@ -793,7 +803,16 @@ float frameH;
             
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            NSLog(@"Request failed with error: %@", error);
+            // There are several ways to init, just look at the class header
+            NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
+                                                              title:@"Error Fetching Images"
+                                                            message:@"Could not get actor images from database"
+                                                           delegate:nil];
+            alert.alertDuration = 4.0;
+            
+            [alert setTextAlignment:NSTextAlignmentCenter];
+            
+            [alert show];
         }];
         
         // Hide the network activity icon
