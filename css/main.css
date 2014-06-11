@@ -405,8 +405,8 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
     .main-container section.last{ margin-right: 0px; }
     .footer-container h1{ float: left; }
     .footer-container ul{ float: right; }
-    .fader .flexslider1{ left: 245px; }
-    .fader:before{ left: 225px; }
+    .fader .flexslider1{ left: 227px; }
+    .fader:before{ left: 205px; }
     .flexslider2 { margin-bottom: 60px;}
 @media only screen and (min-width: 870px) {
 	.header-container h1{
