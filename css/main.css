@@ -41,10 +41,9 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
    	font-weight: 100;
 	color: #ffffff;
 	position: relative;
-	/*width: 271px;  Adjust Width for Logo if needed */
-	height: 93px; /* Adjust Height for Logo if needed */
-	/*background: url(../img/logo.png) no-repeat center 0; /* Change Your Logo Name */*/
 	background-size: 100%;
+	font-size: 77px;
+	line-height: 1.2;
 	margin: 0 auto;
 }
 @media (min--moz-device-pixel-ratio: 1.5),
@@ -52,7 +51,6 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	(-webkit-min-device-pixel-ratio: 1.5),
 	(min-device-pixel-ratio: 1.5),
 	(min-resolution: 1.5dppx) {
-		.header-container h1 { 		font-size: 48px; }
 	/* on retina, use image that's scaled by 2 */
 .header-container h1{
 	/*background: url(../img/logo@2x.png) no-repeat 0 0; /* Change Retina Logo */
@@ -60,12 +58,18 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 }
 }
 
-
+.header-container h2{
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-weight: 100;
+	color: #ffffff;
+	font-size: 2em;
+	line-height: 1.2;
+}
 
 .header-container h3{
 	color: #ffffff;
 	font-weight: normal;
-	font-size: 1.6em;
+	font-size: 1.4em;
 	line-height: 1.2;
 }
 .header-container h4{
@@ -187,6 +191,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	margin-bottom: 0;
 	margin-right: auto;
 	margin-left: auto;
+	padding-left: 0px; 
 }
 .fader .flex-control-nav{
 	bottom: -60px;
@@ -368,12 +373,11 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 
 @media only screen and (min-width: 480px) { }
 @media only screen and (min-width: 680px) {
-	.header-container h1 { 		font-size: 64px; }
-	.wrapper { width: 90%; margin: 0 5% 0 8%; }
+	.wrapper { width: 90%; margin: 0 5% 0 5%; }
 	.ctaColumn input[type="text"]{ text-align: left; }
 	.signup:after{ display: block; }
 	.fader .flexslider1{ top: 89px;; left: 209px; margin-right: 0; margin-left: 0; }
-	.fader{ padding-bottom: 348px;  margin: 0; background: none;}
+	.fader{ padding-bottom: 348px; margin: 0; background: none;}
 	.fader:before {
 		background: url(../img/iphone.png) 0 0; /*Image of iphone 5 in hand */ 
 		background-size: 100%;
@@ -400,8 +404,8 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
     .main-container section.last{ margin-right: 0px; }
     .footer-container h1{ float: left; }
     .footer-container ul{ float: right; }
-    .fader .flexslider1{ left: 225px; }
-    .fader:before{ left: 204px; }
+    .fader .flexslider1{ left: 245px; }
+    .fader:before{ left: 225px; }
     .flexslider2 { margin-bottom: 60px;}
 @media only screen and (min-width: 870px) {
 	.header-container h1{
