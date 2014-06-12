@@ -9,7 +9,6 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <FBShimmeringView.h>
-#import <NZAlertView.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -781,20 +780,20 @@ float frameH;
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             if (request) {
-                [UIView transitionWithView:weakCell.imageView
-                                  duration:0.0f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{[weakCell.imageView setImage:image];}
-                                completion:NULL];
-                NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
-                                                                  title:@"Error Fetching Images"
-                                                                message:@"Could not get actor images from database"
-                                                               delegate:nil];
-                alert.alertDuration = 4.0;
-                
-                [alert setTextAlignment:NSTextAlignmentCenter];
-                
-                [alert show];
+//                [UIView transitionWithView:weakCell.imageView
+//                                  duration:0.0f
+//                                   options:UIViewAnimationOptionTransitionCrossDissolve
+//                                animations:^{[weakCell.imageView setImage:image];}
+//                                completion:NULL];
+//                NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
+//                                                                  title:@"Error Fetching Images"
+//                                                                message:@"Could not get actor images from database"
+//                                                               delegate:nil];
+//                alert.alertDuration = 4.0;
+//                
+//                [alert setTextAlignment:NSTextAlignmentCenter];
+//                
+//                [alert show];
             }
             else {
                 weakCell.imageView.image = image;
@@ -804,15 +803,15 @@ float frameH;
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             // There are several ways to init, just look at the class header
-            NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
-                                                              title:@"Error Fetching Images"
-                                                            message:@"Could not get actor images from database"
-                                                           delegate:nil];
-            alert.alertDuration = 4.0;
-            
-            [alert setTextAlignment:NSTextAlignmentCenter];
-            
-            [alert show];
+//            NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
+//                                                              title:@"Error Fetching Images"
+//                                                            message:@"Could not get actor images from database"
+//                                                           delegate:nil];
+//            alert.alertDuration = 4.0;
+//            
+//            [alert setTextAlignment:NSTextAlignmentCenter];
+//            
+//            [alert show];
         }];
         
         // Hide the network activity icon

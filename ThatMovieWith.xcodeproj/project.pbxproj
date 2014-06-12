@@ -15,6 +15,7 @@
 		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E56A042D193C44E700FC6F23 /* TMWAPI.m */; };
+		E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E575954C19493DDB00C35392 /* TMDB_API_KEY */; };
 		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E57B8FD0193156F40086593D /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E57B8FCE193156F40086593D /* TMWActorViewController.m */; };
 		E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCF193156F40086593D /* TMWActorViewController.xib */; };
@@ -38,7 +39,6 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
-		E5A2F6E01947DFE8004DFEC4 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E5A2F6DF1947DFE8004DFEC4 /* TMDB_API_KEY */; };
 		E5BB14F0192589A500B7A738 /* TMWContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */; };
 		E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E9192589A500B7A738 /* TMWAboutViewController.m */; };
 		E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */; };
@@ -90,6 +90,7 @@
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E56A042C193C44E700FC6F23 /* TMWAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAPI.h; path = Models/TMWAPI.h; sourceTree = "<group>"; };
 		E56A042D193C44E700FC6F23 /* TMWAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAPI.m; path = Models/TMWAPI.m; sourceTree = "<group>"; };
+		E575954C19493DDB00C35392 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
 		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E57B8FCD193156F40086593D /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = Views/TMWActorViewController.h; sourceTree = "<group>"; };
 		E57B8FCE193156F40086593D /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorViewController.m; path = Views/TMWActorViewController.m; sourceTree = "<group>"; };
@@ -125,7 +126,6 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
-		E5A2F6DF1947DFE8004DFEC4 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TMDB_API_KEY; path = ThatMovieWith/TMDB_API_KEY; sourceTree = SOURCE_ROOT; };
 		E5BB14E6192589A500B7A738 /* TMWContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWContainerViewController.h; path = Views/TMWContainerViewController.h; sourceTree = "<group>"; };
 		E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWContainerViewController.m; path = Views/TMWContainerViewController.m; sourceTree = "<group>"; };
 		E5BB14E8192589A500B7A738 /* TMWAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAboutViewController.h; path = Views/TMWAboutViewController.h; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 		E539DCFA1900CD6E0027661C /* api */ = {
 			isa = PBXGroup;
 			children = (
-				E5A2F6DF1947DFE8004DFEC4 /* TMDB_API_KEY */,
+				E575954C19493DDB00C35392 /* TMDB_API_KEY */,
 			);
 			name = api;
 			path = ../api;
@@ -553,7 +553,7 @@
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
-				E5A2F6E01947DFE8004DFEC4 /* TMDB_API_KEY in Resources */,
+				E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */,
 				E5BD0C45193E80EF00356911 /* red-blur.jpg in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
