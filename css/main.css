@@ -37,6 +37,10 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	/*padding-top: 50px;*/
 }
 
+#featureScreen img {
+	height:100%;
+width:100%;
+}
 
 /* ==========================================================================
    LOGO
