@@ -91,78 +91,6 @@ float frameH;
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
-    _statusBarView = [UIView new];
-    _firstActorScrollView = [UIScrollView new];
-    _secondActorScrollView = [UIScrollView new];
-    _firstActorButton = [UIButton new];
-    _secondActorButton = [UIButton new];
-    _thatMovieShimmeringView = [FBShimmeringView new];
-    _andShimmeringView = [FBShimmeringView new];
-    _firstActorLabel = [UILabel new];
-    _secondActorLabel = [UILabel new];
-    _firstActorActionView = [UIView new];
-    _secondActorActionView = [UIView new];
-    _firstActorActionLabel = [UILabel new];
-    _secondActorActionLabel = [UILabel new];
-    _firstActorDeleteLabel = [UILabel new];
-    _secondActorDeleteLabel = [UILabel new];
-    
-    //_curtainView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-    _curtainView.contentMode = UIViewContentModeScaleAspectFill;
-    [_curtainView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    [_curtainView.image applyVeryDarkCurtainEffect];
-    _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
-    
-    // Buttons
-    [_firstActorButton addTarget:self
-                          action:@selector(buttonPressed:)
-                forControlEvents:UIControlEventTouchUpInside];
-    _firstActorButton.hidden = YES;
-    [_secondActorButton addTarget:self
-                           action:@selector(buttonPressed:)
-                 forControlEvents:UIControlEventTouchUpInside];
-    _secondActorButton.hidden = YES;
-    
-    // Tag the actor buttons so they can be identified when pressed
-    _firstActorButton.tag = 1;
-    _secondActorButton.tag = 2;
-    _thatMovieWithButton.tag = 1;
-    _andButton.tag = 2;
-
-    [self.view insertSubview:_curtainView atIndex:0];
-    [self.view insertSubview:_statusBarView aboveSubview:_curtainView];
-    [self.view addSubview:_firstActorScrollView];
-    [self.view insertSubview:_secondActorScrollView belowSubview:_firstActorScrollView];
-    [_firstActorScrollView addSubview:_firstActorButton];
-    [_secondActorScrollView addSubview:_secondActorButton];
-    [self.view addSubview:_thatMovieShimmeringView];
-    [self.view bringSubviewToFront:_thatMovieWithButton];
-    [self.view insertSubview:_andShimmeringView belowSubview:_thatMovieShimmeringView];
-    [_firstActorScrollView addSubview:_firstActorLabel];
-    [_secondActorScrollView addSubview:_secondActorLabel];
-    [_firstActorActionView addSubview:_firstActorActionLabel];
-    [_secondActorActionView addSubview:_secondActorActionLabel];
-    [_firstActorActionView addSubview:_firstActorDeleteLabel];
-    [_secondActorActionView addSubview:_secondActorDeleteLabel];
-    
-    _thatMovieWithButton.alpha = 0.0;
-    [UIView animateWithDuration:2.0
-                          delay:0
-                        options:0
-                     animations:^(void) {
-                         self.thatMovieWithButton.alpha = 1.0;
-                     }
-                     completion:nil];
-
-
-    // Get the base TMDB API URL string
-    [self loadImageConfiguration];
-}
-
 
 - (void)viewDidLayoutSubviews
 {
@@ -266,6 +194,78 @@ float frameH;
     }
     
     
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
+    _statusBarView = [UIView new];
+    _firstActorScrollView = [UIScrollView new];
+    _secondActorScrollView = [UIScrollView new];
+    _firstActorButton = [UIButton new];
+    _secondActorButton = [UIButton new];
+    _thatMovieShimmeringView = [FBShimmeringView new];
+    _andShimmeringView = [FBShimmeringView new];
+    _firstActorLabel = [UILabel new];
+    _secondActorLabel = [UILabel new];
+    _firstActorActionView = [UIView new];
+    _secondActorActionView = [UIView new];
+    _firstActorActionLabel = [UILabel new];
+    _secondActorActionLabel = [UILabel new];
+    _firstActorDeleteLabel = [UILabel new];
+    _secondActorDeleteLabel = [UILabel new];
+    
+    //_curtainView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    _curtainView.contentMode = UIViewContentModeScaleAspectFill;
+    [_curtainView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [_curtainView.image applyVeryDarkCurtainEffect];
+    _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
+    
+    // Buttons
+    [_firstActorButton addTarget:self
+                          action:@selector(buttonPressed:)
+                forControlEvents:UIControlEventTouchUpInside];
+    _firstActorButton.hidden = YES;
+    [_secondActorButton addTarget:self
+                           action:@selector(buttonPressed:)
+                 forControlEvents:UIControlEventTouchUpInside];
+    _secondActorButton.hidden = YES;
+    
+    // Tag the actor buttons so they can be identified when pressed
+    _firstActorButton.tag = 1;
+    _secondActorButton.tag = 2;
+    _thatMovieWithButton.tag = 1;
+    _andButton.tag = 2;
+
+    [self.view insertSubview:_curtainView atIndex:0];
+    [self.view insertSubview:_statusBarView aboveSubview:_curtainView];
+    [self.view addSubview:_firstActorScrollView];
+    [self.view insertSubview:_secondActorScrollView belowSubview:_firstActorScrollView];
+    [_firstActorScrollView addSubview:_firstActorButton];
+    [_secondActorScrollView addSubview:_secondActorButton];
+    [self.view addSubview:_thatMovieShimmeringView];
+    [self.view bringSubviewToFront:_thatMovieWithButton];
+    [self.view insertSubview:_andShimmeringView belowSubview:_thatMovieShimmeringView];
+    [_firstActorScrollView addSubview:_firstActorLabel];
+    [_secondActorScrollView addSubview:_secondActorLabel];
+    [_firstActorActionView addSubview:_firstActorActionLabel];
+    [_secondActorActionView addSubview:_secondActorActionLabel];
+    [_firstActorActionView addSubview:_firstActorDeleteLabel];
+    [_secondActorActionView addSubview:_secondActorDeleteLabel];
+    
+    _thatMovieWithButton.alpha = 0.0;
+    [UIView animateWithDuration:2.0
+                          delay:0
+                        options:0
+                     animations:^(void) {
+                         self.thatMovieWithButton.alpha = 1.0;
+                     }
+                     completion:nil];
+
+
+    // Get the base TMDB API URL string
+    [self loadImageConfiguration];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -781,11 +781,11 @@ float frameH;
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             if (request) {
-//                [UIView transitionWithView:weakCell.imageView
-//                                  duration:0.0f
-//                                   options:UIViewAnimationOptionTransitionCrossDissolve
-//                                animations:^{[weakCell.imageView setImage:image];}
-//                                completion:NULL];
+                [UIView transitionWithView:weakCell.imageView
+                                  duration:0.0f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{[weakCell.imageView setImage:image];}
+                                completion:NULL];
 //                NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
 //                                                                  title:@"Error Fetching Images"
 //                                                                message:@"Could not get actor images from database"
