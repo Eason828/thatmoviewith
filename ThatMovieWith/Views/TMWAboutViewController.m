@@ -62,9 +62,7 @@ int cnt;
 - (void)viewDidLayoutSubviews
 {
     _creditsScrollView.frame = self.view.frame;
-    _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 960);
-    
-    _buildLabel.frame = CGRectMake(0, _creditsScrollView.contentSize.height - 40, self.view.frame.size.width, 20);
+    _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 1162);
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -95,49 +93,6 @@ int cnt;
     
     _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
             majorVersion, minorVersion];
-
-    
-    //[self performSelector:@selector(delayAnimateCreditsWithCount) withObject:nil afterDelay:5.0];
-    
-    [NSTimer scheduledTimerWithTimeInterval:9.0
-                                     target:self
-                                   selector:@selector(delayAnimateCreditsWithCount)
-                                   userInfo:nil
-                                    repeats:NO];
-    
-//    [NSTimer scheduledTimerWithTimeInterval:5.0
-//                                     target:self
-//                                   selector:@selector(labelRequest)
-//                                   userInfo:nil
-//                                    repeats:NO];
-//    
-//    [NSTimer scheduledTimerWithTimeInterval:5.0
-//                                     target:self
-//                                   selector:@selector(labelRequest)
-//                                   userInfo:nil
-//                                    repeats:NO];
-}
-
-- (void)delayAnimateCreditsWithCount
-{
-    [self animateCreditsWithCount:0];
-}
-
-- (void)animateCreditsWithCount:(NSUInteger)count
-{
-    if(count > creditText.count-1) {
-        count = 0;
-    }
-
-    _firstLabel.text = creditText[count];
-    
-    _firstLabel.alpha = 1.0;
-    
-//    [UIView animateWithDuration:0 delay:3.0 options:0 animations:^{
-//        self.firstLabel.alpha = 0.0;
-//    } completion:^(BOOL completion) {
-//        //[self animateCreditsWithCount:count+1];
-//    }];
 }
 
 
