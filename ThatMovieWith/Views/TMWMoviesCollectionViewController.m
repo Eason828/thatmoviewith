@@ -104,7 +104,7 @@ CGFloat cellWidth;
     [self refresh];
 }
 
--(UIStatusBarStyle)preferredStatusBarStyle {
+- (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 

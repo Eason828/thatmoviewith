@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E362CE1BB44647348FF7D152 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B616B934567416C996DB201 /* libPods.a */; };
+		E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E50F833F194EA76900F65728 /* tmdb-logo@2x.png */; };
 		E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */; };
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
@@ -82,6 +83,7 @@
 /* Begin PBXFileReference section */
 		7B616B934567416C996DB201 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3A0F378FCD476DA5B74C48 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		E50F833F194EA76900F65728 /* tmdb-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tmdb-logo@2x.png"; sourceTree = "<group>"; };
 		E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundHiRes.png; sourceTree = "<group>"; };
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E50F833F194EA76900F65728 /* tmdb-logo@2x.png */,
 				E5BD0C44193E80EF00356911 /* red-blur.jpg */,
 				E57B8FC8192F1B5E0086593D /* black.png */,
 				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
@@ -550,6 +553,7 @@
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
 				E57B8FC9192F1B5E0086593D /* black.png in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
+				E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,

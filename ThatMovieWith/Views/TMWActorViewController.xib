@@ -67,6 +67,7 @@
                 <constraint firstItem="3kf-jf-VUh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="uUZ-Ca-YeU"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
         </view>
         <searchDisplayController id="u4Y-t6-osy">
             <connections>

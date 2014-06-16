@@ -12,10 +12,10 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *roleLabel;
 @property (nonatomic, retain) IBOutlet UILabel *peopleLabel;
-@property (nonatomic, retain) IBOutlet UIScrollView *movieScrollView;
+@property (nonatomic, retain) IBOutlet UIScrollView *creditsScrollView;
 
 @property (nonatomic, retain) UILabel *firstLabel;
-@property (nonatomic, retain) IBOutlet UILabel *versionLabel;
+@property (nonatomic, retain) IBOutlet UILabel *buildLabel;
 
 @end
 
@@ -29,6 +29,7 @@ int cnt;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.navigationController.navigationBar.backgroundColor = [UIColor blueColor];
         // Custom initialization
         //self.view.backgroundColor = [UIColor blackColor];
     }
@@ -46,7 +47,24 @@ int cnt;
     _firstLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:30];
     _firstLabel.alpha = 0;
     _firstLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:_firstLabel];
+    
+    
+    //[self.view addSubview:_firstLabel];
+    self.automaticallyAdjustsScrollViewInsets = YES;
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    _creditsScrollView.frame = self.view.frame;
+    _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 960);
+    
+    _buildLabel.frame = CGRectMake(0, _creditsScrollView.contentSize.height - 40, self.view.frame.size.width, 20);
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -75,7 +93,7 @@ int cnt;
     NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
     
-    _versionLabel.text = [NSString stringWithFormat:@"That Movie With, Version %@ (%@)",
+    _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
             majorVersion, minorVersion];
 
     

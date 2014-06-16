@@ -21,6 +21,7 @@
 @property TMWActorViewController *actorViewController;
 @property (nonatomic, copy) UIButton *doneButton;
 @property (nonatomic, copy) UIButton *infoButton;
+@property (nonatomic, copy) UIBarButtonItem *doneBarButtonItem;
 
 @end
 
@@ -41,7 +42,10 @@
                                              selector:@selector(addInfoButton:)
                                                  name:@"addInfoButton"
                                                object:nil];
-    
+    _doneBarButtonItem = [UIBarButtonItem new];
+    _doneBarButtonItem.title = @"Done";
+    _doneBarButtonItem.tintColor = [UIColor blueColor];
+    self.navigationController.navigationBar.topItem.leftBarButtonItem = _doneBarButtonItem;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -72,12 +76,9 @@
     [self addInfoButton:[NSNotification notificationWithName:@"addInfoButton" object:self]];
     
     // Done button to flip back to the main view
-    _doneButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-    _doneButton.showsTouchWhenHighlighted = TRUE;
-    [_doneButton setTintColor:[UIColor blueColor]];
-    _doneButton.tag = 2;
-    [_doneButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [_aboutViewController.view addSubview:_doneButton];
+    _doneBarButtonItem.tag = 2;
+    [_doneBarButtonItem setTarget:self];
+    [_doneBarButtonItem setAction:@selector(buttonPressed:)];
 }
 
 - (void)removeInfoButton:(NSNotification *)notification
@@ -103,8 +104,8 @@
 - (void)viewDidLayoutSubviews
 {
      _infoButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-32);
-    _doneButton.center = CGPointMake(self.view.frame.size.width-32, self.view.frame.size.height-32);
 }
+
 
 -(IBAction)buttonPressed:(id)sender
 {
@@ -113,12 +114,16 @@
         case 1: // Info button in actor view
         {
             [self flipFromViewController:_actorViewController toViewController:_aboutViewController withDirection:UIViewAnimationOptionTransitionFlipFromRight andDelay:0.0];
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            _infoButton.hidden = YES;
+            self.navigationController.navigationBar.topItem.title = @"";
 
             break;
         }
         case 2: //Done button in about view
         {
-            [self flipFromViewController:_aboutViewController toViewController:_actorViewController withDirection:UIViewAnimationOptionTransitionFlipFromRight andDelay:0.0];
+            [self flipFromViewController:_aboutViewController toViewController:_actorViewController withDirection:UIViewAnimationOptionTransitionFlipFromLeft andDelay:0.0];
+            _infoButton.hidden = NO;
             break;
         }
 
@@ -137,7 +142,7 @@
         
         [self transitionFromViewController:fromController
                           toViewController:toController
-                                  duration:1.0
+                                  duration:0.5
                                    options:direction | UIViewAnimationOptionCurveEaseIn
                                 animations:nil
                                 completion:^(BOOL finished) {
