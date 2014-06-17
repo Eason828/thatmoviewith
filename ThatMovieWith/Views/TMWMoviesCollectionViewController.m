@@ -9,6 +9,7 @@
 #import "TMWMoviesCollectionViewController.h"
 #import "ParallaxFlowLayout.h"
 #import "ParallaxPhotoCell.h"
+#import <CWStatusBarNotification.h>
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
@@ -166,6 +167,13 @@ CGFloat cellWidth;
         
         cell.label.text = nil;
         cell.secondLabel.text = nil;
+        
+        CWStatusBarNotification *notification = [CWStatusBarNotification new];
+        notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+        notification.notificationLabelTextColor = [UIColor whiteColor];
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+        
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
@@ -207,7 +215,7 @@ CGFloat cellWidth;
             }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            NSLog(@"Request failed with error: %@", error);
+            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
         }];
 
         CGRect imageViewFrame = cell.imageView.frame;
@@ -259,7 +267,11 @@ CGFloat cellWidth;
     __block NSUInteger i = 1;
     for (TMWActor *actor in [TMWActorContainer actorContainer].allActorObjects) {
         
-        __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+        __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+        notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+        notification.notificationLabelTextColor = [UIColor whiteColor];
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
         
         [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actor.IDNumber} andResponseBlock:^(id response, NSError *error) {
             
@@ -281,7 +293,7 @@ CGFloat cellWidth;
             }
             else {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                [errorAlertView show];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }];
     }
@@ -301,7 +313,11 @@ CGFloat cellWidth;
 - (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
 {
     
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+    notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+    notification.notificationLabelTextColor = [UIColor whiteColor];
+    notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -324,12 +340,11 @@ CGFloat cellWidth;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
             else {
-                [errorAlertView show];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
-            
         }
         else {
-            [errorAlertView show];
+            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
         }
     }];
 }
@@ -343,7 +358,6 @@ CGFloat cellWidth;
     // Cell height must take maximum possible parallax offset into account.
     ParallaxFlowLayout *layout = (ParallaxFlowLayout *)self.collectionViewLayout;
     cellWidth = CGRectGetWidth(self.collectionView.bounds) - layout.sectionInset.left - layout.sectionInset.right;
-//    CGFloat cellHeight = floor(cellWidth / imageWidth * imageHeight) - (2 * layout.maxParallaxOffset);
     return CGSizeMake(cellWidth, TABLE_HEIGHT);
 }
 
