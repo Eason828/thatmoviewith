@@ -170,7 +170,7 @@ width:100%;
 	(min-resolution: 1.5dppx) {
 	/* on retina, use image that's scaled by 2 */
 .signup:after{
-	background: url(../img/iphone_nohand@2x.png) no-repeat center 0; /*Image of iphone 5 in hand */
+	background: url(../img/iphone_nohand_black@2x.png) no-repeat center 0; /*Image of iphone 5 in hand */
 	background-size: 28px 14px;
 }
 }
@@ -180,7 +180,7 @@ width:100%;
 	width: 286px;
 	margin-right: auto;
 	margin-left: auto;
-	background: url(../img/iphone_nohand.png) no-repeat center 0; /*Image of iphone 5 in hand */
+	background: url(../img/iphone_nohand_black.png) no-repeat center 0; /*Image of iphone 5 in hand */
 	background-size: 100%;
 }
 @media (min--moz-device-pixel-ratio: 1.5),
@@ -190,7 +190,7 @@ width:100%;
 	(min-resolution: 1.5dppx) {
 	/* on retina, use image that's scaled by 2 */
 .fader{
-	background: url(../img/iphone_nohand@2x.png) no-repeat center 0; /*Image of iphone 5 in hand */
+	background: url(../img/iphone_nohand_black@2x.png) no-repeat center 0; /*Image of iphone 5 in hand */
 	background-size: 286px 605px;
 }
 }
@@ -206,6 +206,7 @@ width:100%;
 }
 .fader .flex-control-nav{
 	bottom: -60px;
+	display: none;
 }
 .fader:before{
 	content: "";
@@ -369,15 +370,6 @@ width:100%;
 
 
 
-
-
-
-
-
-
-
-
-
 /* ==========================================================================
    Media Queries
    ========================================================================== */
@@ -390,8 +382,8 @@ width:100%;
 	.fader .flexslider1{ top: 89px;; left: 209px; margin-right: 0; margin-left: 0; }
 	.fader{ padding-bottom: 348px; margin: 0; background: none;}
 	.fader:before {
-		background: url(../img/iphone_nohand.png) 0 0; /*Image of iphone 5 in hand */ 
-		background-size: 100%;
+		background: url(../img/iphone_nohand_black.png) 0 0; /*Image of iphone 5 in hand */ 
+		/*background-size: 100%;*/
 		left: 188px; 
 		width: 286px;
 		height: 605px;
@@ -404,7 +396,7 @@ width:100%;
 		(min-resolution: 1.5dppx) {
 		/* on retina, use image that's scaled by 2 */
 	.fader:before {
-		background: url(../img/iphone_nohand@2x.png) 0 0; /*Image of iphone 5 in hand */
+		background: url(../img/iphone_nohand_black@2x.png) 0 0; /*Image of iphone 5 in hand */
 		background-size: 286px 605px; 
 	}
 	}
