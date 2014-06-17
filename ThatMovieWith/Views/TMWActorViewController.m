@@ -9,6 +9,7 @@
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
 #import <FBShimmeringView.h>
+#import <CWStatusBarNotification.h>
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -64,8 +65,6 @@ NSUInteger scrollOffset;
 NSString *moviesSlideString = @"Show\nmovies";
 NSString *deleteSlideString = @"Remove\nActor";
 
-dispatch_queue_t myQueue;
-
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
@@ -97,7 +96,6 @@ float frameH;
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    myQueue = dispatch_queue_create("com.queue.my", DISPATCH_QUEUE_CONCURRENT);
     // Layout only on the first load
     if (!hasSearched) {
         NSLog(@"%f", self.view.frame.size.height);
@@ -398,8 +396,11 @@ float frameH;
 
 - (void)loadImageConfiguration
 {
-    
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+    notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+    notification.notificationLabelTextColor = [UIColor whiteColor];
+    notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
     
     [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbConfiguration withParameters:nil andResponseBlock:^(id response, NSError *error) {
         
@@ -408,7 +409,8 @@ float frameH;
             [TMWActorContainer actorContainer].imagesBaseURLString = [response[@"images"][@"base_url"] stringByAppendingString:[TMWActorContainer actorContainer].backdropSizes[1]];
         }
         else {
-            [errorAlertView show];
+            [notification displayNotificationWithMessage:@"Network Error. Check your network connection."
+                                                  forDuration:3.0f];
         }
     }];
 }
@@ -417,18 +419,22 @@ float frameH;
 {
     NSString *JLTMDBCall = call[@"JLTMDBCall"];
     NSDictionary *parameters = call[@"parameters"];
-    __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
+    
+    __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+    notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+    notification.notificationLabelTextColor = [UIColor whiteColor];
+    notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-            //[[self.searchBarController searchResultsTableView] reloadData];
                 dispatch_async(dispatch_get_main_queue(),^{
                     [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-                    //[[self.searchBarController searchResultsTableView] reloadData];
                 });
         }
         else {
-            [errorAlertView show];
+            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
         }
     }];
 }
@@ -697,21 +703,12 @@ float frameH;
         [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
         
         // Clear any previously queued text changes
-        //[JLTMDbClient sharedAPIInstance].operationQueue.maxConcurrentOperationCount = 1;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        //[JLTMDbClient.operationQueue cancelAllOperations];
-//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((double) 10 * NSEC_PER_MSEC));
-//        dispatch_after(popTime, myQueue, ^(void){
-            [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
+        
+        [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
                        withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
                        afterDelay:delay];
-//        });
     }
-    
-    //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshSearchTableView) object:nil];
-    //[self performSelector:@selector(refreshSearchTableView) withObject:nil afterDelay:1.0];
-    
-    
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -802,9 +799,17 @@ float frameH;
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         __weak TMWCustomActorCellTableViewCell *weakCell = cell;
+        __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+        notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+        notification.notificationLabelTextColor = [UIColor whiteColor];
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            
+            // Hide the network activity icon
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
             if (request) {
                 [UIView transitionWithView:weakCell.imageView
@@ -812,37 +817,19 @@ float frameH;
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{[weakCell.imageView setImage:image];}
                                 completion:NULL];
-//                NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
-//                                                                  title:@"Error Fetching Images"
-//                                                                message:@"Could not get actor images from database"
-//                                                               delegate:nil];
-//                alert.alertDuration = 4.0;
-//                
-//                [alert setTextAlignment:NSTextAlignmentCenter];
-//                
-//                [alert show];
             }
             else {
                 weakCell.imageView.image = image;
             }
-            
-            
-            
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            // There are several ways to init, just look at the class header
-//            NZAlertView *alert = [[NZAlertView alloc] initWithStyle:NZAlertStyleError
-//                                                              title:@"Error Fetching Images"
-//                                                            message:@"Could not get actor images from database"
-//                                                           delegate:nil];
-//            alert.alertDuration = 4.0;
-//            
-//            [alert setTextAlignment:NSTextAlignmentCenter];
-//            
-//            [alert show];
+            
+            [notification displayNotificationWithMessage:@"Network Error. Check your network connection."
+                                             forDuration:3.0f];
+            // Hide the network activity icon
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         }];
         
-        // Hide the network activity icon
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
     }
     else {
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
