@@ -10,9 +10,11 @@
 
 @interface TMWActorSearchResults : NSObject
 
-@property(nonatomic, copy, readonly) NSArray *results;
+@property(nonatomic, copy, readonly) NSMutableArray *results;
 @property(nonatomic, copy, readonly) NSArray *names;
 @property(nonatomic, copy, readonly) NSArray *lowResImageEndingURLs;
+
+- (void)removeAllObjects;
 
 - (instancetype)initActorSearchResultsWithResults:(NSArray *)results;
 

@@ -64,6 +64,8 @@ NSUInteger scrollOffset;
 NSString *moviesSlideString = @"Show\nmovies";
 NSString *deleteSlideString = @"Remove\nActor";
 
+dispatch_queue_t myQueue;
+
 TMWActorSearchResults *searchResults;
 TMWActor *actor1;
 TMWActor *actor2;
@@ -95,7 +97,7 @@ float frameH;
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
+    myQueue = dispatch_queue_create("com.queue.my", DISPATCH_QUEUE_CONCURRENT);
     // Layout only on the first load
     if (!hasSearched) {
         NSLog(@"%f", self.view.frame.size.height);
@@ -255,7 +257,7 @@ float frameH;
     [_secondActorActionView addSubview:_secondActorDeleteLabel];
     
     _thatMovieWithButton.alpha = 0.0;
-    [UIView animateWithDuration:2.0
+    [UIView animateWithDuration:1.0
                           delay:0
                         options:0
                      animations:^(void) {
@@ -416,14 +418,14 @@ float frameH;
     NSString *JLTMDBCall = call[@"JLTMDBCall"];
     NSDictionary *parameters = call[@"parameters"];
     __block UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"") message:NSLocalizedString(@"Please try again later", @"") delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Ok", @""), nil];
-    
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
             //[[self.searchBarController searchResultsTableView] reloadData];
-                //dispatch_async(dispatch_get_main_queue(),^{
+                dispatch_async(dispatch_get_main_queue(),^{
                     [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-                //});
+                    //[[self.searchBarController searchResultsTableView] reloadData];
+                });
         }
         else {
             [errorAlertView show];
@@ -490,6 +492,11 @@ float frameH;
     UIDynamicItemBehavior *itemBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[_firstActorScrollView, _secondActorScrollView]];
     itemBehaviour.elasticity = 0.6f;
     [_animator addBehavior:itemBehaviour];
+}
+
+- (void)refreshSearchTableView
+{
+    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark UIScrollView methods
@@ -677,22 +684,34 @@ float frameH;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-
+    [self.searchBarController.searchResultsTableView setContentOffset:CGPointMake(self.searchBarController.searchResultsTableView.contentOffset.x, 0)
+                             animated:YES];
+    
     // Delays on making the actor API calls
     if([searchText length] != 0) {
         float delay = 0.6;
         
         if (searchText.length > 3) {
-            delay = 0.9;
+            delay = 0.8;
         }
+        [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
         
         // Clear any previously queued text changes
+        //[JLTMDbClient sharedAPIInstance].operationQueue.maxConcurrentOperationCount = 1;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-
-        [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
-                   withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
-                   afterDelay:delay];
+        //[JLTMDbClient.operationQueue cancelAllOperations];
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((double) 10 * NSEC_PER_MSEC));
+//        dispatch_after(popTime, myQueue, ^(void){
+            [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
+                       withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
+                       afterDelay:delay];
+//        });
     }
+    
+    //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshSearchTableView) object:nil];
+    //[self performSelector:@selector(refreshSearchTableView) withObject:nil afterDelay:1.0];
+    
+    
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -701,6 +720,14 @@ float frameH;
     [self.searchDisplayController setActive:NO animated:NO];
     _searchBar.hidden = YES;
     [_blurImageView removeFromSuperview];
+    
+    [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
+    return TRUE;
 }
 
 
@@ -722,7 +749,6 @@ float frameH;
     _searchBar.hidden = YES;
     [_blurImageView removeFromSuperview];
 }
-
 
 #pragma mark UITableView methods
 
@@ -838,6 +864,12 @@ float frameH;
     // Remove an actor if one was chosen
     [self removeActor];
     
+    // Cancel any previous search requests
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+    // Clear the search results
+    [searchResults removeAllObjects];
+    
     if (tappedActor == 1)
     {
         // The second actor is the default selection for being replaced.
@@ -875,6 +907,8 @@ float frameH;
         _andButton.hidden = YES;
         actor2 = chosenActor;
     }
+    
+    if ([TMWActorContainer actorContainer].allActorObjects.count == 2) [self removeInfoButton];
 }
 
 // Set the actor image and all of it's necessary properties

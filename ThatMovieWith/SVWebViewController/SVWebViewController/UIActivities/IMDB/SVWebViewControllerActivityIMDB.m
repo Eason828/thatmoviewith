@@ -19,7 +19,7 @@
 }
 
 - (NSString *)activityTitle {
-	return NSLocalizedStringFromTable(@"Open in IMDB", @"SVWebViewController", nil);
+	return NSLocalizedStringFromTable(@"Open in IMDb", @"SVWebViewController", nil);
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

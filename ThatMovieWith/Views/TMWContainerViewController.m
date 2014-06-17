@@ -91,7 +91,7 @@
 {
     [self.view addSubview:_infoButton];
     _infoButton.alpha = 0.0;
-    [UIView animateWithDuration:2.0
+    [UIView animateWithDuration:1.0
                           delay:0
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                      animations:^(void) {

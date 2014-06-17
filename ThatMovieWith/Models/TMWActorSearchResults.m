@@ -11,10 +11,6 @@
 
 @interface TMWActorSearchResults()
 
-@property(nonatomic, copy) NSArray *results;
-@property(nonatomic, copy) NSArray *names;
-@property(nonatomic, copy) NSArray *lowResImageEndingURLs;
-
 @end
 
 @implementation TMWActorSearchResults
@@ -25,6 +21,11 @@
         self.results = results;
     }
     return self;
+}
+
+- (void)removeAllObjects
+{
+    [_results removeAllObjects];
 }
 
 # pragma mark Getter Methods
@@ -58,7 +59,7 @@
 
 - (void)setResults:(NSArray *)searchResults
 {
-    _results = [self organizeSearchResultsByImageWithArray:searchResults];
+    _results = [self organizeSearchResultsByImageWithArray:searchResults].mutableCopy;
 }
 
 - (NSArray *)organizeSearchResultsByImageWithArray:(NSArray *)results
