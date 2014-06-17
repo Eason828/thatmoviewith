@@ -36,7 +36,6 @@ static TMWActorContainer *actorContainer;
     if (mutableActorContainer) {
         [mutableActorContainer removeObject:actorObject];
     }
-    
 }
 
 - (void)addActorObject:(TMWActor *)actorObject

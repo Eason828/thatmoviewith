@@ -286,6 +286,10 @@ float frameH;
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
+    
+    if (actor2 != nil) {
+        [self removeInfoButton];
+    }
 }
 
 // Captures the current screen and blurs it
@@ -354,6 +358,7 @@ float frameH;
                 [self.firstActorActionView removeFromSuperview];
             }
             [[TMWActorContainer actorContainer] removeActorObject:actor1];
+            actor1 = nil;
             _firstActorButton.hidden = NO;
             [self.view bringSubviewToFront:_firstActorButton];
             [self.view bringSubviewToFront:_firstActorLabel];
@@ -370,6 +375,7 @@ float frameH;
                 [self.secondActorActionView removeFromSuperview];
             }
             [[TMWActorContainer actorContainer] removeActorObject:actor2];
+            actor2 = nil;
             _secondActorButton.hidden = NO;
             [self.view bringSubviewToFront:_secondActorButton];
             [self.view bringSubviewToFront:_secondActorLabel];
