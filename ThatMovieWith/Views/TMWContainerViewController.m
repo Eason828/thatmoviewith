@@ -11,7 +11,6 @@
 #import "TMWAboutViewController.h"
 
 #import "UIColor+customColors.h"
-#import "CALayer+circleLayer.h"
 
 #import <QuartzCore/QuartzCore.h>
 

@@ -7,7 +7,6 @@
 //
 
 #import "UIImage+DrawOnImage.h"
-#import "CALayer+circleLayer.h"
 #import "UIColor+customColors.h"
 
 @implementation UIImage (DrawOnImage)

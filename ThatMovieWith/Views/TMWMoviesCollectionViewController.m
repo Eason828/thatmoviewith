@@ -15,7 +15,6 @@
 #import <JLTMDbClient.h>
 #import "SVWebViewController.h"
 #import "TMWActorContainer.h"
-#import "UIImage+DrawOnImage.h" // Actor's without images
 #import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
 
@@ -93,7 +92,7 @@ CGFloat cellWidth;
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
 
-    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"red-blur" ofType:@"jpg"]];
+    UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"background-blur" ofType:@"jpg"]];
     
     _curtainView = [[UIImageView alloc] initWithImage:productImage];
 
@@ -109,9 +108,10 @@ CGFloat cellWidth;
     return UIStatusBarStyleLightContent;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:YES];
+    [super viewWillAppear:YES];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 #pragma mark - PrivateMethods

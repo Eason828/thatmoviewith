@@ -137,7 +137,7 @@
 
 - (UIImage *)applyPosterEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.5];
+    UIColor *tintColor = [UIColor colorWithWhite:0.11 alpha:0.3];
     return [self applyBlurWithRadius:0.0 tintColor:tintColor saturationDeltaFactor:1.4 maskImage:nil];
 }
 

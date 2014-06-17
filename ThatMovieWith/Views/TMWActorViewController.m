@@ -23,7 +23,6 @@
 #import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
 #import "UIImage+DrawOnImage.h"
-#import "CALayer+circleLayer.h"
 
 @interface TMWActorViewController () <UIScrollViewDelegate>
 
@@ -220,7 +219,6 @@ float frameH;
     _curtainView.contentMode = UIViewContentModeScaleAspectFill;
     [_curtainView setTranslatesAutoresizingMaskIntoConstraints:YES];
     [_curtainView.image applyVeryDarkCurtainEffect];
-    _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
     
     // Buttons
     [_firstActorButton addTarget:self
@@ -284,6 +282,14 @@ float frameH;
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
+    
+    if (actor1 != nil) {
+        _statusBarView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.7];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    }
+    else {
+        _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.0];
+    }
     
     if (actor2 != nil) {
         [self removeInfoButton];
@@ -622,6 +628,10 @@ float frameH;
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) {
             tappedActor = 1;
             [self removeActor];
+            
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.0];
+            
             self.thatMovieWithButton.alpha = 0.0;
             [UIView animateWithDuration:1.0
                                   delay:0
@@ -865,6 +875,8 @@ float frameH;
     
     if (tappedActor == 1)
     {
+        _statusBarView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.7];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
                   withButton:_firstActorButton
