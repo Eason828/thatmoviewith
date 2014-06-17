@@ -14,7 +14,7 @@ The following steps are required to build the That Movie With:
 
 3. Obtain an API key from [TMDB](http://www.themoviedb.org/documentation/api)
 
-4. Save the API key to a file called "TMDB_API_KEY" and drag it to the "api" folder/group in Xcode
+4. Save the API key to a file called "TMDB_API_KEY" and drag it to the "Resources/api/" folder in Xcode
 
 
 
