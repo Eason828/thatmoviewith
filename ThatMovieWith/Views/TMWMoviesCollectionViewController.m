@@ -59,7 +59,7 @@ CGFloat cellWidth;
     [[UINavigationBar appearance] setTitleTextAttributes: fontDict];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
-    
+
     return self;
 }
 
@@ -134,7 +134,14 @@ CGFloat cellWidth;
       withString:(NSString *)string
   inBoundsOfView:(UIView *)view
 {
-    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
+    UIFont *textFont = [UIFont new];
+    if ([string isEqualToString:@"Loading..."]) {
+        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE-18];
+    }
+    else {
+        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
+    }
+    
     
     textView.font = textFont;
     
@@ -187,11 +194,15 @@ CGFloat cellWidth;
         notification.notificationLabelTextColor = [UIColor whiteColor];
         notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
         notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+       
+        
+        NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+        [self setLabel:cell.label withString:@"Loading..." inBoundsOfView:cell.imageView];
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+            
             NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
             
             // Darken the image

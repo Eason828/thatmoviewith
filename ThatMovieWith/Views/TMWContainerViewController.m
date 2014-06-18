@@ -45,6 +45,8 @@
     _doneBarButtonItem.title = @"Done";
     _doneBarButtonItem.tintColor = [UIColor blueColor];
     self.navigationController.navigationBar.topItem.leftBarButtonItem = _doneBarButtonItem;
+    [[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"buttonRoundedDeleteHighlighted"]];
+    [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[UIImage imageNamed:@"buttonRoundedDeleteHighlighted"]];
 }
 
 - (void)viewDidLoad
