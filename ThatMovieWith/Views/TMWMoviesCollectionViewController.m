@@ -34,6 +34,8 @@
 static const NSUInteger TABLE_HEIGHT = 126;
 static const NSUInteger TITLE_FONT_SIZE = 36;
 
+bool selectedMovie;
+
 NSInteger tableViewRows;
 CGFloat cellWidth;
 
@@ -111,7 +113,27 @@ CGFloat cellWidth;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
+    [UIView beginAnimations:@"hideStatusBar" context:nil];
+    [UIView setAnimationDuration:0.0];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [UIView commitAnimations];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    selectedMovie = NO;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (!selectedMovie) {
+        [UIView beginAnimations:@"showStatusBar" context:nil];
+        [UIView setAnimationDuration:0.0];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        [UIView commitAnimations];
+    }
 }
 
 #pragma mark - PrivateMethods
@@ -303,6 +325,7 @@ CGFloat cellWidth;
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    selectedMovie = YES;
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
                               withParameters:@{@"id":[[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]}];

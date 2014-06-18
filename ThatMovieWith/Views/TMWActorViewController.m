@@ -103,9 +103,9 @@ float frameH;
         _statusBarView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, 20);
         
         frameX = self.view.frame.origin.x;
-        frameY = self.view.frame.origin.y+20;
+        frameY = self.view.frame.origin.y;
         frameW = self.view.frame.size.width;
-        frameH = self.view.frame.size.height-20;
+        frameH = self.view.frame.size.height;
         
         _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
         _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
@@ -164,25 +164,25 @@ float frameH;
         _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
         _secondActorActionView.backgroundColor = [UIColor grayColor];
         
-        _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+        _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
         _firstActorActionLabel.text = moviesSlideString;
         _firstActorActionLabel.numberOfLines = 2;
         _firstActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
         _firstActorActionLabel.textAlignment = NSTextAlignmentCenter;
         
-        _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+        _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
         _secondActorActionLabel.text = moviesSlideString;
         _secondActorActionLabel.numberOfLines = 2;
         _secondActorActionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
         _secondActorActionLabel.textAlignment = NSTextAlignmentCenter;
         
-        _firstActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
+        _firstActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
         _firstActorDeleteLabel.text = deleteSlideString;
         _firstActorDeleteLabel.numberOfLines = 2;
         _firstActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
         _firstActorDeleteLabel.textAlignment = NSTextAlignmentCenter;
         
-        _secondActorDeleteLabel.frame = CGRectMake(5, frameY - 20, 100, frameH/2);
+        _secondActorDeleteLabel.frame = CGRectMake(5, frameY, 100, frameH/2);
         _secondActorDeleteLabel.text = deleteSlideString;
         _secondActorDeleteLabel.numberOfLines = 2;
         _secondActorDeleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
@@ -198,7 +198,7 @@ float frameH;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red-blur.jpg"]];
+    _curtainView = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"background-blur" ofType:@"jpg"]]];
     _statusBarView = [UIView new];
     _firstActorScrollView = [UIScrollView new];
     _secondActorScrollView = [UIScrollView new];
@@ -283,16 +283,18 @@ float frameH;
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
     
-    if (actor1 != nil) {
-        _statusBarView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.7];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    }
-    else {
-        _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.0];
-    }
-    
     if (actor2 != nil) {
         [self removeInfoButton];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (actor1 == nil) {
+        [self showStatusBar];
+    }
+    else {
+        [self hideStatusBar];
     }
 }
 
@@ -318,6 +320,22 @@ float frameH;
 }
 
 #pragma mark Private Methods
+
+- (void)hideStatusBar
+{
+    [UIView beginAnimations:@"hideStatusBar" context:nil];
+    [UIView setAnimationDuration:5.0];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [UIView commitAnimations];
+}
+
+- (void)showStatusBar
+{
+    [UIView beginAnimations:@"showStatusBar" context:nil];
+    [UIView setAnimationDuration:3.0];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [UIView commitAnimations];
+}
 
 - (void)removeInfoButton
 {
@@ -401,8 +419,8 @@ float frameH;
         [self.view bringSubviewToFront:_thatMovieShimmeringView];
     }
     else {
-        _thatMovieWithButton.frame = CGRectMake(frameX, frameY - 10, frameW, frameH/2);
-        _thatMovieShimmeringView.frame = CGRectMake(frameX, frameY - 10, frameW, frameH/2);
+        _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
+        _thatMovieShimmeringView.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
     }
 }
 
@@ -576,8 +594,8 @@ float frameH;
 
         }
         else {
-            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
-            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY - 20, 100, frameH/2);
+            _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
+            _secondActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
         }
     }
 }
@@ -629,8 +647,7 @@ float frameH;
             tappedActor = 1;
             [self removeActor];
             
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-            _statusBarView.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.0];
+            [self showStatusBar];
             
             self.thatMovieWithButton.alpha = 0.0;
             [UIView animateWithDuration:1.0
@@ -735,6 +752,7 @@ float frameH;
     [_blurImageView removeFromSuperview];
     
     [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
+    if (actor1 != nil) [self hideStatusBar];
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -745,6 +763,12 @@ float frameH;
 
 
 #pragma mark UISearchDisplayController methods
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [self showStatusBar];
+}
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
 {
@@ -875,8 +899,6 @@ float frameH;
     
     if (tappedActor == 1)
     {
-        _statusBarView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.7];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
         // The second actor is the default selection for being replaced.
         [self configureActor:chosenActor
                   withButton:_firstActorButton
@@ -912,6 +934,7 @@ float frameH;
         _andButton.hidden = YES;
         actor2 = chosenActor;
     }
+    [self hideStatusBar];
     
     if ([TMWActorContainer actorContainer].allActorObjects.count == 2) [self removeInfoButton];
 }

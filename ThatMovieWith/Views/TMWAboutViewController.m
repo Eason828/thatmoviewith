@@ -57,6 +57,10 @@ int cnt;
 - (void)viewWillAppear:(BOOL)animated
 {
     //[self.navigationController setNavigationBarHidden:YES animated:YES];
+        [UIView beginAnimations:@"showStatusBar" context:nil];
+        [UIView setAnimationDuration:0.0];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [UIView commitAnimations];
 }
 
 - (void)viewDidLayoutSubviews
@@ -65,10 +69,17 @@ int cnt;
     _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 1162);
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [UIView beginAnimations:@"showStatusBar" context:nil];
+    [UIView setAnimationDuration:0.0];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [UIView commitAnimations];
+}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
     [self addInfoButton];
-
 }
 
 - (void)addInfoButton
