@@ -30,7 +30,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 100;
     background: #f3f8fc;  /*Adjust Background colour of header */
-    background-image: url(../img/background.jpg);
+    background: url(../img/background.jpg) top center no-repeat;
     background-size: cover;
     color: #525b60;  /* Adjust colour of header text */
 	/*text-shadow: 1px 1px 0 #ffffff;*/
@@ -39,7 +39,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 
 #featureScreen img {
 	height:100%;
-width:100%;
+	width:100%;
 }
 
 /* ==========================================================================
@@ -136,8 +136,22 @@ width:100%;
 	transition: all 300ms ease-in-out;
 }
 .available a:hover{
-	color: #6b7d84; /* Change colour of alt app store links on hover */
+	color: #6b7d84;
 }
+
+.beta{
+color: #ffffff;
+}
+.beta a{
+	color: #ffd700;
+	border-bottom: 1px dotted #ffffff;
+}
+.beta a:hover{
+	color: #ffffff; 
+	border-bottom: 1px dotted #ffd700;
+	background-color: #ffd700;
+}
+
 .ctaColumn input[type="text"]{
 	border-radius: 4px;
 	padding: 0.8em;
@@ -233,24 +247,24 @@ width:100%;
 	background: #5a6c79; /* Change colour of iphone nav dots on hover */
 }
 .fader .flex-control-paging li a.flex-active { 
-	background: #0ca2d9; /* Change colour of iphone nav dots when active */
+	background: #ffd700; /* Change colour of iphone nav dots when active */
 	cursor: default;
 }
 .fader .slides li img{
 	width: 100%;
 }
 .main-container{
-	background: #293034; /* Adjust Background colour of Main Area */
-	color: #bbc7d1; /* Adjust colour of Main Text */
+	background: #ffffff; /* Adjust Background colour of Main Area */
+	color: #aeaeae; /* Adjust colour of Main Text */
 }
 .main { 
 	padding: 40px 0 40px; 
 }
 .main-container h2{
-	color: #f3f8fc;
+	color: #3c444a;
 }
 .main-container h6{
-	color: #3c444a;
+	color: #9e2236;
 	font-size: 6em;
 	margin: 0.5em 0;
 }
@@ -292,10 +306,10 @@ width:100%;
 	cursor: default;
 	}
 .footer-container {
-    background: #363d42;  /* Adjust Background colour of Footer Area */
+    background: #9e2236;  /* Adjust Background colour of Footer Area */
     font-size: 1em;
-    padding-bottom: 100px;
-    padding-top: 40px;
+    /*padding-bottom: 100px;*/
+    /*padding-top: 10px;*/
 }
 
 
@@ -313,7 +327,7 @@ width:100%;
 	height: 19px; /* Adjust Height for Logo if needed */
 	/*background: url(../img/logo_foot.png) no-repeat center 0; /* Change Logo */*/
 	background-size: 100%;
-	margin: 0 auto 40px;
+	margin: 0 auto 10px;
 }
 @media (min--moz-device-pixel-ratio: 1.5),
 	(-o-min-device-pixel-ratio: 3/2),
@@ -346,7 +360,7 @@ width:100%;
 .footer-container a{
 	font-family: "Helvetica Neue", Helvetica, "Source Sans Pro", Arial, "Lucida Grande", sans-serif; 
    	font-weight: 400;
-	color: #aabdcd; /* Change colour of footer links */
+	color: #ffffff; /* Change colour of footer links */
 
 	-webkit-transition: all 300ms ease-in-out;
 	-moz-transition: all 300ms ease-in-out;
@@ -355,10 +369,10 @@ width:100%;
 	transition: all 300ms ease-in-out;
 }
 .footer-container a:hover{
-	color: #fbfdff; /* Change colour of footer links on hover */
+	color: #ffd700; /* Change colour of footer links on hover */
 }
 .footer-container footer {
-	color: #fff; 
+	color: #aeaeae; 
 	padding: 20px 0; 
 }
 
@@ -419,6 +433,7 @@ width:100%;
     .fader:before{ left: 204px; }
     .flexslider2 { margin-bottom: 60px;}
 @media only screen and (min-width: 870px) {
+
 	.header-container h1{
 		/*background: url(../img/logo.png) no-repeat 0 0; /* Logo */*/
 		margin: 0;
