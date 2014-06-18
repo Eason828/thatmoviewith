@@ -31,8 +31,11 @@
 
 @implementation TMWMoviesCollectionViewController
 
-// 3 movies: 168    4 movies: 126
-static const NSUInteger TABLE_HEIGHT = 126;
+// 2 movies: 252    3 movies: 168    4 movies: 126
+static const NSUInteger TABLE_HEIGHT_FOUR = 126;
+static const NSUInteger TABLE_HEIGHT_THREE = 168;
+static const NSUInteger TABLE_HEIGHT_TWO = 252;
+static const NSUInteger TABLE_HEIGHT_ONE = 504;
 static const NSUInteger TITLE_FONT_SIZE = 36;
 
 bool selectedMovie;
@@ -384,7 +387,21 @@ CGFloat cellWidth;
     // Cell height must take maximum possible parallax offset into account.
     ParallaxFlowLayout *layout = (ParallaxFlowLayout *)self.collectionViewLayout;
     cellWidth = CGRectGetWidth(self.collectionView.bounds) - layout.sectionInset.left - layout.sectionInset.right;
-    return CGSizeMake(cellWidth, TABLE_HEIGHT);
+    switch ([TMWActorContainer actorContainer].sameMoviesNames.count) {
+        case 0:
+        case 1:
+            return CGSizeMake(cellWidth, TABLE_HEIGHT_ONE);
+            break;
+        case 2:
+            return CGSizeMake(cellWidth, TABLE_HEIGHT_TWO);
+            break;
+        case 3:
+            return CGSizeMake(cellWidth, TABLE_HEIGHT_THREE);
+            break;
+        default:
+            return CGSizeMake(cellWidth, TABLE_HEIGHT_FOUR);
+            break;
+    }
 }
 
 @end
