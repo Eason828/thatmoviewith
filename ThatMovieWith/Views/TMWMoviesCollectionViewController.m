@@ -204,7 +204,8 @@ CGFloat cellWidth;
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            
+            // Hide the network activity icon
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
             NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
             
@@ -243,7 +244,13 @@ CGFloat cellWidth;
             }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            [notification displayNotificationWithMessage:@"Network Error Loading Movie Poster. Check your network connection." forDuration:3.0f];
+            // Hide the network activity icon
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            // Don't show the error for NSURLErrorDomain -999 because that's just a cancelled image request due to scrolling
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error Loading Movie Poster. Check your network connection." forDuration:3.0f];
+            }
         }];
 
         CGRect imageViewFrame = cell.imageView.frame;
@@ -252,9 +259,6 @@ CGFloat cellWidth;
         // assign the new frame
         cell.imageView.frame = imageViewFrame;
         cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        
-        // Hide the network activity icon
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }
     
     else {

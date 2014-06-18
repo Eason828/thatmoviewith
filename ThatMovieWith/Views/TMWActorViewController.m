@@ -291,6 +291,13 @@ float frameH;
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
     
+        [self.navigationController.navigationBar.backItem.backBarButtonItem setImageInsets:UIEdgeInsetsMake(40, 40, -40, 40)];
+    [self.navigationController.navigationBar setBackIndicatorImage:
+     [UIImage imageNamed:@"arrow"]];
+    [self.navigationController.navigationBar setBackIndicatorTransitionMaskImage:
+     [UIImage imageNamed:@"arrow"]];
+
+    
     if (actor2 != nil) {
         [self removeInfoButton];
     }
