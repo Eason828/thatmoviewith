@@ -11,8 +11,8 @@ html, button, input, select, textarea { color: #222; }
 body { font-size: 1em; line-height: 1.4; }
 
 ::-moz-selection { background: #b3d4fc; text-shadow: none; }
-::selection { background: #b3d4fc; text-shadow: none; }
-.chromeframe { margin: 0.2em 0; background: #ccc; color: #000; padding: 0.2em 0;}
+::selection { background: #ffd700; text-shadow: none; }
+.chromeframe { margin: 0.2em 0; background: #ccc; color: #ffd700; padding: 0.2em 0;}
 hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
 img { vertical-align: middle; }
 a{ text-decoration: none; }
@@ -29,8 +29,8 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 .header-container {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 100;
-    background: #f3f8fc;  /*Adjust Background colour of header */
-    background: url(../img/background.jpg) top center no-repeat;
+    background: #9e2236;  /*Adjust Background colour of header */
+    background: #000000 url(../img/background.jpg) top center no-repeat;
     background-size: cover;
     color: #525b60;  /* Adjust colour of header text */
 	/*text-shadow: 1px 1px 0 #ffffff;*/
@@ -255,13 +255,13 @@ color: #ffffff;
 }
 .main-container{
 	background: #ffffff; /* Adjust Background colour of Main Area */
-	color: #aeaeae; /* Adjust colour of Main Text */
+	color: #3c444a; /* Adjust colour of Main Text */
 }
 .main { 
 	padding: 40px 0 40px; 
 }
 .main-container h2{
-	color: #3c444a;
+	color: #000000;
 }
 .main-container h6{
 	color: #9e2236;
@@ -306,7 +306,7 @@ color: #ffffff;
 	cursor: default;
 	}
 .footer-container {
-    background: #9e2236;  /* Adjust Background colour of Footer Area */
+    background: #9e2236 url(../img/background.jpg) bottom center no-repeat;  /* Adjust Background colour of Footer Area */
     font-size: 1em;
     /*padding-bottom: 100px;*/
     /*padding-top: 10px;*/
@@ -372,7 +372,7 @@ color: #ffffff;
 	color: #ffd700; /* Change colour of footer links on hover */
 }
 .footer-container footer {
-	color: #aeaeae; 
+	color: #bfbfbf; 
 	padding: 20px 0; 
 }
 
