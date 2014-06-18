@@ -431,7 +431,7 @@ float frameH;
             [TMWActorContainer actorContainer].imagesBaseURLString = [response[@"images"][@"base_url"] stringByAppendingString:[TMWActorContainer actorContainer].backdropSizes[1]];
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error. Check your network connection."
+            [notification displayNotificationWithMessage:@"Network Error Loading Image Config. Check your network connection."
                                                   forDuration:3.0f];
         }
     }];
@@ -456,7 +456,7 @@ float frameH;
                 });
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+            [notification displayNotificationWithMessage:@"Network Error Loading Actor Names. Check your network connection." forDuration:3.0f];
         }
     }];
 }
@@ -860,7 +860,7 @@ float frameH;
             }
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            [notification displayNotificationWithMessage:@"Network Error. Check your network connection."
+            [notification displayNotificationWithMessage:@"Network Error Getting Actor Image. Check your network connection."
                                              forDuration:3.0f];
             // Hide the network activity icon
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];

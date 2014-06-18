@@ -243,7 +243,7 @@ CGFloat cellWidth;
             }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+            [notification displayNotificationWithMessage:@"Network Error Loading Movie Poster. Check your network connection." forDuration:3.0f];
         }];
 
         CGRect imageViewFrame = cell.imageView.frame;
@@ -321,7 +321,7 @@ CGFloat cellWidth;
             }
             else {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error Getting Actor Movie Names. Check your network connection." forDuration:3.0f];
             }
         }];
     }
@@ -343,7 +343,7 @@ CGFloat cellWidth;
 {
     
     __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
-    notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+    notification.notificationLabelBackgroundColor = [UIColor goldColor];
     notification.notificationLabelTextColor = [UIColor whiteColor];
     notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
@@ -369,11 +369,11 @@ CGFloat cellWidth;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
             else {
-                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"No IMDb page exists for this movie." forDuration:3.0f];
             }
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+            [notification displayNotificationWithMessage:@"Network Error Getting Each Movie URL. Check your network connection." forDuration:3.0f];
         }
     }];
 }
