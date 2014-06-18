@@ -465,17 +465,22 @@ float frameH;
       withString:(NSString *)string
   inBoundsOfView:(UIView *)view
 {
-    textView.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE];
-    
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     textStyle.lineBreakMode = NSLineBreakByWordWrapping;
     textStyle.alignment = NSTextAlignmentCenter;
-    UIFont *textFont = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE];
+    UIFont *textFont = [UIFont new];
+    if ([string rangeOfString:@"Loading "].location != NSNotFound) {
+        textFont = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE - 18];
+    }
+    else {
+        textFont = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:ACTOR_FONT_SIZE];
+    }
     
     NSDictionary *attributes = @{NSFontAttributeName:textFont, NSParagraphStyleAttributeName: textStyle};
     CGRect bound = [string boundingRectWithSize:CGSizeMake(view.bounds.size.width-20, view.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
     
     textView.numberOfLines = 4;
+    textView.font = textFont;
     textView.bounds = bound;
     textView.text = string;
 }
@@ -952,6 +957,9 @@ float frameH;
         
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:actor.hiResImageURLEnding];
         
+        [self setLabel:label withString:[@"Loading " stringByAppendingString:actor.name] inBoundsOfView:button];
+        label.hidden = NO;
+        
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
         [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
@@ -974,7 +982,6 @@ float frameH;
             
             // Set the image label properties to center it in the cell
             [self setLabel:label withString:actor.name inBoundsOfView:button];
-            label.hidden = NO;
             
             self.firstActorActionView.backgroundColor = [UIColor flatGreenColor];
             self.secondActorActionView.backgroundColor = [UIColor flatGreenColor];

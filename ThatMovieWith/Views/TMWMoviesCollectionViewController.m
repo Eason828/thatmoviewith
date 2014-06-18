@@ -139,7 +139,7 @@ CGFloat cellWidth;
 {
     UIFont *textFont = [UIFont new];
     if ([string isEqualToString:@"Loading..."]) {
-        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE-18];
+        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE - 18];
     }
     else {
         textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
