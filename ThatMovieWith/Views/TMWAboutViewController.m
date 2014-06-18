@@ -59,7 +59,7 @@ int cnt;
     //[self.navigationController setNavigationBarHidden:YES animated:YES];
         [UIView beginAnimations:@"showStatusBar" context:nil];
         [UIView setAnimationDuration:0.0];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        //[[UIApplication sharedApplication] setStatusBarHidden:NO];
         [UIView commitAnimations];
 }
 

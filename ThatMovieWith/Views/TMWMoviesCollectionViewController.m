@@ -7,6 +7,7 @@
 //
 
 #import "TMWMoviesCollectionViewController.h"
+#import "TMWActorViewController.h"
 #import "ParallaxFlowLayout.h"
 #import "ParallaxPhotoCell.h"
 #import <CWStatusBarNotification.h>
@@ -112,7 +113,7 @@ CGFloat cellWidth;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:YES];
+    [super viewWillAppear:animated];
     [UIView beginAnimations:@"hideStatusBar" context:nil];
     [UIView setAnimationDuration:0.0];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -121,19 +122,10 @@ CGFloat cellWidth;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     selectedMovie = NO;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if (!selectedMovie) {
-        [UIView beginAnimations:@"showStatusBar" context:nil];
-        [UIView setAnimationDuration:0.0];
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        [UIView commitAnimations];
-    }
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 #pragma mark - PrivateMethods

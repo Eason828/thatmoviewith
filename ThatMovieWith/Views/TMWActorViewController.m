@@ -253,7 +253,7 @@ float frameH;
     [_secondActorActionView addSubview:_secondActorDeleteLabel];
     
     _thatMovieWithButton.alpha = 0.0;
-    [UIView animateWithDuration:1.0
+    [UIView animateWithDuration:0.5
                           delay:0
                         options:0
                      animations:^(void) {
@@ -266,12 +266,20 @@ float frameH;
     [self loadImageConfiguration];
 }
 
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
-    // Hide the navigation bar
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [super viewWillAppear:animated];
+    if (actor1 != nil) [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
+	// hide navigation bar
+	[self.navigationController setNavigationBarHidden:YES animated:YES];
+     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     // Make the search bar text white
@@ -285,16 +293,6 @@ float frameH;
     
     if (actor2 != nil) {
         [self removeInfoButton];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    if (actor1 == nil) {
-        [self showStatusBar];
-    }
-    else {
-        [self hideStatusBar];
     }
 }
 
@@ -323,18 +321,12 @@ float frameH;
 
 - (void)hideStatusBar
 {
-    [UIView beginAnimations:@"hideStatusBar" context:nil];
-    [UIView setAnimationDuration:5.0];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    [UIView commitAnimations];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 }
 
 - (void)showStatusBar
 {
-    [UIView beginAnimations:@"showStatusBar" context:nil];
-    [UIView setAnimationDuration:3.0];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [UIView commitAnimations];
 }
 
 - (void)removeInfoButton
@@ -650,7 +642,7 @@ float frameH;
             [self showStatusBar];
             
             self.thatMovieWithButton.alpha = 0.0;
-            [UIView animateWithDuration:1.0
+            [UIView animateWithDuration:0.25
                                   delay:0
                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                              animations:^(void) {
@@ -665,7 +657,7 @@ float frameH;
                 self.firstActorScrollView.alpha = 1.0;
                 self.firstActorButton.alpha = 1.0;
                 self.firstActorActionView.hidden = YES;
-                [UIView animateWithDuration:1.0
+                [UIView animateWithDuration:0.25
                                       delay:0
                                     options:0
                                  animations:^(void) {
@@ -683,7 +675,7 @@ float frameH;
             tappedActor = 2;
             [self removeActor];
             self.andButton.alpha = 0.0;
-            [UIView animateWithDuration:1.0
+            [UIView animateWithDuration:0.25
                                   delay:0
                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                              animations:^(void) {
@@ -699,7 +691,7 @@ float frameH;
                  self.secondActorButton.alpha = 1.0;
                  self.secondActorActionView.hidden = YES;
                  [self addInfoButton];
-                 [UIView animateWithDuration:1.0
+                 [UIView animateWithDuration:0.25
                                        delay:0
                                      options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                                   animations:^(void) {

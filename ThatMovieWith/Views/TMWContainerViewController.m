@@ -26,7 +26,7 @@
 
 @implementation TMWContainerViewController
 
-- (void) loadView
+- (void)loadView
 {
     UIView *view = [UIView new];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -45,10 +45,6 @@
     _doneBarButtonItem.title = @"Done";
     _doneBarButtonItem.tintColor = [UIColor blueColor];
     self.navigationController.navigationBar.topItem.leftBarButtonItem = _doneBarButtonItem;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
 }
 
 - (void)viewDidLoad
@@ -116,6 +112,7 @@
             [self.navigationController setNavigationBarHidden:NO animated:YES];
             _infoButton.hidden = YES;
             self.navigationController.navigationBar.topItem.title = @"";
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
             break;
         }
