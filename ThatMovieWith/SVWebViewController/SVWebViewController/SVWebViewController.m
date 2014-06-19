@@ -5,6 +5,7 @@
 //  Copyright 2010 Sam Vermette. All rights reserved.
 //
 //  https://github.com/samvermette/SVWebViewController
+#import <AudioToolbox/AudioServices.h>
 
 #import "SVWebViewControllerActivityChrome.h"
 #import "SVWebViewControllerActivitySafari.h"
@@ -87,6 +88,14 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    // Play sound
+    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When leaving IMDb website view"] ofType:@"m4a"];
+    NSURL *pathURL = [NSURL fileURLWithPath : path];
+    SystemSoundID audioEffect;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
+    AudioServicesPlaySystemSound(audioEffect);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [self.navigationController setToolbarHidden:YES animated:animated];

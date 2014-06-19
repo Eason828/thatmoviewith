@@ -5,6 +5,7 @@
 //  Created by Ole Begemann on 01.05.14.
 //  Copyright (c) 2014 Ole Begemann. All rights reserved.
 //
+#import <AudioToolbox/AudioServices.h>
 
 #import "TMWMoviesCollectionViewController.h"
 #import "TMWActorViewController.h"
@@ -129,6 +130,20 @@ CGFloat cellWidth;
     selectedMovie = NO;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (!selectedMovie) {
+        // Play sound
+        NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+        NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When pressing the back button to go back from the movies to the actors screen"] ofType:@"m4a"];
+        NSURL *pathURL = [NSURL fileURLWithPath : path];
+        SystemSoundID audioEffect;
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
+        AudioServicesPlaySystemSound(audioEffect);
+    }
 }
 
 #pragma mark - PrivateMethods
@@ -335,6 +350,14 @@ CGFloat cellWidth;
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Play sound
+    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When a movie is selected"] ofType:@"m4a"];
+    NSURL *pathURL = [NSURL fileURLWithPath : path];
+    SystemSoundID audioEffect;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
+    AudioServicesPlaySystemSound(audioEffect);
+    
     selectedMovie = YES;
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie

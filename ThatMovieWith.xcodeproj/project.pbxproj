@@ -22,6 +22,10 @@
 		E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCF193156F40086593D /* TMWActorViewController.xib */; };
 		E57E87C219523B4400832995 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = E57E87C019523B4400832995 /* arrow.png */; };
 		E57E87C319523B4400832995 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E57E87C119523B4400832995 /* arrow@2x.png */; };
+		E57E87C8195258D900832995 /* stone_love_horn.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87C7195256BB00832995 /* stone_love_horn.m4a */; };
+		E57E87CB195259E500832995 /* Sounds.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CA195259E500832995 /* Sounds.plist */; };
+		E57E87CD19525EB500832995 /* Tweet.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CC19525E9400832995 /* Tweet.m4a */; };
+		E57E87CF195266DD00832995 /* Navi-Hey-Listen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */; };
 		E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E58EB1F519298C5F00A254C5 /* OpenGLES.framework */; };
 		E58EB1FD1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */; };
 		E58EB1FE1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FC1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m */; };
@@ -100,6 +104,10 @@
 		E57B8FCF193156F40086593D /* TMWActorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWActorViewController.xib; path = Views/TMWActorViewController.xib; sourceTree = "<group>"; };
 		E57E87C019523B4400832995 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		E57E87C119523B4400832995 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
+		E57E87C7195256BB00832995 /* stone_love_horn.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = stone_love_horn.m4a; path = sounds/stone_love_horn.m4a; sourceTree = SOURCE_ROOT; };
+		E57E87CA195259E500832995 /* Sounds.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Sounds.plist; sourceTree = "<group>"; };
+		E57E87CC19525E9400832995 /* Tweet.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Tweet.m4a; path = sounds/Tweet.m4a; sourceTree = SOURCE_ROOT; };
+		E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Navi-Hey-Listen.m4a"; path = "sounds/Navi-Hey-Listen.m4a"; sourceTree = SOURCE_ROOT; };
 		E58EB1F519298C5F00A254C5 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E58EB1F91929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWCustomActorCellTableViewCell.h; path = Customizations/TMWCustomActorCellTableViewCell.h; sourceTree = "<group>"; };
 		E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWCustomActorCellTableViewCell.m; path = Customizations/TMWCustomActorCellTableViewCell.m; sourceTree = "<group>"; };
@@ -294,11 +302,22 @@
 		E571EA481901D90000CB3B31 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E57E87C6195256A400832995 /* sounds */,
 				E539DCFA1900CD6E0027661C /* api */,
 				E5994D0318FDE85100A5B79F /* Images.xcassets */,
 				E539DC67190080F20027661C /* images */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		E57E87C6195256A400832995 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */,
+				E57E87CC19525E9400832995 /* Tweet.m4a */,
+				E57E87C7195256BB00832995 /* stone_love_horn.m4a */,
+			);
+			name = sounds;
 			sourceTree = "<group>";
 		};
 		E58EB1F71929CA7300A254C5 /* ParallaxMoviesView */ = {
@@ -370,6 +389,7 @@
 		E5994CF818FDE85100A5B79F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E57E87CA195259E500832995 /* Sounds.plist */,
 				E5994CF918FDE85100A5B79F /* ThatMovieWith-Info.plist */,
 				E5994CFA18FDE85100A5B79F /* InfoPlist.strings */,
 				E5994CFD18FDE85100A5B79F /* main.m */,
@@ -545,6 +565,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E57E87CD19525EB500832995 /* Tweet.m4a in Resources */,
+				E57E87C8195258D900832995 /* stone_love_horn.m4a in Resources */,
 				E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */,
 				E5E3FB2F195103FC00D8935F /* background-blur.jpg in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
@@ -557,10 +579,12 @@
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
+				E57E87CF195266DD00832995 /* Navi-Hey-Listen.m4a in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
 				E539DCF91900CD640027661C /* Clear.png in Resources */,
 				E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
+				E57E87CB195259E500832995 /* Sounds.plist in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
 				E5994CFC18FDE85100A5B79F /* InfoPlist.strings in Resources */,
 				E57E87C219523B4400832995 /* arrow.png in Resources */,
