@@ -12,9 +12,9 @@
 
 #import "UIColor+customColors.h"
 
-#import <QuartzCore/QuartzCore.h>
+@import AVFoundation;
 
-@interface TMWContainerViewController ()
+@interface TMWContainerViewController () <AVAudioPlayerDelegate>
 
 @property TMWAboutViewController *aboutViewController;
 @property TMWActorViewController *actorViewController;
@@ -22,6 +22,7 @@
 @property (nonatomic, copy) UIButton *infoButton;
 @property (nonatomic, copy) UIBarButtonItem *doneBarButtonItem;
 @property (nonatomic, copy) UIBarButtonItem *soundButtonItem;
+@property (strong, nonatomic, getter=theBackgroundPlayer) AVAudioPlayer *backgroundPlayer;
 
 @end
 
@@ -135,12 +136,26 @@
             self.navigationController.navigationBar.topItem.title = @"";
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+                
+                AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+                if (![audioSession isOtherAudioPlaying]) {
+                    NSDictionary *soundDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+                    NSString *soundFilePath  = [[NSBundle mainBundle] pathForResource:soundDictionary[@"Credits Background Music"] ofType:@"m4a"];
+                    NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+                    _backgroundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+                    _backgroundPlayer.numberOfLoops = -1; //infinite
+                    [_backgroundPlayer play];
+                }
+            }
             break;
         }
         case 2: //Done button in about view
         {
             [self flipFromViewController:_aboutViewController toViewController:_actorViewController withDirection:UIViewAnimationOptionTransitionFlipFromLeft andDelay:0.0];
             _infoButton.hidden = NO;
+            [_backgroundPlayer stop];
+            _backgroundPlayer.currentTime = 0;
             break;
         }
         case 3:
@@ -150,12 +165,15 @@
                 [self.view setNeedsDisplay];
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"SoundsEnabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                [_backgroundPlayer stop];
+                _backgroundPlayer.currentTime = 0;
             }
             else {
                 _soundButtonItem.image = [UIImage imageNamed:@"audio-mute"];
                 [self.view setNeedsDisplay];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"SoundsEnabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                [_backgroundPlayer play];
             }
         }
 

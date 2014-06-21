@@ -276,7 +276,7 @@ float frameH;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (actor1 != nil) [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    (actor1 != nil) ? [self hideStatusBar] : [self showStatusBar];
     
 	// hide navigation bar
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
@@ -293,7 +293,7 @@ float frameH;
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName, [UIColor goldColor], NSForegroundColorAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
     
-        [self.navigationController.navigationBar.backItem.backBarButtonItem setImageInsets:UIEdgeInsetsMake(40, 40, -40, 40)];
+    [self.navigationController.navigationBar.backItem.backBarButtonItem setImageInsets:UIEdgeInsetsMake(40, 40, -40, 40)];
     [self.navigationController.navigationBar setBackIndicatorImage:
      [UIImage imageNamed:@"arrow"]];
     [self.navigationController.navigationBar setBackIndicatorTransitionMaskImage:

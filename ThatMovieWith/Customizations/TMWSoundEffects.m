@@ -35,8 +35,8 @@ static TMWSoundEffects *soundEffects;
 {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
         // Play sound
-        NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-        NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[sound] ofType:@"m4a"];
+        NSDictionary *soundDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+        NSString *path  = [[NSBundle mainBundle] pathForResource:soundDictionary[sound] ofType:@"m4a"];
         NSURL *pathURL = [NSURL fileURLWithPath : path];
         SystemSoundID audioEffect;
         AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);

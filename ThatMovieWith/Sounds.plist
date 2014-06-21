@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Credits Background Music</key>
+	<string>stone_love_horn</string>
 	<key>When tapping to add an actor</key>
 	<string>Navi-Hey-Listen</string>
 	<key>When cancel button is clicked in actor search</key>

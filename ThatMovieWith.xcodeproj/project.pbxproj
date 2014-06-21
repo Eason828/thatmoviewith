@@ -152,6 +152,10 @@
 		E5A1730219562D56006A125E /* TMWSoundEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWSoundEffects.h; path = Customizations/TMWSoundEffects.h; sourceTree = "<group>"; };
 		E5A1730319562D56006A125E /* TMWSoundEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWSoundEffects.m; path = Customizations/TMWSoundEffects.m; sourceTree = "<group>"; };
 		E5A1730719563907006A125E /* DefaultPreferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
+		E5A1730D19564856006A125E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		E5A1730F19564969006A125E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		E5A1731019564969006A125E /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		E5A1731119564969006A125E /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		E5BB14E6192589A500B7A738 /* TMWContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWContainerViewController.h; path = Views/TMWContainerViewController.h; sourceTree = "<group>"; };
 		E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWContainerViewController.m; path = Views/TMWContainerViewController.m; sourceTree = "<group>"; };
 		E5BB14E8192589A500B7A738 /* TMWAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAboutViewController.h; path = Views/TMWAboutViewController.h; sourceTree = "<group>"; };
@@ -377,6 +381,10 @@
 		E5994CF018FDE85100A5B79F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E5A1730F19564969006A125E /* AudioToolbox.framework */,
+				E5A1731019564969006A125E /* AudioUnit.framework */,
+				E5A1731119564969006A125E /* CoreAudio.framework */,
+				E5A1730D19564856006A125E /* AVFoundation.framework */,
 				E58EB1F519298C5F00A254C5 /* OpenGLES.framework */,
 				E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */,
 				E5994CF118FDE85100A5B79F /* Foundation.framework */,
