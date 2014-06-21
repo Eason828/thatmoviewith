@@ -5,12 +5,12 @@
 //  Created by Ole Begemann on 01.05.14.
 //  Copyright (c) 2014 Ole Begemann. All rights reserved.
 //
-#import <AudioToolbox/AudioServices.h>
 
 #import "TMWMoviesCollectionViewController.h"
 #import "TMWActorViewController.h"
 #import "ParallaxFlowLayout.h"
 #import "ParallaxPhotoCell.h"
+#import "TMWSoundEffects.h"
 #import <CWStatusBarNotification.h>
 
 #import <UIImageView+AFNetworking.h>
@@ -23,7 +23,7 @@
 @interface TMWMoviesCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, copy) NSArray *photos;
-@property (nonatomic, copy) UIImageView *curtainView;
+@property (nonatomic, copy) UIImageView *backgroundView;
 @property (nonatomic, strong) UIView *noResultsView;
 @property (nonatomic, strong) UILabel *noResultsLabel;
 
@@ -57,12 +57,10 @@ CGFloat cellWidth;
         return nil;
     }
     
-    self.title = @"Movies";
+    self.title = @"Screendhots";
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName,nil];
+                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:22.0], NSFontAttributeName,nil];
     [[UINavigationBar appearance] setTitleTextAttributes: fontDict];
-    
-    [[UIBarButtonItem appearance] setTitleTextAttributes:fontDict forState:UIControlStateNormal];
 
     return self;
 }
@@ -81,12 +79,18 @@ CGFloat cellWidth;
     [self.view addSubview:_noResultsView];
     
     _noResultsLabel = [UILabel new];
-    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
+    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 30, self.view.frame.origin.y, self.view.frame.size.width - 60, self.view.frame.size.height);
     _noResultsLabel.textAlignment = NSTextAlignmentCenter;
     _noResultsLabel.textColor = [UIColor whiteColor];
     _noResultsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _noResultsLabel.numberOfLines = 0;
-    _noResultsLabel.text = @"No Movies";
+    
+    _noResultsLabel.text = @"No movies";
+    
+    if ([[TMWActorContainer actorContainer].actorNames count] > 1) {
+        _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@ and %@", [TMWActorContainer actorContainer].actorNames[0], [TMWActorContainer actorContainer].actorNames[1]];
+    }
+
     [_noResultsView addSubview:_noResultsLabel];
     
     // Calls perferredStatusBarStyle
@@ -98,12 +102,12 @@ CGFloat cellWidth;
     // Special attribute set for title text color
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
-
+                                                                                           
     UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"background-blur" ofType:@"jpg"]];
     
-    _curtainView = [[UIImageView alloc] initWithImage:productImage];
+    _backgroundView = [[UIImageView alloc] initWithImage:productImage];
 
-    self.collectionView.backgroundView = _curtainView;
+    self.collectionView.backgroundView = _backgroundView;
     
     tableViewRows = 0;
     
@@ -136,13 +140,9 @@ CGFloat cellWidth;
 {
     [super viewWillDisappear:animated];
     if (!selectedMovie) {
+        
         // Play sound
-        NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-        NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When pressing the back button to go back from the movies to the actors screen"] ofType:@"m4a"];
-        NSURL *pathURL = [NSURL fileURLWithPath : path];
-        SystemSoundID audioEffect;
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-        AudioServicesPlaySystemSound(audioEffect);
+        [[TMWSoundEffects soundEffects] playSound:@"When pressing the back button to go back from the movies to the actors screen"];
     }
 }
 
@@ -351,12 +351,7 @@ CGFloat cellWidth;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // Play sound
-    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When a movie is selected"] ofType:@"m4a"];
-    NSURL *pathURL = [NSURL fileURLWithPath : path];
-    SystemSoundID audioEffect;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-    AudioServicesPlaySystemSound(audioEffect);
+    [[TMWSoundEffects soundEffects] playSound:@"When a movie is selected"];
     
     selectedMovie = YES;
     // Get the information about the selected movie

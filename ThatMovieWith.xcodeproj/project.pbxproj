@@ -46,6 +46,12 @@
 		E5994D0D18FDE85100A5B79F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5994CF518FDE85100A5B79F /* UIKit.framework */; };
 		E5994D1518FDE85100A5B79F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E5994D1318FDE85100A5B79F /* InfoPlist.strings */; };
 		E5994D1718FDE85100A5B79F /* ThatMovieWithTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */; };
+		E5A172F01956275D006A125E /* audio-mute.png in Resources */ = {isa = PBXBuildFile; fileRef = E5A172EC1956275D006A125E /* audio-mute.png */; };
+		E5A172F11956275D006A125E /* audio-mute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5A172ED1956275D006A125E /* audio-mute@2x.png */; };
+		E5A1730019562AA1006A125E /* audio-high.png in Resources */ = {isa = PBXBuildFile; fileRef = E5A172FE19562AA1006A125E /* audio-high.png */; };
+		E5A1730119562AA1006A125E /* audio-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5A172FF19562AA1006A125E /* audio-high@2x.png */; };
+		E5A1730419562D56006A125E /* TMWSoundEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E5A1730319562D56006A125E /* TMWSoundEffects.m */; };
+		E5A1730819563907006A125E /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5A1730719563907006A125E /* DefaultPreferences.plist */; };
 		E5BB14F0192589A500B7A738 /* TMWContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */; };
 		E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E9192589A500B7A738 /* TMWAboutViewController.m */; };
 		E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */; };
@@ -139,6 +145,13 @@
 		E5994D1218FDE85100A5B79F /* ThatMovieWithTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThatMovieWithTests-Info.plist"; sourceTree = "<group>"; };
 		E5994D1418FDE85100A5B79F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5994D1618FDE85100A5B79F /* ThatMovieWithTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThatMovieWithTests.m; sourceTree = "<group>"; };
+		E5A172EC1956275D006A125E /* audio-mute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-mute.png"; sourceTree = "<group>"; };
+		E5A172ED1956275D006A125E /* audio-mute@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-mute@2x.png"; sourceTree = "<group>"; };
+		E5A172FE19562AA1006A125E /* audio-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-high.png"; sourceTree = "<group>"; };
+		E5A172FF19562AA1006A125E /* audio-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio-high@2x.png"; sourceTree = "<group>"; };
+		E5A1730219562D56006A125E /* TMWSoundEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWSoundEffects.h; path = Customizations/TMWSoundEffects.h; sourceTree = "<group>"; };
+		E5A1730319562D56006A125E /* TMWSoundEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWSoundEffects.m; path = Customizations/TMWSoundEffects.m; sourceTree = "<group>"; };
+		E5A1730719563907006A125E /* DefaultPreferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
 		E5BB14E6192589A500B7A738 /* TMWContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWContainerViewController.h; path = Views/TMWContainerViewController.h; sourceTree = "<group>"; };
 		E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWContainerViewController.m; path = Views/TMWContainerViewController.m; sourceTree = "<group>"; };
 		E5BB14E8192589A500B7A738 /* TMWAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAboutViewController.h; path = Views/TMWAboutViewController.h; sourceTree = "<group>"; };
@@ -211,6 +224,10 @@
 		E539DC67190080F20027661C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E5A172FE19562AA1006A125E /* audio-high.png */,
+				E5A172FF19562AA1006A125E /* audio-high@2x.png */,
+				E5A172EC1956275D006A125E /* audio-mute.png */,
+				E5A172ED1956275D006A125E /* audio-mute@2x.png */,
 				E57E87C019523B4400832995 /* arrow.png */,
 				E57E87C119523B4400832995 /* arrow@2x.png */,
 				E5E3FB2E195103FC00D8935F /* background-blur.jpg */,
@@ -287,6 +304,8 @@
 		E569FF381902F0B6002928AF /* Customizations */ = {
 			isa = PBXGroup;
 			children = (
+				E5A1730219562D56006A125E /* TMWSoundEffects.h */,
+				E5A1730319562D56006A125E /* TMWSoundEffects.m */,
 				E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */,
 				E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */,
 				E58EB1FF1929CF0B00A254C5 /* UIImage+ImageEffects.h */,
@@ -394,6 +413,7 @@
 				E5994CFA18FDE85100A5B79F /* InfoPlist.strings */,
 				E5994CFD18FDE85100A5B79F /* main.m */,
 				E5994CFF18FDE85100A5B79F /* ThatMovieWith-Prefix.pch */,
+				E5A1730719563907006A125E /* DefaultPreferences.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -570,11 +590,14 @@
 				E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */,
 				E5E3FB2F195103FC00D8935F /* background-blur.jpg in Resources */,
 				E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */,
+				E5A1730819563907006A125E /* DefaultPreferences.plist in Resources */,
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,
 				E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */,
 				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
+				E5A172F11956275D006A125E /* audio-mute@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
+				E5A1730119562AA1006A125E /* audio-high@2x.png in Resources */,
 				E57B8FC9192F1B5E0086593D /* black.png in Resources */,
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */,
@@ -594,8 +617,10 @@
 				E5C1DF0B19175F640041E31D /* SVWebViewControllerActivityIMDB@2x.png in Resources */,
 				E5C1DEFE19175E900041E31D /* SVWebViewController.bundle in Resources */,
 				E5994D0418FDE85100A5B79F /* Images.xcassets in Resources */,
+				E5A1730019562AA1006A125E /* audio-high.png in Resources */,
 				E5C1DF0819175E900041E31D /* SVWebViewControllerActivitySafari@2x.png in Resources */,
 				E57E87C319523B4400832995 /* arrow@2x.png in Resources */,
+				E5A172F01956275D006A125E /* audio-mute.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,6 +703,7 @@
 				E58EB20D1929D00600A254C5 /* TMWMoviesCollectionViewController.m in Sources */,
 				E57B8FD0193156F40086593D /* TMWActorViewController.m in Sources */,
 				E58EB2081929CFFD00A254C5 /* ParallaxFlowLayout.m in Sources */,
+				E5A1730419562D56006A125E /* TMWSoundEffects.m in Sources */,
 				E58EB2011929CF0B00A254C5 /* UIImage+ImageEffects.m in Sources */,
 				E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */,
 				E5994CFE18FDE85100A5B79F /* main.m in Sources */,

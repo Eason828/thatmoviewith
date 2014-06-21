@@ -11,6 +11,7 @@
 #import "SVWebViewControllerActivitySafari.h"
 #import "SVWebViewControllerActivityIMDB.h"
 #import "SVWebViewController.h"
+#import "TMWSoundEffects.h"
 
 @interface SVWebViewController () <UIWebViewDelegate>
 
@@ -90,12 +91,7 @@
     [super viewWillDisappear:animated];
     
     // Play sound
-    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When leaving IMDb website view"] ofType:@"m4a"];
-    NSURL *pathURL = [NSURL fileURLWithPath : path];
-    SystemSoundID audioEffect;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-    AudioServicesPlaySystemSound(audioEffect);
+    [[TMWSoundEffects soundEffects] playSound:@"When leaving IMDb website view"];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [self.navigationController setToolbarHidden:YES animated:animated];

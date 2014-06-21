@@ -14,6 +14,7 @@
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
+#import "TMWSoundEffects.h"
 #import "TMWActorContainer.h"
 #import "TMWContainerViewController.h"
 #import "TMWActorSearchResults.h"
@@ -62,7 +63,7 @@ static const NSUInteger TABLE_HEIGHT = 66;
 static const NSUInteger ACTOR_FONT_SIZE = 42;
 NSUInteger scrollOffset;
 
-NSString *moviesSlideString = @"Show\nmovies";
+NSString *moviesSlideString = @"Show\nMovies";
 NSString *deleteSlideString = @"Remove\nActor";
 
 TMWActorSearchResults *searchResults;
@@ -389,6 +390,7 @@ float frameH;
             _firstActorActionView.hidden = YES;
             _thatMovieWithButton.hidden = NO;
             _thatMovieShimmeringView.hidden = NO;
+            
             break;
         }
         case 2:
@@ -579,7 +581,7 @@ float frameH;
             _firstActorActionView.hidden = NO;
             _secondActorActionView.hidden = NO;
             _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, _firstActorScrollView.frame.size.height/2, 100, _firstActorScrollView.frame.size.height);
-            _firstActorActionLabel.text = @"Common movies";
+            _firstActorActionLabel.text = @"Common Movies";
             
             // Rearrange all the subviews again
             [self.view bringSubviewToFront:_secondActorActionView];
@@ -603,22 +605,12 @@ float frameH;
     // Common movies sound
     if (scrollView.contentOffset.x > scrollOffset - 20 && pastSoundThreshold == NO) {
         pastSoundThreshold = YES;
-        NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-        NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When swipe transition to movies screen begins"] ofType:@"m4a"];
-        NSURL *pathURL = [NSURL fileURLWithPath : path];
-        SystemSoundID audioEffect;
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-        AudioServicesPlaySystemSound(audioEffect);
+        [[TMWSoundEffects soundEffects] playSound:@"When swipe transition to movies screen begins"];
     }
     // Delete sound
     else if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20) && pastSoundThreshold == NO) {
         pastSoundThreshold = YES;
-        NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-        NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When swipe transition to delete actor begins"] ofType:@"m4a"];
-        NSURL *pathURL = [NSURL fileURLWithPath : path];
-        SystemSoundID audioEffect;
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-        AudioServicesPlaySystemSound(audioEffect);
+        [[TMWSoundEffects soundEffects] playSound:@"When swipe transition to delete actor begins"];
     }
     else if (!((-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) || (scrollView.contentOffset.x > scrollOffset - 20))) {
         pastSoundThreshold = NO;
@@ -661,12 +653,7 @@ float frameH;
         if (scrollView.contentOffset.x > scrollOffset - 20) {
             
             // Play transition sound
-            NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-            NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"During transition to movies screen"] ofType:@"m4a"];
-            NSURL *pathURL = [NSURL fileURLWithPath : path];
-            SystemSoundID audioEffect;
-            AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-            AudioServicesPlaySystemSound(audioEffect);
+            [[TMWSoundEffects soundEffects] playSound:@"During transition to movies screen"];
             
             // Show the Movies View
             TMWMoviesCollectionViewController *moviesViewController = [[TMWMoviesCollectionViewController alloc] init];
@@ -679,7 +666,7 @@ float frameH;
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) {
             tappedActor = 1;
             [self removeActor];
-            [self playDeleteActorSound];
+            [[TMWSoundEffects soundEffects] playSound:@"During deletion of actor"];
             [self showStatusBar];
             
             self.thatMovieWithButton.alpha = 0.0;
@@ -715,7 +702,7 @@ float frameH;
         if (-1 * scrollView.contentOffset.x > abs((int)scrollOffset - 20)) {
             tappedActor = 2;
             [self removeActor];
-            [self playDeleteActorSound];
+            [[TMWSoundEffects soundEffects] playSound:@"During deletion of actor"];
             self.andButton.alpha = 0.0;
             [UIView animateWithDuration:0.25
                                   delay:0
@@ -745,16 +732,6 @@ float frameH;
             [self.view bringSubviewToFront:_andButton];
         }
     }
-}
-
-- (void)playDeleteActorSound
-{
-    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"During deletion of actor"] ofType:@"m4a"];
-    NSURL *pathURL = [NSURL fileURLWithPath : path];
-    SystemSoundID audioEffect;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-    AudioServicesPlaySystemSound(audioEffect);
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -799,13 +776,7 @@ float frameH;
     if (actor1 != nil) [self hideStatusBar];
     
     // Play sound
-    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When cancel button is clicked in actor search"] ofType:@"m4a"];
-    NSURL *pathURL = [NSURL fileURLWithPath : path];
-    SystemSoundID audioEffect;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-    AudioServicesPlaySystemSound(audioEffect);
-    
+    [[TMWSoundEffects soundEffects] playSound:@"When cancel button is clicked in actor search"];
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -1051,12 +1022,7 @@ float frameH;
             self.pushBehavior.active = YES;
             
             // Play sound
-            NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-            NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When actor is added and bounce occurs"] ofType:@"m4a"];
-            NSURL *pathURL = [NSURL fileURLWithPath : path];
-            SystemSoundID audioEffect;
-            AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-            AudioServicesPlaySystemSound(audioEffect);
+            [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"Failed with error: %@", error);
@@ -1131,12 +1097,7 @@ float frameH;
     UIButton *button = (UIButton *)sender;
     
     // Play sound
-    NSDictionary *mainDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-    NSString *path  = [[NSBundle mainBundle] pathForResource:mainDictionary[@"When tapping to add an actor"] ofType:@"m4a"];
-    NSURL *pathURL = [NSURL fileURLWithPath : path];
-    SystemSoundID audioEffect;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef) pathURL, &audioEffect);
-    AudioServicesPlaySystemSound(audioEffect);
+    [[TMWSoundEffects soundEffects] playSound:@"When tapping to add an actor"];
     
     switch ([button tag]) {
         case 1: // First actor button

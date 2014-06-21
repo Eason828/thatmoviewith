@@ -21,6 +21,7 @@
 @property (nonatomic, copy) UIButton *doneButton;
 @property (nonatomic, copy) UIButton *infoButton;
 @property (nonatomic, copy) UIBarButtonItem *doneBarButtonItem;
+@property (nonatomic, copy) UIBarButtonItem *soundButtonItem;
 
 @end
 
@@ -43,8 +44,19 @@
                                                object:nil];
     _doneBarButtonItem = [UIBarButtonItem new];
     _doneBarButtonItem.title = @"Done";
-    _doneBarButtonItem.tintColor = [UIColor blueColor];
+    _doneBarButtonItem.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.topItem.leftBarButtonItem = _doneBarButtonItem;
+    
+    _soundButtonItem = [UIBarButtonItem new];
+    self.navigationController.navigationBar.topItem.rightBarButtonItem = _soundButtonItem;
+    _soundButtonItem.tintColor = [UIColor goldColor];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+        _soundButtonItem.image = [UIImage imageNamed:@"audio-mute"];
+    }
+    else {
+        _soundButtonItem.image = [UIImage imageNamed:@"audio-high"];
+    }
+    
     [[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"buttonRoundedDeleteHighlighted"]];
     [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[UIImage imageNamed:@"buttonRoundedDeleteHighlighted"]];
 }
@@ -69,13 +81,18 @@
     [_infoButton setTintColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5]];
     _infoButton.tag = 1;
     [_infoButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //[_actorViewController.view addSubview:_infoButton];
+    [_actorViewController.view addSubview:_infoButton];
     [self addInfoButton:[NSNotification notificationWithName:@"addInfoButton" object:self]];
     
     // Done button to flip back to the main view
     _doneBarButtonItem.tag = 2;
     [_doneBarButtonItem setTarget:self];
     [_doneBarButtonItem setAction:@selector(buttonPressed:)];
+    
+    // For toggling the sounds
+    _soundButtonItem.tag = 3;
+    [_soundButtonItem setTarget:self];
+    [_soundButtonItem setAction:@selector(buttonPressed:)];
 }
 
 - (void)removeInfoButton:(NSNotification *)notification
@@ -86,7 +103,7 @@
 
 - (void)addInfoButton:(NSNotification *)notification
 {
-    //[self.view addSubview:_infoButton];
+    [self.view addSubview:_infoButton];
     _infoButton.alpha = 0.0;
     [UIView animateWithDuration:1.0
                           delay:0
@@ -95,6 +112,8 @@
                          self.infoButton.alpha = 0.75;
                      }
                      completion:nil];
+    [self.view bringSubviewToFront:_infoButton];
+    [self.view setNeedsLayout];
 }
 
 // This is called after autolayout has set the views
@@ -123,6 +142,21 @@
             [self flipFromViewController:_aboutViewController toViewController:_actorViewController withDirection:UIViewAnimationOptionTransitionFlipFromLeft andDelay:0.0];
             _infoButton.hidden = NO;
             break;
+        }
+        case 3:
+        {
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+                _soundButtonItem.image = [UIImage imageNamed:@"audio-high"];
+                [self.view setNeedsDisplay];
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"SoundsEnabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            else {
+                _soundButtonItem.image = [UIImage imageNamed:@"audio-mute"];
+                [self.view setNeedsDisplay];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"SoundsEnabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
         }
 
     }

@@ -11,6 +11,7 @@
 @interface TMWActorContainer : TMWActor
 
 @property(nonatomic, copy, readonly) NSArray *allActorObjects;
+@property(nonatomic, copy, readonly) NSArray *actorNames;
 @property(nonatomic, copy, readonly) NSArray *sameMovies;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesNames;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesPosterUrlEndings;

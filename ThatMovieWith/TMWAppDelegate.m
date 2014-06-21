@@ -18,6 +18,19 @@
 
 @implementation TMWAppDelegate
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        // Get the default preferences from DefaultPreferences.plist
+        NSURL *defaultPrefsFile = [[NSBundle mainBundle] URLForResource:@"DefaultPreferences" withExtension:@"plist"];
+        NSDictionary *defaultPrefs = [NSDictionary dictionaryWithContentsOfURL:defaultPrefsFile];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPrefs];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    return self;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

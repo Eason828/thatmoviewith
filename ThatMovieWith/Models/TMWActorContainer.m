@@ -60,6 +60,17 @@ static TMWActorContainer *actorContainer;
     return [NSArray arrayWithArray:mutableActorContainer];
 }
 
+- (NSArray *)actorNames
+{
+    NSMutableArray *mutableActorNames = [[NSMutableArray alloc] init];
+    for (TMWActor *actor in mutableActorContainer) {
+        if (actor.name) {
+            [mutableActorNames addObject:actor.name];
+        }
+    }
+    return mutableActorNames;
+}
+
 - (NSArray *)sameMovies
 {
     NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
@@ -181,11 +192,6 @@ static TMWActorContainer *actorContainer;
         }
     }
     return sameMoviesReleaseDatesArray;
-}
-
-- (NSArray *)sameMoviesRottenTomatoes
-{
-    return 0;
 }
 
 @end
