@@ -77,6 +77,7 @@
 		E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */; };
 		E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */; };
 		E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */; };
+		E5D0F12D1956982C0078BD8D /* TMWAutoScroll.m in Sources */ = {isa = PBXBuildFile; fileRef = E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */; };
 		E5E3FB2D1950F7FA00D8935F /* UIImage+DrawOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */; };
 		E5E3FB2F195103FC00D8935F /* background-blur.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E5E3FB2E195103FC00D8935F /* background-blur.jpg */; };
 /* End PBXBuildFile section */
@@ -193,6 +194,8 @@
 		E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorSearchResults.m; path = Models/TMWActorSearchResults.m; sourceTree = "<group>"; };
 		E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MoviesBackgroundHiRes.png; sourceTree = "<group>"; };
 		E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MoviesBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
+		E5D0F12B1956982C0078BD8D /* TMWAutoScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAutoScroll.h; path = Customizations/TMWAutoScroll.h; sourceTree = "<group>"; };
+		E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAutoScroll.m; path = Customizations/TMWAutoScroll.m; sourceTree = "<group>"; };
 		E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawOnImage.h"; path = "Categories/UIImage+DrawOnImage.h"; sourceTree = "<group>"; };
 		E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawOnImage.m"; path = "Categories/UIImage+DrawOnImage.m"; sourceTree = "<group>"; };
 		E5E3FB2E195103FC00D8935F /* background-blur.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background-blur.jpg"; sourceTree = "<group>"; };
@@ -308,6 +311,8 @@
 		E569FF381902F0B6002928AF /* Customizations */ = {
 			isa = PBXGroup;
 			children = (
+				E5D0F12B1956982C0078BD8D /* TMWAutoScroll.h */,
+				E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */,
 				E5A1730219562D56006A125E /* TMWSoundEffects.h */,
 				E5A1730319562D56006A125E /* TMWSoundEffects.m */,
 				E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */,
@@ -721,6 +726,7 @@
 				E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */,
 				E58EB20A1929CFFD00A254C5 /* ParallaxPhotoCell.m in Sources */,
 				E5C1DF0219175E900041E31D /* SVWebViewControllerActivityChrome.m in Sources */,
+				E5D0F12D1956982C0078BD8D /* TMWAutoScroll.m in Sources */,
 				E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
 				E5C91612191333FB00A3DEC6 /* UIColor+customColors.m in Sources */,

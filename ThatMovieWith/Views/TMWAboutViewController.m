@@ -7,14 +7,12 @@
 //
 
 #import "TMWAboutViewController.h"
+#import "TMWAutoScroll.h"
 
-@interface TMWAboutViewController ()
+@interface TMWAboutViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UILabel *roleLabel;
-@property (nonatomic, retain) IBOutlet UILabel *peopleLabel;
 @property (nonatomic, retain) IBOutlet UIScrollView *creditsScrollView;
-
-@property (nonatomic, retain) UILabel *firstLabel;
+@property (nonatomic, retain) IBOutlet UIView *endView;
 @property (nonatomic, retain) IBOutlet UILabel *buildLabel;
 
 @end
@@ -30,8 +28,6 @@ int cnt;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.navigationController.navigationBar.backgroundColor = [UIColor blueColor];
-        // Custom initialization
-        //self.view.backgroundColor = [UIColor blackColor];
     }
     return self;
 }
@@ -40,36 +36,39 @@ int cnt;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    _firstLabel = [UILabel new];
-    _firstLabel.frame = self.view.frame;
-    _firstLabel.textAlignment = NSTextAlignmentCenter;
-    _firstLabel.numberOfLines = 2;
-    _firstLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:30];
-    _firstLabel.alpha = 0;
-    _firstLabel.textColor = [UIColor whiteColor];
-    
-    
-    //[self.view addSubview:_firstLabel];
-    self.automaticallyAdjustsScrollViewInsets = YES;
-
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //[self.navigationController setNavigationBarHidden:YES animated:YES];
-        [UIView beginAnimations:@"showStatusBar" context:nil];
-        [UIView setAnimationDuration:0.0];
-        //[[UIApplication sharedApplication] setStatusBarHidden:NO];
-        [UIView commitAnimations];
+    [super viewWillAppear:animated];
+    [UIView beginAnimations:@"showStatusBar" context:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [UIView setAnimationDuration:0.0];
+    [UIView commitAnimations];
 }
 
-- (void)viewDidLayoutSubviews
+// TODO: Use NSNotificationCenter to alert when this
+// view enters the foreground in the container view
+- (void)viewDidAppear:(BOOL)animated
 {
+    // Get the version info
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
     
+    _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
+                        majorVersion, minorVersion];
+    
+    
+    // Setup the auto scrolling
+    _creditsScrollView.scrollPointsPerSecond = 30.0f;
+    [_creditsScrollView startScrolling];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [UIView beginAnimations:@"showStatusBar" context:nil];
     [UIView setAnimationDuration:0.0];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -78,31 +77,35 @@ int cnt;
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
+    // Bring the scroll view back to the top
+    [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [self addInfoButton];
 }
+
+# pragma mark ScrollView Methods
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate) {
+        [_creditsScrollView startScrolling];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [_creditsScrollView startScrolling];
+}
+
+# pragma mark Private Methods
 
 - (void)addInfoButton
 {
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"addInfoButton"
      object:self];
-}
-
-// TODO: Use NSNotificationCenter to alert when this
-// view enters the foreground in the container view
-- (void)viewDidAppear:(BOOL)animated
-{
-    creditsLength = 0;
-    creditText = @[@"Directed by\nJay Hickey", @"Produced by\nJay Hickey",
-                   @"Beta Testers\n"];
-    
-    // Get the version info
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
-    
-    _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
-            majorVersion, minorVersion];
 }
 
 
