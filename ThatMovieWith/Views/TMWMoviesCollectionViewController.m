@@ -57,9 +57,9 @@ CGFloat cellWidth;
         return nil;
     }
     
-    self.title = @"Screendhots";
+    self.title = @"Movies";
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:22.0], NSFontAttributeName,nil];
+                              [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName,nil];
     [[UINavigationBar appearance] setTitleTextAttributes: fontDict];
 
     return self;
