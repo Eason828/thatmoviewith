@@ -136,17 +136,14 @@
             self.navigationController.navigationBar.topItem.title = @"";
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
+            NSDictionary *soundDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
+            NSString *soundFilePath  = [[NSBundle mainBundle] pathForResource:soundDictionary[@"Credits Background Music"] ofType:@"m4a"];
+            NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+            _backgroundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+            _backgroundPlayer.numberOfLoops = -1; //infinite
+        
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
-                
-                AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-                if (![audioSession isOtherAudioPlaying]) {
-                    NSDictionary *soundDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:@"plist"]];
-                    NSString *soundFilePath  = [[NSBundle mainBundle] pathForResource:soundDictionary[@"Credits Background Music"] ofType:@"m4a"];
-                    NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-                    _backgroundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
-                    _backgroundPlayer.numberOfLoops = -1; //infinite
-                    [_backgroundPlayer play];
-                }
+                [_backgroundPlayer play];
             }
             break;
         }
