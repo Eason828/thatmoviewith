@@ -57,7 +57,7 @@ static char UIScrollViewAutoScrollTimer;
     if (newOffset.y > maximumYOffset) {
         
         // Restart the scrolling from the top
-        [self setContentOffset:CGPointMake(self.contentOffset.x, -self.bounds.size.height/2-100) animated:NO];
+        [self setContentOffset:CGPointMake(self.contentOffset.x, 0) animated:NO];
     } else {
         [UIView animateWithDuration:animationDuration
                               delay:0.0f
