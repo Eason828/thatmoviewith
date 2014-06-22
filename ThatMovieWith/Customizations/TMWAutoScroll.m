@@ -53,23 +53,13 @@ static char UIScrollViewAutoScrollTimer;
         .y = self.contentOffset.y + pointChange
     };
     
-   // NSLog(@"%f", self.contentOffset.y);
-//    if (self.contentOffset.y == 0.0) {
-//        NSLog(@"%f", self.contentOffset.y);
-//        [self stopScrolling];
-//        [self performSelector:@selector(startScrolling) withObject:nil afterDelay:10.0];
-//    }
-    
-    if (self.bounds.size.height == newOffset.y)
-    {
-        [self stopScrolling];
-    }
-    
-    CGFloat maximumYOffset = self.contentSize.height - self.bounds.size.height;
+    CGFloat maximumYOffset = self.contentSize.height - 4500 + self.bounds.size.height;
+    NSLog(@"%f", self.contentOffset.y);
+    NSLog(@"%f", maximumYOffset);
     if (newOffset.y > maximumYOffset) {
         
         // Restart the scrolling from the top
-        [self setContentOffset:CGPointMake(self.contentOffset.x, -self.bounds.size.height+20) animated:NO];
+        [self setContentOffset:CGPointMake(self.contentOffset.x, -self.bounds.size.height/2-100) animated:NO];
     } else {
         [UIView animateWithDuration:animationDuration
                               delay:0.0f

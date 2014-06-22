@@ -6,10 +6,15 @@
 //  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
+#import <sys/utsname.h>
+
 #import "TMWAboutViewController.h"
 #import "TMWAutoScroll.h"
+#import "SVWebViewController.h"
+#import "UIColor+customColors.h"
 
-@interface TMWAboutViewController () <UIScrollViewDelegate>
+@interface TMWAboutViewController () <UIScrollViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, retain) IBOutlet UIScrollView *creditsScrollView;
 @property (nonatomic, retain) IBOutlet UIView *endView;
@@ -19,9 +24,10 @@
 
 @implementation TMWAboutViewController
 
-NSUInteger creditsLength;
-NSArray *creditText;
-int cnt;
+NSString *version;
+NSString *buildNumber;
+
+static bool buttonPressed;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -54,11 +60,11 @@ int cnt;
 {
     // Get the version info
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+    version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    buildNumber = [infoDictionary objectForKey:@"CFBundleVersion"];
     
     _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
-                        majorVersion, minorVersion];
+                        version, buildNumber];
     
     
     // Setup the auto scrolling
@@ -71,14 +77,13 @@ int cnt;
     [super viewWillDisappear:animated];
     [UIView beginAnimations:@"showStatusBar" context:nil];
     [UIView setAnimationDuration:0.0];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    if (buttonPressed == NO) [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [UIView commitAnimations];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
     // Bring the scroll view back to the top
     [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
@@ -106,6 +111,50 @@ int cnt;
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"addInfoButton"
      object:self];
+}
+
+-(IBAction)buttonPressed:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    
+    buttonPressed = YES;
+    
+    switch ([button tag]) {
+        case 1: // First actor button
+        {
+            SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/jayhickey"];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            webViewController.barsTintColor = [UIColor goldColor];
+            [self presentViewController:webViewController animated:YES completion:^(){
+                buttonPressed = NO;
+            }];
+            break;
+        }
+            
+        case 2: // Second actor button
+        {
+            if ([MFMailComposeViewController canSendMail]) {
+                MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
+                [composeViewController setMailComposeDelegate:self];
+                [composeViewController setToRecipients:@[@"support@thatmoviewith.com"]];
+                [composeViewController setSubject:@"That Movie With"];
+                
+                struct utsname systemInfo;
+                uname(&systemInfo);
+                NSString *msgBody = [NSString stringWithFormat:@"\n\n\n------\nDevice: %@\niOS: %@\nVersion: %@ (%@)", [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding], [[UIDevice currentDevice] systemVersion], version, buildNumber];
+                [composeViewController setMessageBody:msgBody isHTML:NO];
+                [self presentViewController:composeViewController animated:YES completion:nil];
+            }
+            break;
+        }
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    // you can test the result of the mail sending here if you want
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
