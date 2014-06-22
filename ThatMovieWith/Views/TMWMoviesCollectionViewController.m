@@ -212,8 +212,6 @@ CGFloat cellWidth;
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            // Hide the network activity icon
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
             NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
             
@@ -224,7 +222,14 @@ CGFloat cellWidth;
             for (UIView *v in viewsToRemove) [v removeFromSuperview];
             [cell.imageView addSubview:overlay];
             
+            // Hide the network activity icon
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
             if (request) {
+                
+                // Hide the network activity icon
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                
                 [UIView transitionWithView:cell.imageView
                                   duration:0.5f
                                    options:UIViewAnimationOptionTransitionCrossDissolve

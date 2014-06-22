@@ -56,8 +56,6 @@ static bool buttonPressed;
     [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
-// TODO: Use NSNotificationCenter to alert when this
-// view enters the foreground in the container view
 - (void)viewDidAppear:(BOOL)animated
 {
     // Get the version info
