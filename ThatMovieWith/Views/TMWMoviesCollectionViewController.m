@@ -153,13 +153,7 @@ CGFloat cellWidth;
   inBoundsOfView:(UIView *)view
 {
     UIFont *textFont = [UIFont new];
-    if ([string isEqualToString:@"Loading..."]) {
-        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE - 18];
-    }
-    else {
-        textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
-    }
-    
+    textFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:TITLE_FONT_SIZE];
     
     textView.font = textFont;
     
@@ -215,7 +209,6 @@ CGFloat cellWidth;
        
         
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
-        [self setLabel:cell.label withString:@"Loading..." inBoundsOfView:cell.imageView];
         
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
