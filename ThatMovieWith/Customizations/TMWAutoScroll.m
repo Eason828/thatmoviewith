@@ -54,8 +54,6 @@ static char UIScrollViewAutoScrollTimer;
     };
     
     CGFloat maximumYOffset = self.contentSize.height - 4500 + self.bounds.size.height;
-    NSLog(@"%f", self.contentOffset.y);
-    NSLog(@"%f", maximumYOffset);
     if (newOffset.y > maximumYOffset) {
         
         // Restart the scrolling from the top

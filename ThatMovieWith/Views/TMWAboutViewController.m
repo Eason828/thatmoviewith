@@ -52,6 +52,8 @@ static bool buttonPressed;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [UIView setAnimationDuration:0.0];
     [UIView commitAnimations];
+    // Bring the scroll view back to the top
+    [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
 // TODO: Use NSNotificationCenter to alert when this
@@ -85,8 +87,6 @@ static bool buttonPressed;
 {
     [super viewDidDisappear:animated];
     
-    // Bring the scroll view back to the top
-    [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     [self addInfoButton];
 }
 
