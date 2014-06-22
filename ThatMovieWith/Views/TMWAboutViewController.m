@@ -66,7 +66,7 @@ int cnt;
 - (void)viewDidLayoutSubviews
 {
     _creditsScrollView.frame = self.view.frame;
-    _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 1162);
+    _creditsScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 7000);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
