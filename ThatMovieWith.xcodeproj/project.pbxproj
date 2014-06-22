@@ -78,6 +78,7 @@
 		E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */; };
 		E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */; };
 		E5D0F12D1956982C0078BD8D /* TMWAutoScroll.m in Sources */ = {isa = PBXBuildFile; fileRef = E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */; };
+		E5D0F13419575DA70078BD8D /* background.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5D0F13319575DA70078BD8D /* background.m4a */; };
 		E5E3FB2D1950F7FA00D8935F /* UIImage+DrawOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */; };
 		E5E3FB2F195103FC00D8935F /* background-blur.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E5E3FB2E195103FC00D8935F /* background-blur.jpg */; };
 /* End PBXBuildFile section */
@@ -196,6 +197,7 @@
 		E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MoviesBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5D0F12B1956982C0078BD8D /* TMWAutoScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAutoScroll.h; path = Customizations/TMWAutoScroll.h; sourceTree = "<group>"; };
 		E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAutoScroll.m; path = Customizations/TMWAutoScroll.m; sourceTree = "<group>"; };
+		E5D0F13319575DA70078BD8D /* background.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = background.m4a; path = sounds/background.m4a; sourceTree = SOURCE_ROOT; };
 		E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+DrawOnImage.h"; path = "Categories/UIImage+DrawOnImage.h"; sourceTree = "<group>"; };
 		E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DrawOnImage.m"; path = "Categories/UIImage+DrawOnImage.m"; sourceTree = "<group>"; };
 		E5E3FB2E195103FC00D8935F /* background-blur.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background-blur.jpg"; sourceTree = "<group>"; };
@@ -341,6 +343,7 @@
 		E57E87C6195256A400832995 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E5D0F13319575DA70078BD8D /* background.m4a */,
 				E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */,
 				E57E87CC19525E9400832995 /* Tweet.m4a */,
 				E57E87C7195256BB00832995 /* stone_love_horn.m4a */,
@@ -623,6 +626,7 @@
 				E57E87CB195259E500832995 /* Sounds.plist in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
 				E5994CFC18FDE85100A5B79F /* InfoPlist.strings in Resources */,
+				E5D0F13419575DA70078BD8D /* background.m4a in Resources */,
 				E57E87C219523B4400832995 /* arrow.png in Resources */,
 				E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */,
 				E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */,

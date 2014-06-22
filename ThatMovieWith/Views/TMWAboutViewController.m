@@ -27,7 +27,7 @@
 NSString *version;
 NSString *buildNumber;
 
-static bool buttonPressed;
+static bool webButtonPressed;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -41,6 +41,10 @@ static bool buttonPressed;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(scrollToTop:)
+                                                 name:@"scrollToTop"
+                                               object:nil];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
 }
@@ -48,9 +52,6 @@ static bool buttonPressed;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    // Bring the scroll view back to the top
-    [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -67,6 +68,8 @@ static bool buttonPressed;
     // Setup the auto scrolling
     _creditsScrollView.scrollPointsPerSecond = 30.0f;
     [_creditsScrollView startScrolling];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"playBackgroundMusic" object:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -74,7 +77,7 @@ static bool buttonPressed;
     [super viewWillDisappear:animated];
     [UIView beginAnimations:@"showStatusBar" context:nil];
     [UIView setAnimationDuration:0.0];
-    if (buttonPressed == NO) [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    if (webButtonPressed == NO) [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [UIView commitAnimations];
 }
 
@@ -101,6 +104,12 @@ static bool buttonPressed;
 
 # pragma mark Private Methods
 
+- (void)scrollToTop:(NSNotification *)notification
+{
+    // Bring the scroll view back to the top
+    [_creditsScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+}
+
 - (void)addInfoButton
 {
     [[NSNotificationCenter defaultCenter]
@@ -112,7 +121,10 @@ static bool buttonPressed;
 {
     UIButton *button = (UIButton *)sender;
     
-    buttonPressed = YES;
+    webButtonPressed = YES;
+    
+    // Restart the scrolling credits in the About view
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
     
     switch ([button tag]) {
         case 1: // First actor button
@@ -120,8 +132,10 @@ static bool buttonPressed;
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/jayhickey"];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
             webViewController.barsTintColor = [UIColor goldColor];
+            [_creditsScrollView stopScrolling];
             [self presentViewController:webViewController animated:YES completion:^(){
-                buttonPressed = NO;
+                webButtonPressed = NO;
+                [self.creditsScrollView startScrolling];
             }];
             break;
         }
@@ -129,6 +143,7 @@ static bool buttonPressed;
         case 2: // Second actor button
         {
             if ([MFMailComposeViewController canSendMail]) {
+                [_creditsScrollView stopScrolling];
                 MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
                 [composeViewController setMailComposeDelegate:self];
                 [composeViewController setToRecipients:@[@"support@thatmoviewith.com"]];
@@ -138,7 +153,10 @@ static bool buttonPressed;
                 uname(&systemInfo);
                 NSString *msgBody = [NSString stringWithFormat:@"\n\n\n------\nDevice: %@\niOS: %@\nVersion: %@ (%@)", [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding], [[UIDevice currentDevice] systemVersion], version, buildNumber];
                 [composeViewController setMessageBody:msgBody isHTML:NO];
-                [self presentViewController:composeViewController animated:YES completion:nil];
+                [self presentViewController:composeViewController animated:YES completion:^(){
+                    webButtonPressed = NO;
+                    [self.creditsScrollView startScrolling];
+                }];
             }
             break;
         }

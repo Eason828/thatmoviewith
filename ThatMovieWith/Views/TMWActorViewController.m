@@ -790,6 +790,7 @@ float frameH;
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
+    [self removeInfoButton];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self showStatusBar];
 }
@@ -809,6 +810,7 @@ float frameH;
     [self.searchDisplayController setActive:NO animated:NO];
     _searchBar.hidden = YES;
     [_blurImageView removeFromSuperview];
+    [self addInfoButton];
 }
 
 #pragma mark UITableView methods
@@ -896,6 +898,7 @@ float frameH;
         
     }
     else {
+        NSLog(@"no image");
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
         [cell.imageView setImage:defaultImage];
     }

@@ -43,6 +43,17 @@
                                              selector:@selector(addInfoButton:)
                                                  name:@"addInfoButton"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(pauseBackgroundMusic:)
+                                                 name:@"pauseBackgroundMusic"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playBackgroundMusic:)
+                                                 name:@"playBackgroundMusic"
+                                               object:nil];
+    
     _doneBarButtonItem = [UIBarButtonItem new];
     _doneBarButtonItem.title = @"Done";
     _doneBarButtonItem.tintColor = [UIColor goldColor];
@@ -117,6 +128,18 @@
     [self.view setNeedsLayout];
 }
 
+- (void)pauseBackgroundMusic:(NSNotification *)notification
+{
+    [_backgroundPlayer stop];
+}
+
+- (void)playBackgroundMusic:(NSNotification *)notification
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+        [_backgroundPlayer play];
+    }
+}
+
 // This is called after autolayout has set the views
 - (void)viewDidLayoutSubviews
 {
@@ -145,6 +168,10 @@
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
                 [_backgroundPlayer play];
             }
+            
+            // Restart the scrolling credits in the About view
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:self];
+            
             break;
         }
         case 2: //Done button in about view
