@@ -26,6 +26,8 @@
 		E57E87CB195259E500832995 /* Sounds.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CA195259E500832995 /* Sounds.plist */; };
 		E57E87CD19525EB500832995 /* Tweet.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CC19525E9400832995 /* Tweet.m4a */; };
 		E57E87CF195266DD00832995 /* Navi-Hey-Listen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */; };
+		E587AC5D195771B40070C846 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A1730F19564969006A125E /* AudioToolbox.framework */; };
+		E587AC5E195771BB0070C846 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A1730D19564856006A125E /* AVFoundation.framework */; };
 		E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E58EB1F519298C5F00A254C5 /* OpenGLES.framework */; };
 		E58EB1FD1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */; };
 		E58EB1FE1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FC1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m */; };
@@ -208,6 +210,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E587AC5E195771BB0070C846 /* AVFoundation.framework in Frameworks */,
+				E587AC5D195771B40070C846 /* AudioToolbox.framework in Frameworks */,
 				E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */,
 				E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */,
 				E5994CF418FDE85100A5B79F /* CoreGraphics.framework in Frameworks */,

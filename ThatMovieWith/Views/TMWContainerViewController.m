@@ -130,13 +130,37 @@
 
 - (void)pauseBackgroundMusic:(NSNotification *)notification
 {
-    [_backgroundPlayer stop];
+    [self doVolumeFadeOutAndRestartToTime:[NSNumber numberWithDouble:_backgroundPlayer.currentTime]];
 }
 
 - (void)playBackgroundMusic:(NSNotification *)notification
 {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+        _backgroundPlayer.volume = 0.0;
         [_backgroundPlayer play];
+        [self doVolumeFadeIn];
+    }
+}
+
+-(void)doVolumeFadeOutAndRestartToTime:(NSNumber *)currentTime
+{
+    if (_backgroundPlayer.volume > 0.1) {
+        _backgroundPlayer.volume = _backgroundPlayer.volume - 0.05;
+        [self performSelector:@selector(doVolumeFadeOutAndRestartToTime:) withObject:currentTime afterDelay:0.05];
+    } else {
+        // Stop and get the sound ready for playing again
+        [_backgroundPlayer stop];
+        _backgroundPlayer.currentTime = [currentTime doubleValue];
+        [_backgroundPlayer prepareToPlay];
+    }
+}
+
+-(void)doVolumeFadeIn
+{
+    
+    if (_backgroundPlayer.volume < 1.0) {
+        _backgroundPlayer.volume = _backgroundPlayer.volume + 0.04;
+        [self performSelector:@selector(doVolumeFadeIn) withObject:nil afterDelay:0.1];
     }
 }
 
@@ -166,7 +190,9 @@
             _backgroundPlayer.numberOfLoops = -1; //infinite
         
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
+                _backgroundPlayer.volume = 0.0;
                 [_backgroundPlayer play];
+                [self doVolumeFadeIn];
             }
             
             // Restart the scrolling credits in the About view
@@ -178,8 +204,7 @@
         {
             [self flipFromViewController:_aboutViewController toViewController:_actorViewController withDirection:UIViewAnimationOptionTransitionFlipFromLeft andDelay:0.0];
             _infoButton.hidden = NO;
-            [_backgroundPlayer stop];
-            _backgroundPlayer.currentTime = 0;
+            [self doVolumeFadeOutAndRestartToTime:0];
             break;
         }
         case 3:
@@ -189,15 +214,17 @@
                 [self.view setNeedsDisplay];
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"SoundsEnabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                [_backgroundPlayer stop];
-                _backgroundPlayer.currentTime = 0;
+                [self doVolumeFadeOutAndRestartToTime:0];
+                //_backgroundPlayer.currentTime = 0;
             }
             else {
                 _soundButtonItem.image = [UIImage imageNamed:@"audio-mute"];
                 [self.view setNeedsDisplay];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"SoundsEnabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                _backgroundPlayer.volume = 0.0;
                 [_backgroundPlayer play];
+                [self doVolumeFadeIn];
             }
         }
 
