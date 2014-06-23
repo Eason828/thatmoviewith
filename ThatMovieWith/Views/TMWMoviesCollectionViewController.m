@@ -338,7 +338,9 @@ CGFloat cellWidth;
             }
             else {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                [notification displayNotificationWithMessage:@"Network Error Getting Actor Movie Names. Check your network connection." forDuration:3.0f];
+                if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                    [notification displayNotificationWithMessage:@"Network Error Getting Actor Movie Names. Check your network connection." forDuration:3.0f];
+                }
             }
         }];
     }
@@ -362,8 +364,13 @@ CGFloat cellWidth;
 - (void) refreshMovieResponseWithJLTMDBcall:(NSString *)JLTMDBCall withParameters:(NSDictionary *)parameters
 {
     
+    __block CWStatusBarNotification *IMDBnotification = [CWStatusBarNotification new];
     __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
-    notification.notificationLabelBackgroundColor = [UIColor goldColor];
+    IMDBnotification.notificationLabelBackgroundColor = [UIColor goldColor];
+    IMDBnotification.notificationLabelTextColor = [UIColor blackColor];
+    IMDBnotification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    IMDBnotification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    notification.notificationLabelBackgroundColor = [UIColor redColor];
     notification.notificationLabelTextColor = [UIColor whiteColor];
     notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
@@ -389,11 +396,13 @@ CGFloat cellWidth;
                 [self presentViewController:webViewController animated:YES completion:NULL];
             }
             else {
-                [notification displayNotificationWithMessage:@"No IMDb page exists for this movie." forDuration:3.0f];
+                [IMDBnotification displayNotificationWithMessage:@"No IMDb page exists for this movie." forDuration:3.0f];
             }
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error Getting Each Movie URL. Check your network connection." forDuration:3.0f];
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error Getting Each Movie URL. Check your network connection." forDuration:3.0f];
+            }
         }
     }];
 }

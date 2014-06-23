@@ -441,8 +441,9 @@ float frameH;
             [TMWActorContainer actorContainer].imagesBaseURLString = [response[@"images"][@"base_url"] stringByAppendingString:[TMWActorContainer actorContainer].backdropSizes[1]];
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error Loading Image Config. Check your network connection."
-                                                  forDuration:3.0f];
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error Loading Image Config. Check your network connection." forDuration:3.0f];
+            }
         }
     }];
 }
@@ -466,7 +467,9 @@ float frameH;
                 });
         }
         else {
-            [notification displayNotificationWithMessage:@"Network Error Loading Actor Names. Check your network connection." forDuration:3.0f];
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error Loading Actor Names. Check your network connection." forDuration:3.0f];
+            }
         }
     }];
 }
@@ -788,6 +791,19 @@ float frameH;
 
 #pragma mark UISearchDisplayController methods
 
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        for (UIView *v in controller.searchResultsTableView.subviews) {
+            if ([v isKindOfClass:[UILabel self]]) {
+                ((UILabel *)v).font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];;
+                break;
+            }
+        }
+    });
+    return YES;
+}
+
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     [self removeInfoButton];
@@ -845,6 +861,7 @@ float frameH;
         // Set the line separator left offset to start after the image
         [_searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];
     
     // Make the actors images circles in the search table view
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height/2;
@@ -888,9 +905,9 @@ float frameH;
                 weakCell.imageView.image = image;
             }
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            
-            [notification displayNotificationWithMessage:@"Network Error Getting Actor Image. Check your network connection."
-                                             forDuration:3.0f];
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error Getting Actor Image. Check your network connection." forDuration:3.0f];
+            }
             // Hide the network activity icon
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         }];
@@ -898,7 +915,6 @@ float frameH;
         
     }
     else {
-        NSLog(@"no image");
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
         [cell.imageView setImage:defaultImage];
     }
