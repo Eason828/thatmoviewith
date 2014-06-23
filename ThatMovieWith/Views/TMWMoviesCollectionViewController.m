@@ -263,7 +263,7 @@ CGFloat cellWidth;
             
             // Don't show the error for NSURLErrorDomain -999 because that's just a cancelled image request due to scrolling
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                [notification displayNotificationWithMessage:@"Network Error Loading Movie Poster. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }];
 
@@ -340,7 +340,7 @@ CGFloat cellWidth;
             else {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                    [notification displayNotificationWithMessage:@"Network Error Getting Actor Movie Names. Check your network connection." forDuration:3.0f];
+                    [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
                 }
             }
         }];
@@ -402,7 +402,7 @@ CGFloat cellWidth;
         }
         else {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                [notification displayNotificationWithMessage:@"Network Error Getting Each Movie URL. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }
     }];

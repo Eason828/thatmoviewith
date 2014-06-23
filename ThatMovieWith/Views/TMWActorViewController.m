@@ -442,7 +442,7 @@ float frameH;
         }
         else {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                [notification displayNotificationWithMessage:@"Network Error Loading Image Config. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }
     }];
@@ -468,7 +468,7 @@ float frameH;
         }
         else {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                [notification displayNotificationWithMessage:@"Network Error Loading Actor Names. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }
     }];
@@ -906,7 +906,7 @@ float frameH;
             }
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
-                [notification displayNotificationWithMessage:@"Network Error Getting Actor Image. Check your network connection." forDuration:3.0f];
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
             // Hide the network activity icon
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
