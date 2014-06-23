@@ -92,6 +92,7 @@ CGFloat cellWidth;
     }
 
     [_noResultsView addSubview:_noResultsLabel];
+    _noResultsLabel.hidden = YES;
     
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
