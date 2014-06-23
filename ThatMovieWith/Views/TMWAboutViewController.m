@@ -69,6 +69,9 @@ static bool webButtonPressed;
     _creditsScrollView.scrollPointsPerSecond = 30.0f;
     [_creditsScrollView startScrolling];
     
+    [_creditsScrollView setScrollsToTop:NO];
+    [_creditsScrollView setShowsVerticalScrollIndicator:NO];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"playBackgroundMusic" object:self];
 }
 

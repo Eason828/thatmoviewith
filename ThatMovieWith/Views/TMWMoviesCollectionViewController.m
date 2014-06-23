@@ -275,7 +275,7 @@ CGFloat cellWidth;
     }
     
     else {
-        UIImage *defaultImage = [UIImage imageNamed:@"MoviesBackgroundHiRes"];
+        UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes"];
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
         NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
         

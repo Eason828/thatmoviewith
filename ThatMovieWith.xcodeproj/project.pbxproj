@@ -13,7 +13,6 @@
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
 		E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */; };
-		E539DCF91900CD640027661C /* Clear.png in Resources */ = {isa = PBXBuildFile; fileRef = E539DCF81900CD640027661C /* Clear.png */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E56A042D193C44E700FC6F23 /* TMWAPI.m */; };
 		E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E575954C19493DDB00C35392 /* TMDB_API_KEY */; };
@@ -25,9 +24,9 @@
 		E57E87C8195258D900832995 /* stone_love_horn.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87C7195256BB00832995 /* stone_love_horn.m4a */; };
 		E57E87CB195259E500832995 /* Sounds.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CA195259E500832995 /* Sounds.plist */; };
 		E57E87CD19525EB500832995 /* Tweet.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CC19525E9400832995 /* Tweet.m4a */; };
-		E57E87CF195266DD00832995 /* Navi-Hey-Listen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */; };
 		E587AC5D195771B40070C846 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A1730F19564969006A125E /* AudioToolbox.framework */; };
 		E587AC5E195771BB0070C846 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A1730D19564856006A125E /* AVFoundation.framework */; };
+		E587AC6019578A1B0070C846 /* silence.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E587AC5F19578A1B0070C846 /* silence.m4a */; };
 		E58EB1F619298C5F00A254C5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E58EB1F519298C5F00A254C5 /* OpenGLES.framework */; };
 		E58EB1FD1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */; };
 		E58EB1FE1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E58EB1FC1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.m */; };
@@ -77,8 +76,6 @@
 		E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C9161F1913341F00A3DEC6 /* TMWActor.m */; };
 		E5C916251913341F00A3DEC6 /* TMWActorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916211913341F00A3DEC6 /* TMWActorContainer.m */; };
 		E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */; };
-		E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */; };
-		E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */; };
 		E5D0F12D1956982C0078BD8D /* TMWAutoScroll.m in Sources */ = {isa = PBXBuildFile; fileRef = E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */; };
 		E5D0F13419575DA70078BD8D /* background.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5D0F13319575DA70078BD8D /* background.m4a */; };
 		E5E3FB2D1950F7FA00D8935F /* UIImage+DrawOnImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */; };
@@ -103,7 +100,6 @@
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
 		E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundLowRes@2x.png"; sourceTree = "<group>"; };
-		E539DCF81900CD640027661C /* Clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Clear.png; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E56A042C193C44E700FC6F23 /* TMWAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAPI.h; path = Models/TMWAPI.h; sourceTree = "<group>"; };
 		E56A042D193C44E700FC6F23 /* TMWAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAPI.m; path = Models/TMWAPI.m; sourceTree = "<group>"; };
@@ -117,7 +113,7 @@
 		E57E87C7195256BB00832995 /* stone_love_horn.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = stone_love_horn.m4a; path = sounds/stone_love_horn.m4a; sourceTree = SOURCE_ROOT; };
 		E57E87CA195259E500832995 /* Sounds.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Sounds.plist; sourceTree = "<group>"; };
 		E57E87CC19525E9400832995 /* Tweet.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Tweet.m4a; path = sounds/Tweet.m4a; sourceTree = SOURCE_ROOT; };
-		E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Navi-Hey-Listen.m4a"; path = "sounds/Navi-Hey-Listen.m4a"; sourceTree = SOURCE_ROOT; };
+		E587AC5F19578A1B0070C846 /* silence.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = silence.m4a; path = sounds/silence.m4a; sourceTree = SOURCE_ROOT; };
 		E58EB1F519298C5F00A254C5 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E58EB1F91929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWCustomActorCellTableViewCell.h; path = Customizations/TMWCustomActorCellTableViewCell.h; sourceTree = "<group>"; };
 		E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWCustomActorCellTableViewCell.m; path = Customizations/TMWCustomActorCellTableViewCell.m; sourceTree = "<group>"; };
@@ -195,8 +191,6 @@
 		E5C916211913341F00A3DEC6 /* TMWActorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorContainer.m; path = Models/TMWActorContainer.m; sourceTree = "<group>"; };
 		E5C916221913341F00A3DEC6 /* TMWActorSearchResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorSearchResults.h; path = Models/TMWActorSearchResults.h; sourceTree = "<group>"; };
 		E5C916231913341F00A3DEC6 /* TMWActorSearchResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorSearchResults.m; path = Models/TMWActorSearchResults.m; sourceTree = "<group>"; };
-		E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MoviesBackgroundHiRes.png; sourceTree = "<group>"; };
-		E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MoviesBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5D0F12B1956982C0078BD8D /* TMWAutoScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAutoScroll.h; path = Customizations/TMWAutoScroll.h; sourceTree = "<group>"; };
 		E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAutoScroll.m; path = Customizations/TMWAutoScroll.m; sourceTree = "<group>"; };
 		E5D0F13319575DA70078BD8D /* background.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = background.m4a; path = sounds/background.m4a; sourceTree = SOURCE_ROOT; };
@@ -246,13 +240,10 @@
 				E5E3FB2E195103FC00D8935F /* background-blur.jpg */,
 				E50F833F194EA76900F65728 /* tmdb-logo@2x.png */,
 				E57B8FC8192F1B5E0086593D /* black.png */,
-				E5C916271913387D00A3DEC6 /* MoviesBackgroundHiRes.png */,
-				E5C916281913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png */,
 				E5227AD919088E930094D471 /* InitialsBackgroundHiRes.png */,
 				E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */,
 				E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */,
 				E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */,
-				E539DCF81900CD640027661C /* Clear.png */,
 			);
 			name = images;
 			path = ../images;
@@ -347,8 +338,8 @@
 		E57E87C6195256A400832995 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E587AC5F19578A1B0070C846 /* silence.m4a */,
 				E5D0F13319575DA70078BD8D /* background.m4a */,
-				E57E87CE195266DD00832995 /* Navi-Hey-Listen.m4a */,
 				E57E87CC19525E9400832995 /* Tweet.m4a */,
 				E57E87C7195256BB00832995 /* stone_love_horn.m4a */,
 			);
@@ -614,7 +605,6 @@
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,
 				E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */,
-				E5C9162A1913387D00A3DEC6 /* MoviesBackgroundHiRes@2x.png in Resources */,
 				E5A172F11956275D006A125E /* audio-mute@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
 				E5A1730119562AA1006A125E /* audio-high@2x.png in Resources */,
@@ -622,9 +612,7 @@
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
-				E57E87CF195266DD00832995 /* Navi-Hey-Listen.m4a in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
-				E539DCF91900CD640027661C /* Clear.png in Resources */,
 				E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
 				E57E87CB195259E500832995 /* Sounds.plist in Resources */,
@@ -633,13 +621,13 @@
 				E5D0F13419575DA70078BD8D /* background.m4a in Resources */,
 				E57E87C219523B4400832995 /* arrow.png in Resources */,
 				E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */,
-				E5C916291913387D00A3DEC6 /* MoviesBackgroundHiRes.png in Resources */,
 				E5227ADD19088E930094D471 /* InitialsBackgroundHiRes.png in Resources */,
 				E5C1DF0B19175F640041E31D /* SVWebViewControllerActivityIMDB@2x.png in Resources */,
 				E5C1DEFE19175E900041E31D /* SVWebViewController.bundle in Resources */,
 				E5994D0418FDE85100A5B79F /* Images.xcassets in Resources */,
 				E5A1730019562AA1006A125E /* audio-high.png in Resources */,
 				E5C1DF0819175E900041E31D /* SVWebViewControllerActivitySafari@2x.png in Resources */,
+				E587AC6019578A1B0070C846 /* silence.m4a in Resources */,
 				E57E87C319523B4400832995 /* arrow@2x.png in Resources */,
 				E5A172F01956275D006A125E /* audio-mute.png in Resources */,
 			);

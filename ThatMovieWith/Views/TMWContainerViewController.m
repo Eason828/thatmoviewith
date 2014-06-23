@@ -138,7 +138,7 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
         _backgroundPlayer.volume = 0.0;
         [_backgroundPlayer play];
-        [self doVolumeFadeIn];
+        [self performSelector:@selector(doVolumeFadeIn) withObject:nil afterDelay:1.0];
     }
 }
 
@@ -159,7 +159,7 @@
 {
     
     if (_backgroundPlayer.volume < 1.0) {
-        _backgroundPlayer.volume = _backgroundPlayer.volume + 0.04;
+        _backgroundPlayer.volume = _backgroundPlayer.volume + 0.02;
         [self performSelector:@selector(doVolumeFadeIn) withObject:nil afterDelay:0.1];
     }
 }
@@ -191,8 +191,6 @@
         
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SoundsEnabled"] == YES) {
                 _backgroundPlayer.volume = 0.0;
-                [_backgroundPlayer play];
-                [self doVolumeFadeIn];
             }
             
             // Restart the scrolling credits in the About view

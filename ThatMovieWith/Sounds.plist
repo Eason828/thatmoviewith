@@ -5,24 +5,24 @@
 	<key>Credits Background Music</key>
 	<string>background</string>
 	<key>When tapping to add an actor</key>
-	<string></string>
+	<string>silence</string>
 	<key>When cancel button is clicked in actor search</key>
-	<string></string>
+	<string>silence</string>
 	<key>When actor is added and bounce occurs</key>
-	<string></string>
+	<string>silence</string>
 	<key>When swipe transition to movies screen begins</key>
-	<string></string>
+	<string>silence</string>
 	<key>During transition to movies screen</key>
-	<string></string>
+	<string>silence</string>
 	<key>When swipe transition to delete actor begins</key>
-	<string></string>
+	<string>silence</string>
 	<key>During deletion of actor</key>
-	<string></string>
+	<string>silence</string>
 	<key>When a movie is selected</key>
-	<string></string>
+	<string>silence</string>
 	<key>When leaving IMDb website view</key>
-	<string></string>
+	<string>silence</string>
 	<key>When pressing the back button to go back from the movies to the actors screen</key>
-	<string></string>
+	<string>silence</string>
 </dict>
 </plist>
