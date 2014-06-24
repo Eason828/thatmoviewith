@@ -129,7 +129,7 @@
 		E58EB2071929CFFD00A254C5 /* ParallaxPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParallaxPhotoCell.m; path = Views/ParallaxPhotoCell.m; sourceTree = "<group>"; };
 		E58EB20B1929D00600A254C5 /* TMWMoviesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWMoviesCollectionViewController.h; path = Views/TMWMoviesCollectionViewController.h; sourceTree = "<group>"; };
 		E58EB20C1929D00600A254C5 /* TMWMoviesCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWMoviesCollectionViewController.m; path = Views/TMWMoviesCollectionViewController.m; sourceTree = "<group>"; };
-		E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThatMovieWith.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5994CEE18FDE85100A5B79F /* That Movie With.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "That Movie With.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5994CF118FDE85100A5B79F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E5994CF318FDE85100A5B79F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E5994CF518FDE85100A5B79F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -375,7 +375,7 @@
 		E5994CEF18FDE85100A5B79F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */,
+				E5994CEE18FDE85100A5B79F /* That Movie With.app */,
 				E5994D0918FDE85100A5B79F /* ThatMovieWithTests.xctest */,
 			);
 			name = Products;
@@ -519,9 +519,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E5994CED18FDE85100A5B79F /* ThatMovieWith */ = {
+		E5994CED18FDE85100A5B79F /* That Movie With */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E5994D1A18FDE85100A5B79F /* Build configuration list for PBXNativeTarget "ThatMovieWith" */;
+			buildConfigurationList = E5994D1A18FDE85100A5B79F /* Build configuration list for PBXNativeTarget "That Movie With" */;
 			buildPhases = (
 				C9484701D6704128879C0FD4 /* Check Pods Manifest.lock */,
 				E5994CEA18FDE85100A5B79F /* Sources */,
@@ -535,9 +535,9 @@
 			);
 			dependencies = (
 			);
-			name = ThatMovieWith;
+			name = "That Movie With";
 			productName = ThatMovieWith;
-			productReference = E5994CEE18FDE85100A5B79F /* ThatMovieWith.app */;
+			productReference = E5994CEE18FDE85100A5B79F /* That Movie With.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E5994D0818FDE85100A5B79F /* ThatMovieWithTests */ = {
@@ -588,7 +588,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E5994CED18FDE85100A5B79F /* ThatMovieWith */,
+				E5994CED18FDE85100A5B79F /* That Movie With */,
 				E5994D0818FDE85100A5B79F /* ThatMovieWithTests */,
 			);
 		};
@@ -752,7 +752,7 @@
 /* Begin PBXTargetDependency section */
 		E5994D0F18FDE85100A5B79F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E5994CED18FDE85100A5B79F /* ThatMovieWith */;
+			target = E5994CED18FDE85100A5B79F /* That Movie With */;
 			targetProxy = E5994D0E18FDE85100A5B79F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -811,6 +811,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -843,6 +844,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -873,7 +875,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "ThatMovieWith/ThatMovieWith-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -906,7 +908,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "ThatMovieWith/ThatMovieWith-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -966,7 +968,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E5994D1A18FDE85100A5B79F /* Build configuration list for PBXNativeTarget "ThatMovieWith" */ = {
+		E5994D1A18FDE85100A5B79F /* Build configuration list for PBXNativeTarget "That Movie With" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E5994D1B18FDE85100A5B79F /* Debug */,

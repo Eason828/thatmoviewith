@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>That Movie</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
@@ -27,6 +27,7 @@
 			<string>com.jayhickey.thatmoviewith</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>TMW</string>
 				<string>thatmoviewith</string>
 			</array>
 		</dict>
