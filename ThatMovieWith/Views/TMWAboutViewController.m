@@ -163,6 +163,18 @@ static bool webButtonPressed;
             }
             break;
         }
+        case 3: // First actor button
+        {
+            SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/timbueno"];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            webViewController.barsTintColor = [UIColor goldColor];
+            [_creditsScrollView stopScrolling];
+            [self presentViewController:webViewController animated:YES completion:^(){
+                webButtonPressed = NO;
+                [self.creditsScrollView startScrolling];
+            }];
+            break;
+        }
     }
 }
 

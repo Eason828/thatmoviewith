@@ -159,7 +159,7 @@
 {
     
     if (_backgroundPlayer.volume < 1.0) {
-        _backgroundPlayer.volume = _backgroundPlayer.volume + 0.02;
+        _backgroundPlayer.volume = _backgroundPlayer.volume + 0.03;
         [self performSelector:@selector(doVolumeFadeIn) withObject:nil afterDelay:0.1];
     }
 }
