@@ -14,27 +14,26 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="64" width="320" height="10000"/>
+            <rect key="frame" x="0.0" y="64" width="320" height="504"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I7R-g1-eRM">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="10000"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This product uses the TMDb API but is not endorsed or certified by TMDb." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="SfL-FV-feW">
-                            <rect key="frame" x="20" y="86555.5" width="280" height="34"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This product uses the TMDb API but is not endorsed or certified by TMDb." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="SfL-FV-feW">
+                            <rect key="frame" x="20" y="4037.5" width="280" height="34"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="tmdb-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fp1-Ya-u8K">
-                            <rect key="frame" x="20" y="84276" width="280" height="24"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tmdb-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fp1-Ya-u8K">
+                            <rect key="frame" x="20" y="4010" width="280" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="24" id="YWT-aF-BQb"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nnw-1U-pXE" userLabel="Licenses Label">
-                            <rect key="frame" x="20" y="1278" width="280" height="2727"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nnw-1U-pXE" userLabel="Licenses Label">
+                            <rect key="frame" x="20" y="1233" width="280" height="2727"/>
                             <string key="text">AFNETWORKING
 
 Copyright (c) 2013-2014 AFNetworking (http://afnetworking.com/)
@@ -129,71 +128,56 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="ADAM WHITCROFT" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="KuS-cg-D34" userLabel="Batch Icon Label">
-                            <rect key="frame" x="20" y="1020" width="280" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="24"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="build" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T6e-uV-YS2" userLabel="Build Label">
-                            <rect key="frame" x="20" y="85398.5" width="280" height="17"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="build" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T6e-uV-YS2" userLabel="Build Label">
+                            <rect key="frame" x="20" y="4121.5" width="280" height="17"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="OPEN SOURCE SOFTWARE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYq-kL-PVQ">
-                            <rect key="frame" x="20" y="1251" width="280" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OPEN SOURCE SOFTWARE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYq-kL-PVQ">
+                            <rect key="frame" x="20" y="1206" width="280" height="19"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JAY HICKEY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vWm-bI-vez">
                             <rect key="frame" x="20" y="597" width="280" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="52"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TIM BUENO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oer-Ha-6NV">
-                            <rect key="frame" x="20" y="808" width="280" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="20" y="820" width="280" height="29"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="24"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DESIGN DIRECTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8fM-00-Des">
-                            <rect key="frame" x="80" y="781" width="161" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="80" y="793" width="161" height="19"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="MICHAEL BJELOVUK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYZ-zc-NPa">
-                            <rect key="frame" x="20" y="914" width="280" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MICHAEL BJELOVUK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYZ-zc-NPa">
+                            <rect key="frame" x="20" y="959" width="280" height="29"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="24"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="AUDIO PRODUCTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zs5-wj-DX0">
-                            <rect key="frame" x="20" y="887" width="280" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AUDIO PRODUCTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zs5-wj-DX0">
+                            <rect key="frame" x="20" y="932" width="280" height="19"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CREATED BY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9S7-GR-082">
                             <rect key="frame" x="20" y="568" width="280" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W9d-sP-9Yh">
-                            <rect key="frame" x="100" y="668" width="44" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="100" y="660" width="44" height="33"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
                             <state key="normal" title="TWITTER">
                                 <color key="titleColor" red="1" green="0.84313725490196079" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -203,9 +187,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
                                 <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="afd-Kn-ePa"/>
                             </connections>
                         </button>
-                        <button opaque="NO" tag="3" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7g-C8-NhP">
-                            <rect key="frame" x="138" y="846" width="44" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7g-C8-NhP">
+                            <rect key="frame" x="138" y="849" width="44" height="33"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
                             <state key="normal" title="TWITTER">
                                 <color key="titleColor" red="1" green="0.84313725490000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -215,47 +198,40 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
                                 <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="VES-fH-Itm"/>
                             </connections>
                         </button>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="SPECIAL THANKS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fiv-h5-Mv6">
-                            <rect key="frame" x="20" y="1116" width="280" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df0-Ya-yrh">
+                            <rect key="frame" x="138" y="988" width="44" height="33"/>
+                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
+                            <state key="normal" title="TWITTER">
+                                <color key="titleColor" red="1" green="0.84313725490000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="W7O-bT-T2x"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SPECIAL THANKS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fiv-h5-Mv6">
+                            <rect key="frame" x="20" y="1071" width="280" height="19"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="15"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="1yc-kP-WLD">
-                            <rect key="frame" x="20" y="1143" width="280" height="58"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="1yc-kP-WLD">
+                            <rect key="frame" x="20" y="1098" width="280" height="58"/>
                             <string key="text">JACK HICKEY
 MARIAH FOSNIGHT</string>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="24"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ewJ-Zl-JAG" userLabel="End View">
-                            <rect key="frame" x="20" y="4209" width="280" height="852"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ewJ-Zl-JAG" userLabel="End View">
+                            <rect key="frame" x="20" y="4164.5" width="280" height="852"/>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="852" id="R54-D3-tfJ"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="INTERFACE ICONS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39V-tF-Y5M">
-                            <rect key="frame" x="20" y="993" width="280" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="15"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="adamwhitcroft.com/batch" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="POL-La-cuW">
-                            <rect key="frame" x="20" y="1049" width="280" height="17"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="14"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdA-iz-MIL">
-                            <rect key="frame" x="187" y="668" width="33" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdA-iz-MIL">
+                            <rect key="frame" x="175" y="660" width="45" height="33"/>
                             <fontDescription key="fontDescription" name="Futura-CondensedMedium" family="Futura" pointSize="17"/>
                             <state key="normal" title="EMAIL">
                                 <color key="titleColor" red="1" green="0.84313725490196079" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -270,61 +246,54 @@ MARIAH FOSNIGHT</string>
                         <constraint firstItem="W9d-sP-9Yh" firstAttribute="width" secondItem="fdA-iz-MIL" secondAttribute="width" id="1L1-yW-Lfu"/>
                         <constraint firstItem="oer-Ha-6NV" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="2HM-MP-efA"/>
                         <constraint firstItem="oer-Ha-6NV" firstAttribute="top" secondItem="8fM-00-Des" secondAttribute="bottom" constant="8" id="4Gm-R5-UEF"/>
+                        <constraint firstItem="df0-Ya-yrh" firstAttribute="top" secondItem="NYZ-zc-NPa" secondAttribute="bottom" id="5Ix-tY-DgQ"/>
                         <constraint firstAttribute="centerX" secondItem="vWm-bI-vez" secondAttribute="centerX" id="6gK-DO-caA"/>
                         <constraint firstItem="T6e-uV-YS2" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="8M8-iG-N3f"/>
                         <constraint firstAttribute="trailing" secondItem="fiv-h5-Mv6" secondAttribute="trailing" constant="20" id="ArN-eK-JD6"/>
+                        <constraint firstItem="fiv-h5-Mv6" firstAttribute="top" secondItem="df0-Ya-yrh" secondAttribute="bottom" constant="50" id="CRc-YA-HZ3"/>
                         <constraint firstItem="Fp1-Ya-u8K" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="CfU-l7-s9l"/>
                         <constraint firstAttribute="trailing" secondItem="nnw-1U-pXE" secondAttribute="trailing" constant="20" id="DV3-jo-Rq5"/>
                         <constraint firstAttribute="trailing" secondItem="fdA-iz-MIL" secondAttribute="trailing" constant="100" id="Dpa-nx-Tos"/>
                         <constraint firstAttribute="trailing" secondItem="zs5-wj-DX0" secondAttribute="trailing" constant="20" id="ENj-Ou-dP3"/>
-                        <constraint firstItem="8fM-00-Des" firstAttribute="top" secondItem="fdA-iz-MIL" secondAttribute="bottom" constant="80" id="EOV-gh-Xhv"/>
-                        <constraint firstAttribute="trailing" secondItem="39V-tF-Y5M" secondAttribute="trailing" constant="20" id="Faf-lU-7mW"/>
+                        <constraint firstItem="8fM-00-Des" firstAttribute="top" secondItem="fdA-iz-MIL" secondAttribute="bottom" constant="100" id="EOV-gh-Xhv"/>
                         <constraint firstItem="8fM-00-Des" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="80" id="FqI-tY-x1n"/>
-                        <constraint firstItem="fiv-h5-Mv6" firstAttribute="top" secondItem="POL-La-cuW" secondAttribute="bottom" constant="50" id="GR7-Kf-91T"/>
                         <constraint firstItem="1yc-kP-WLD" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="GZj-F8-bVo"/>
                         <constraint firstAttribute="trailing" secondItem="ewJ-Zl-JAG" secondAttribute="trailing" constant="20" id="Hh4-8i-dAX"/>
-                        <constraint firstItem="fdA-iz-MIL" firstAttribute="top" secondItem="vWm-bI-vez" secondAttribute="bottom" constant="8" id="JBJ-lt-qA9"/>
+                        <constraint firstItem="fdA-iz-MIL" firstAttribute="top" secondItem="vWm-bI-vez" secondAttribute="bottom" id="JBJ-lt-qA9"/>
                         <constraint firstItem="SfL-FV-feW" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="JRI-5j-Gbx"/>
-                        <constraint firstItem="39V-tF-Y5M" firstAttribute="top" secondItem="NYZ-zc-NPa" secondAttribute="bottom" constant="50" id="L5H-wc-2ch"/>
                         <constraint firstAttribute="trailing" secondItem="NYZ-zc-NPa" secondAttribute="trailing" constant="20" id="LcP-cB-42s"/>
-                        <constraint firstAttribute="trailing" secondItem="POL-La-cuW" secondAttribute="trailing" constant="20" id="Nqw-aR-nge"/>
                         <constraint firstItem="9S7-GR-082" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="PrQ-Qq-aIt"/>
                         <constraint firstItem="ewJ-Zl-JAG" firstAttribute="top" secondItem="T6e-uV-YS2" secondAttribute="bottom" constant="26" id="PtR-Ts-syO"/>
                         <constraint firstAttribute="trailing" secondItem="bYq-kL-PVQ" secondAttribute="trailing" constant="20" id="RZk-qM-klL"/>
                         <constraint firstAttribute="bottom" secondItem="ewJ-Zl-JAG" secondAttribute="bottom" constant="5" id="RaV-OZ-9YM"/>
-                        <constraint firstAttribute="trailing" secondItem="KuS-cg-D34" secondAttribute="trailing" constant="20" id="SML-yi-1J6"/>
                         <constraint firstAttribute="trailing" secondItem="vWm-bI-vez" secondAttribute="trailing" constant="20" id="ShZ-4S-ADM"/>
                         <constraint firstAttribute="centerX" secondItem="g7g-C8-NhP" secondAttribute="centerX" id="UXu-88-bgd"/>
                         <constraint firstItem="ewJ-Zl-JAG" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="VUQ-VM-YjU"/>
-                        <constraint firstItem="KuS-cg-D34" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="Ww2-zH-86d"/>
                         <constraint firstAttribute="trailing" secondItem="9S7-GR-082" secondAttribute="trailing" constant="20" id="Y3r-oN-6aH"/>
                         <constraint firstAttribute="trailing" secondItem="1yc-kP-WLD" secondAttribute="trailing" constant="20" id="YzM-Qu-nCr"/>
                         <constraint firstItem="nnw-1U-pXE" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="ZmF-VC-VXL"/>
-                        <constraint firstItem="W9d-sP-9Yh" firstAttribute="top" secondItem="vWm-bI-vez" secondAttribute="bottom" constant="8" id="agP-AG-hiC"/>
+                        <constraint firstItem="W9d-sP-9Yh" firstAttribute="top" secondItem="vWm-bI-vez" secondAttribute="bottom" id="agP-AG-hiC"/>
                         <constraint firstItem="NYZ-zc-NPa" firstAttribute="top" secondItem="zs5-wj-DX0" secondAttribute="bottom" constant="8" id="ahp-PJ-33c"/>
-                        <constraint firstItem="POL-La-cuW" firstAttribute="top" secondItem="KuS-cg-D34" secondAttribute="bottom" id="auy-4X-cNH"/>
                         <constraint firstItem="1yc-kP-WLD" firstAttribute="top" secondItem="fiv-h5-Mv6" secondAttribute="bottom" constant="8" id="dUx-gz-ftd"/>
                         <constraint firstItem="bYq-kL-PVQ" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="do3-YH-Bh0"/>
                         <constraint firstItem="T6e-uV-YS2" firstAttribute="top" secondItem="SfL-FV-feW" secondAttribute="bottom" constant="50" id="e1a-Xu-kQs"/>
                         <constraint firstItem="g7g-C8-NhP" firstAttribute="top" secondItem="oer-Ha-6NV" secondAttribute="bottom" id="eX2-nP-fo9"/>
-                        <constraint firstItem="KuS-cg-D34" firstAttribute="top" secondItem="39V-tF-Y5M" secondAttribute="bottom" constant="8" id="ezn-Qe-YZ3"/>
                         <constraint firstItem="Fp1-Ya-u8K" firstAttribute="top" secondItem="nnw-1U-pXE" secondAttribute="bottom" constant="50" id="frF-VW-ORr"/>
                         <constraint firstItem="SfL-FV-feW" firstAttribute="top" secondItem="Fp1-Ya-u8K" secondAttribute="bottom" constant="2.5" id="gGL-gf-BlD"/>
+                        <constraint firstAttribute="centerX" secondItem="df0-Ya-yrh" secondAttribute="centerX" id="go4-qG-AP1"/>
                         <constraint firstItem="W9d-sP-9Yh" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="100" id="gtR-xn-xuA"/>
                         <constraint firstAttribute="trailing" secondItem="T6e-uV-YS2" secondAttribute="trailing" constant="20" id="hAf-mh-GMD"/>
                         <constraint firstAttribute="trailing" secondItem="8fM-00-Des" secondAttribute="trailing" constant="79" id="hj6-be-Ag3"/>
                         <constraint firstItem="NYZ-zc-NPa" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="jjV-mr-HRw"/>
                         <constraint firstItem="vWm-bI-vez" firstAttribute="top" secondItem="9S7-GR-082" secondAttribute="bottom" constant="8" id="mCC-R8-xT8"/>
-                        <constraint firstItem="POL-La-cuW" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="mc5-3h-rfS"/>
                         <constraint firstItem="9S7-GR-082" firstAttribute="top" secondItem="I7R-g1-eRM" secondAttribute="top" constant="568" id="nCI-mK-H5X"/>
                         <constraint firstAttribute="trailing" secondItem="Fp1-Ya-u8K" secondAttribute="trailing" constant="20" id="nhV-Pt-Muc"/>
                         <constraint firstItem="bYq-kL-PVQ" firstAttribute="top" secondItem="1yc-kP-WLD" secondAttribute="bottom" constant="50" id="ppr-u4-beb"/>
                         <constraint firstAttribute="trailing" secondItem="oer-Ha-6NV" secondAttribute="trailing" constant="20" id="ptS-yZ-f51"/>
                         <constraint firstAttribute="trailing" secondItem="SfL-FV-feW" secondAttribute="trailing" constant="20" id="sYX-V9-vki"/>
                         <constraint firstItem="fiv-h5-Mv6" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="tmz-D9-qTl"/>
-                        <constraint firstItem="8fM-00-Des" firstAttribute="top" secondItem="W9d-sP-9Yh" secondAttribute="bottom" constant="80" id="uMH-dV-StB"/>
+                        <constraint firstItem="8fM-00-Des" firstAttribute="top" secondItem="W9d-sP-9Yh" secondAttribute="bottom" constant="100" id="uMH-dV-StB"/>
                         <constraint firstItem="zs5-wj-DX0" firstAttribute="top" secondItem="g7g-C8-NhP" secondAttribute="bottom" constant="50" id="v7D-Wn-ZEj"/>
-                        <constraint firstItem="39V-tF-Y5M" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="vBw-z5-6AZ"/>
                         <constraint firstItem="nnw-1U-pXE" firstAttribute="top" secondItem="bYq-kL-PVQ" secondAttribute="bottom" constant="8" id="vch-kS-aiQ"/>
                         <constraint firstItem="vWm-bI-vez" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="wVY-vC-vHE"/>
                         <constraint firstItem="zs5-wj-DX0" firstAttribute="leading" secondItem="I7R-g1-eRM" secondAttribute="leading" constant="20" id="xOa-xt-N7R"/>
@@ -340,7 +309,7 @@ MARIAH FOSNIGHT</string>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>

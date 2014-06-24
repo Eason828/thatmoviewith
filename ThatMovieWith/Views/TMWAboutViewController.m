@@ -175,13 +175,24 @@ static bool webButtonPressed;
             }];
             break;
         }
+        case 4: // First actor button
+        {
+            SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/michaelbjelovuk"];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            webViewController.barsTintColor = [UIColor goldColor];
+            [_creditsScrollView stopScrolling];
+            [self presentViewController:webViewController animated:YES completion:^(){
+                webButtonPressed = NO;
+                [self.creditsScrollView startScrolling];
+            }];
+            break;
+        }
     }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
     // you can test the result of the mail sending here if you want
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
