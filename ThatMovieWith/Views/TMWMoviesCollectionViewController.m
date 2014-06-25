@@ -215,7 +215,7 @@ CGFloat cellWidth;
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
+            NSString *movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
             
             // Darken the image
             UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
@@ -248,14 +248,14 @@ CGFloat cellWidth;
                 [UIView transitionWithView:cell.secondLabel
                                   duration:0.5f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{[cell.secondLabel setText:movieReleaseString];}
+                                animations:^{[cell.secondLabel setText:movieYearString];}
                                 completion:NULL];
             }
             else {
                 // Set the image label properties to center it in the cell
                 [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
                 cell.imageView.image = image;
-                cell.secondLabel.text = movieReleaseString;
+                cell.secondLabel.text = movieYearString;
             }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
@@ -279,7 +279,7 @@ CGFloat cellWidth;
     else {
         UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes"];
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
-        NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseDates objectAtIndex:indexPath.row];
+        NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
         
         cell.secondLabel.text = movieReleaseString;
         

@@ -62,7 +62,7 @@
 {
     _secondLabel = [UILabel new];
     self.secondLabel.textColor = [UIColor whiteColor];
-    self.secondLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:12];
+    self.secondLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
     self.secondLabel.textAlignment = NSTextAlignmentRight;
     self.secondLabel.backgroundColor = [UIColor clearColor];
     self.secondLabel.frame = CGRectMake(self.contentView.frame.origin.x - 5, self.contentView.frame.origin.y + self.contentView.frame.size.height/2 - 12, self.contentView.frame.size.width, self.contentView.frame.size.height);

@@ -15,7 +15,7 @@
 @property(nonatomic, copy, readonly) NSArray *sameMovies;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesNames;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesPosterUrlEndings;
-@property(nonatomic, copy, readonly) NSArray *sameMoviesReleaseDates;
+@property(nonatomic, copy, readonly) NSArray *sameMoviesReleaseYears;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesIDs;
 @property(nonatomic, copy, readonly) NSArray *sameMoviesRottenTomatoes;
 @property(nonatomic, copy) NSString *imagesBaseURLString;

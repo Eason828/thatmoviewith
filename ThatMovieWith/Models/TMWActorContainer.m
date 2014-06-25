@@ -170,7 +170,7 @@ static TMWActorContainer *actorContainer;
     return samePosterArray;
 }
 
-- (NSArray *)sameMoviesReleaseDates
+- (NSArray *)sameMoviesReleaseYears
 {
     TMWActor *firstActor = mutableActorContainer[0];
     NSMutableArray *sameMoviesReleaseDatesArray = [[NSMutableArray alloc] init];

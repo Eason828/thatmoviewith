@@ -796,7 +796,7 @@ float frameH;
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         for (UIView *v in controller.searchResultsTableView.subviews) {
             if ([v isKindOfClass:[UILabel self]]) {
-                ((UILabel *)v).font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];;
+                ((UILabel *)v).font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];;
                 break;
             }
         }
