@@ -87,12 +87,13 @@ CGFloat cellWidth;
     
     _noResultsLabel.text = @"No movies";
     
-    if ([[TMWActorContainer actorContainer].actorNames count] > 1) {
-        _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@ and %@", [TMWActorContainer actorContainer].actorNames[0], [TMWActorContainer actorContainer].actorNames[1]];
-    }
-
     [_noResultsView addSubview:_noResultsLabel];
     _noResultsLabel.hidden = YES;
+    
+    if ([[TMWActorContainer actorContainer].actorNames count] > 1) {
+        _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@ and %@", [TMWActorContainer actorContainer].actorNames[0], [TMWActorContainer actorContainer].actorNames[1]];
+        _noResultsLabel.hidden = NO;
+    }
     
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
