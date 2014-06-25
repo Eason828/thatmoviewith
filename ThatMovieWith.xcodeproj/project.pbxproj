@@ -18,6 +18,7 @@
 		E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E575954C19493DDB00C35392 /* TMDB_API_KEY */; };
 		E5760D6E195A6615008C6BF5 /* Credits.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5760D6D195A6615008C6BF5 /* Credits.m4a */; };
 		E5760D75195A7417008C6BF5 /* Refresh.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5760D74195A7417008C6BF5 /* Refresh.m4a */; };
+		E5760D79195B8E53008C6BF5 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E5760D78195B8E53008C6BF5 /* SVProgressHUD.m */; };
 		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E57B8FD0193156F40086593D /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E57B8FCE193156F40086593D /* TMWActorViewController.m */; };
 		E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCF193156F40086593D /* TMWActorViewController.xib */; };
@@ -104,6 +105,8 @@
 		E575954C19493DDB00C35392 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
 		E5760D6D195A6615008C6BF5 /* Credits.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Credits.m4a; path = sounds/Credits.m4a; sourceTree = SOURCE_ROOT; };
 		E5760D74195A7417008C6BF5 /* Refresh.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Refresh.m4a; path = sounds/Refresh.m4a; sourceTree = SOURCE_ROOT; };
+		E5760D77195B8E53008C6BF5 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD/SVProgressHUD.h; sourceTree = "<group>"; };
+		E5760D78195B8E53008C6BF5 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
 		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E57B8FCD193156F40086593D /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = Views/TMWActorViewController.h; sourceTree = "<group>"; };
 		E57B8FCE193156F40086593D /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorViewController.m; path = Views/TMWActorViewController.m; sourceTree = "<group>"; };
@@ -331,6 +334,15 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		E5760D76195B8E42008C6BF5 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				E5760D77195B8E53008C6BF5 /* SVProgressHUD.h */,
+				E5760D78195B8E53008C6BF5 /* SVProgressHUD.m */,
+			);
+			name = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		E57E87C6195256A400832995 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -396,6 +408,7 @@
 		E5994CF718FDE85100A5B79F /* ThatMovieWith */ = {
 			isa = PBXGroup;
 			children = (
+				E5760D76195B8E42008C6BF5 /* SVProgressHUD */,
 				E5C1DEE019175E900041E31D /* SVWebViewController */,
 				E5994D0018FDE85100A5B79F /* TMWAppDelegate.h */,
 				E5994D0118FDE85100A5B79F /* TMWAppDelegate.m */,
@@ -721,6 +734,7 @@
 				E58EB20D1929D00600A254C5 /* TMWMoviesCollectionViewController.m in Sources */,
 				E57B8FD0193156F40086593D /* TMWActorViewController.m in Sources */,
 				E58EB2081929CFFD00A254C5 /* ParallaxFlowLayout.m in Sources */,
+				E5760D79195B8E53008C6BF5 /* SVProgressHUD.m in Sources */,
 				E5A1730419562D56006A125E /* TMWSoundEffects.m in Sources */,
 				E58EB2011929CF0B00A254C5 /* UIImage+ImageEffects.m in Sources */,
 				E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */,

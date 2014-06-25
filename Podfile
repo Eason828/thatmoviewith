@@ -3,4 +3,3 @@ pod 'HockeySDK'
 pod 'JLTMDbClient'
 pod 'Shimmer'
 pod 'CWStatusBarNotification'
-pod 'SVProgressHUD', :head

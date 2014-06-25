@@ -31,6 +31,8 @@
     self.clipsToBounds = YES;
 
     [self setupImageView];
+    [self setupActivityIndicator]; // Must be added to view after imageview so
+                                   // it isn't covered by black temp image
     [self setupLabel];
     [self setupSecondLabel];
     [self setupConstraints];
@@ -45,6 +47,14 @@
     _imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.bounds = self.contentView.bounds;
     [self.contentView addSubview:_imageView];
+}
+
+- (void)setupActivityIndicator
+{
+    _activityIndicator = [[UIActivityIndicatorView alloc]  initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    self.activityIndicator.bounds = self.contentView.bounds;
+    self.activityIndicator.center = self.contentView.center;
+    [self.contentView addSubview:_activityIndicator];
 }
 
 - (void)setupLabel

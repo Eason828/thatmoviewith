@@ -11,6 +11,7 @@
 #import <JLTMDbClient.h>
 #import <FBShimmeringView.h>
 #import <CWStatusBarNotification.h>
+#import "SVProgressHUD.h"
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -557,6 +558,10 @@ float frameH;
         else {
             _firstActorActionView.backgroundColor = [UIColor flatRedColor];
         }
+        // Make sure the actor image and label are on top
+        [self.view bringSubviewToFront:_firstActorScrollView];
+        [_firstActorScrollView bringSubviewToFront:_firstActorButton];
+        [_firstActorScrollView bringSubviewToFront:_firstActorLabel];
     }
     
     else if (scrollView == _secondActorScrollView) {
@@ -572,6 +577,10 @@ float frameH;
         else {
             _secondActorActionView.backgroundColor = [UIColor flatRedColor];
         }
+        // Make sure the actor image and label are on top
+        [self.view bringSubviewToFront:_secondActorScrollView];
+        [_secondActorScrollView bringSubviewToFront:_secondActorButton];
+        [_secondActorScrollView bringSubviewToFront:_secondActorLabel];
     }
     
     if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
@@ -637,7 +646,6 @@ float frameH;
     }
     
     if (scrollView == _secondActorScrollView) {
-        
         // Move the other actor back into its original position
         if (_firstActorScrollView.contentOffset.x != 0) {
             if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
@@ -997,6 +1005,8 @@ float frameH;
     button.clipsToBounds = NO;
     
     label.hidden = YES;
+    
+    [SVProgressHUD show];
 
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
@@ -1040,6 +1050,10 @@ float frameH;
             self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
             self.pushBehavior.active = YES;
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            
             // Play sound
             [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
@@ -1076,6 +1090,7 @@ float frameH;
         }
         self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
         self.pushBehavior.active = YES;
+        [SVProgressHUD dismiss];
         
     }
 }

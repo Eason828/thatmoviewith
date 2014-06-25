@@ -212,8 +212,12 @@ CGFloat cellWidth;
         
         NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
         
+        [cell.activityIndicator startAnimating];
+        
         // Get the image from the URL and set it
         [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]] placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            
+            [cell.activityIndicator stopAnimating];
             
             NSString *movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
             
@@ -259,6 +263,9 @@ CGFloat cellWidth;
             }
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            
+            [cell.activityIndicator stopAnimating];
+            
             // Hide the network activity icon
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             

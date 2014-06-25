@@ -13,6 +13,7 @@
 @property (nonatomic, strong, readonly) UIImageView *imageView;
 @property (nonatomic, strong, readonly) UILabel *label;
 @property (nonatomic, strong, readonly) UILabel *secondLabel;
+@property (nonatomic, strong, readonly) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic) CGFloat maxParallaxOffset;
 
 @end
