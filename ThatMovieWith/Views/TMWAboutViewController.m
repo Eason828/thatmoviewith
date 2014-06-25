@@ -13,6 +13,7 @@
 #import "TMWAutoScroll.h"
 #import "SVWebViewController.h"
 #import "UIColor+customColors.h"
+#import <CWStatusBarNotification.h>
 
 @interface TMWAboutViewController () <UIScrollViewDelegate, MFMailComposeViewControllerDelegate>
 
@@ -127,10 +128,11 @@ static bool webButtonPressed;
     webButtonPressed = YES;
     
     // Restart the scrolling credits in the About view
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
+    // Don't pause for email button incase user hasn't setup email
+    if (button.tag !=2) [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
     
     switch ([button tag]) {
-        case 1: // First actor button
+        case 1: // Jay's twitter
         {
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/jayhickey"];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -143,9 +145,10 @@ static bool webButtonPressed;
             break;
         }
             
-        case 2: // Second actor button
+        case 2: // Support email
         {
             if ([MFMailComposeViewController canSendMail]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
                 [_creditsScrollView stopScrolling];
                 MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
                 [composeViewController setMailComposeDelegate:self];
@@ -161,9 +164,18 @@ static bool webButtonPressed;
                     [self.creditsScrollView startScrolling];
                 }];
             }
+            else {
+                webButtonPressed = NO;
+                CWStatusBarNotification *IMDBnotification = [CWStatusBarNotification new];
+                IMDBnotification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+                IMDBnotification.notificationLabelTextColor = [UIColor blackColor];
+                IMDBnotification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+                IMDBnotification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+                [IMDBnotification displayNotificationWithMessage:@"Email not configured. support@thatmoviewith.com" forDuration:6.0f];
+            }
             break;
         }
-        case 3: // First actor button
+        case 3: // Tim's twitter
         {
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/timbueno"];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -175,7 +187,7 @@ static bool webButtonPressed;
             }];
             break;
         }
-        case 4: // First actor button
+        case 4: // Mike's twitter
         {
             SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://twitter.com/michaelbjelovuk"];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;

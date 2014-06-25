@@ -17,6 +17,7 @@
 		E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E56A042D193C44E700FC6F23 /* TMWAPI.m */; };
 		E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E575954C19493DDB00C35392 /* TMDB_API_KEY */; };
 		E5760D6E195A6615008C6BF5 /* Credits.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5760D6D195A6615008C6BF5 /* Credits.m4a */; };
+		E5760D75195A7417008C6BF5 /* Refresh.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5760D74195A7417008C6BF5 /* Refresh.m4a */; };
 		E57B8FC9192F1B5E0086593D /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FC8192F1B5E0086593D /* black.png */; };
 		E57B8FD0193156F40086593D /* TMWActorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E57B8FCE193156F40086593D /* TMWActorViewController.m */; };
 		E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E57B8FCF193156F40086593D /* TMWActorViewController.xib */; };
@@ -102,6 +103,7 @@
 		E56A042D193C44E700FC6F23 /* TMWAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAPI.m; path = Models/TMWAPI.m; sourceTree = "<group>"; };
 		E575954C19493DDB00C35392 /* TMDB_API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TMDB_API_KEY; sourceTree = "<group>"; };
 		E5760D6D195A6615008C6BF5 /* Credits.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Credits.m4a; path = sounds/Credits.m4a; sourceTree = SOURCE_ROOT; };
+		E5760D74195A7417008C6BF5 /* Refresh.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = Refresh.m4a; path = sounds/Refresh.m4a; sourceTree = SOURCE_ROOT; };
 		E57B8FC8192F1B5E0086593D /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
 		E57B8FCD193156F40086593D /* TMWActorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWActorViewController.h; path = Views/TMWActorViewController.h; sourceTree = "<group>"; };
 		E57B8FCE193156F40086593D /* TMWActorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWActorViewController.m; path = Views/TMWActorViewController.m; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 		E57E87C6195256A400832995 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E5760D74195A7417008C6BF5 /* Refresh.m4a */,
 				E5760D6D195A6615008C6BF5 /* Credits.m4a */,
 			);
 			name = sounds;
@@ -597,6 +600,7 @@
 				E5A1730819563907006A125E /* DefaultPreferences.plist in Resources */,
 				E5C1DF0519175E900041E31D /* SVWebViewControllerActivitySafari-iPad.png in Resources */,
 				E5C1DF0119175E900041E31D /* SVWebViewControllerActivityChrome-iPad@2x.png in Resources */,
+				E5760D75195A7417008C6BF5 /* Refresh.m4a in Resources */,
 				E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */,
 				E5A172F11956275D006A125E /* audio-mute@2x.png in Resources */,
 				E5C1DEFC19175E900041E31D /* README.md in Resources */,
@@ -831,7 +835,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ThatMovieWith/ThatMovieWith-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;

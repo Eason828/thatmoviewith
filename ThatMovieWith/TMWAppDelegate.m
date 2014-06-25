@@ -47,7 +47,13 @@
     [self.window makeKeyAndVisible];
     
     // Hockey app needs to be the last 3rd party integration in this method
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
+    if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.thatmoviewith"]) {
+        // App Store Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"e62a5cc4f832208f409e4d889fb8ec99"];
+    } else {
+        // Beta Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
+    }
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
 
