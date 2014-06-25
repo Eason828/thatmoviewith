@@ -3,26 +3,26 @@
 <plist version="1.0">
 <dict>
 	<key>Credits Background Music</key>
-	<string>background</string>
+	<string>Credits</string>
 	<key>When tapping to add an actor</key>
-	<string>silence</string>
+	<string></string>
 	<key>When cancel button is clicked in actor search</key>
-	<string>silence</string>
+	<string></string>
 	<key>When actor is added and bounce occurs</key>
-	<string>silence</string>
+	<string></string>
 	<key>When swipe transition to movies screen begins</key>
-	<string>silence</string>
+	<string></string>
 	<key>During transition to movies screen</key>
-	<string>silence</string>
+	<string></string>
 	<key>When swipe transition to delete actor begins</key>
-	<string>silence</string>
+	<string></string>
 	<key>During deletion of actor</key>
-	<string>silence</string>
+	<string></string>
 	<key>When a movie is selected</key>
-	<string>silence</string>
+	<string></string>
 	<key>When leaving IMDb website view</key>
-	<string>silence</string>
+	<string></string>
 	<key>When pressing the back button to go back from the movies to the actors screen</key>
-	<string>silence</string>
+	<string></string>
 </dict>
 </plist>
