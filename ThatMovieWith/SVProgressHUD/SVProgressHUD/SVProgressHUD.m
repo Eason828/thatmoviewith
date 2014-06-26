@@ -381,27 +381,25 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 - (void)positionHUD:(NSNotification*)notification {
     
     CGFloat keyboardHeight;
-    double animationDuration;
+    double animationDuration = 0.0;
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     
-// Removed keyboard positioning to keep HUD in center at all times
-    
-//    if(notification) {
-//        NSDictionary* keyboardInfo = [notification userInfo];
-//        CGRect keyboardFrame = [[keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-//        animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-//        
-//        if(notification.name == UIKeyboardWillShowNotification || notification.name == UIKeyboardDidShowNotification) {
-//            if(UIInterfaceOrientationIsPortrait(orientation))
-//                keyboardHeight = keyboardFrame.size.height;
-//            else
-//                keyboardHeight = keyboardFrame.size.width;
-//        } else
-//            keyboardHeight = 0;
-//    } else {
-//        keyboardHeight = self.visibleKeyboardHeight;
-//    }
+    if(notification) {
+        NSDictionary* keyboardInfo = [notification userInfo];
+        CGRect keyboardFrame = [[keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        
+        if(notification.name == UIKeyboardWillShowNotification || notification.name == UIKeyboardDidShowNotification) {
+            if(UIInterfaceOrientationIsPortrait(orientation))
+                keyboardHeight = keyboardFrame.size.height;
+            else
+                keyboardHeight = keyboardFrame.size.width;
+        } else
+            keyboardHeight = 0;
+    } else {
+        keyboardHeight = self.visibleKeyboardHeight;
+    }
     
     CGRect orientationFrame = [UIScreen mainScreen].bounds;
     CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
@@ -418,9 +416,8 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     
     CGFloat activeHeight = orientationFrame.size.height;
     
-// Removed keyboard positioning to keep HUD in center at all times
-//    if(keyboardHeight > 0)
-//        activeHeight += statusBarFrame.size.height*2;
+    if(keyboardHeight > 0)
+        activeHeight += statusBarFrame.size.height*2;
     
     activeHeight -= keyboardHeight;
     CGFloat posY = floor(activeHeight*0.5); // Changed from .45 to .5 to center HUD

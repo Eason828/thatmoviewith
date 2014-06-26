@@ -72,6 +72,7 @@ TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
 bool hasSearched;
+bool doneLoadingActorImage;
 bool pastSoundThreshold;
 float frameX;
 float frameY;
@@ -542,6 +543,11 @@ float frameH;
     [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+- (void)SVProgressHUDShow
+{
+    if (!doneLoadingActorImage) [SVProgressHUD show];
+}
+
 #pragma mark UIScrollView methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -1006,7 +1012,9 @@ float frameH;
     
     label.hidden = YES;
     
-    [SVProgressHUD show];
+    doneLoadingActorImage = NO;
+    
+    [self performSelector:@selector(SVProgressHUDShow) withObject:nil afterDelay:0.5];
 
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
@@ -1016,6 +1024,8 @@ float frameH;
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
         [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
+            
+            doneLoadingActorImage = YES;
             
             // Set the image
             weakActorImage.image = image;
@@ -1058,10 +1068,12 @@ float frameH;
             [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
+            doneLoadingActorImage = YES;
             NSLog(@"Failed with error: %@", error);
         }];
     }
     else {
+        doneLoadingActorImage = YES;
         UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes.png"];
         [actorImage setImage:defaultImage];
         // Get the actor circle initials image with layer and set it to the button background
