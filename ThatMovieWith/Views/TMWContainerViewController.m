@@ -146,7 +146,7 @@
 {
     if (_backgroundPlayer.volume > 0.1) {
         _backgroundPlayer.volume = _backgroundPlayer.volume - 0.05;
-        [self performSelector:@selector(doVolumeFadeOutAndRestartToTime:) withObject:currentTime afterDelay:0.05];
+        [self performSelector:@selector(doVolumeFadeOutAndRestartToTime:) withObject:currentTime afterDelay:0.025];
     } else {
         // Stop and get the sound ready for playing again
         [_backgroundPlayer stop];

@@ -62,7 +62,7 @@ static bool webButtonPressed;
     version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     buildNumber = [infoDictionary objectForKey:@"CFBundleVersion"];
     
-    _buildLabel.text = [NSString stringWithFormat:@"Build %@ (%@)",
+    _buildLabel.text = [NSString stringWithFormat:@"Version %@ (%@)",
                         version, buildNumber];
     
     
@@ -129,7 +129,8 @@ static bool webButtonPressed;
     
     // Restart the scrolling credits in the About view
     // Don't pause for email button incase user hasn't setup email
-    if (button.tag !=2) [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
+    // and don't pause it for the iTunes opening
+    if (button.tag !=2 || button.tag != 5) [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
     
     switch ([button tag]) {
         case 1: // Jay's twitter
@@ -197,6 +198,12 @@ static bool webButtonPressed;
                 webButtonPressed = NO;
                 [self.creditsScrollView startScrolling];
             }];
+            break;
+        }
+        case 5: // App Review
+        {
+            [[UIApplication sharedApplication]
+             openURL:[NSURL URLWithString:@"http://itunes.apple.com/us/app/that-movie-with/id892972135?ls=1&mt=8"]];
             break;
         }
     }
