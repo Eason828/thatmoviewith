@@ -552,6 +552,7 @@ float frameH;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == _firstActorScrollView) {
+        NSLog(@"scrolling first");
         _firstActorActionView.hidden = NO;
         _firstActorDeleteLabel.text = deleteSlideString;
         _firstActorActionLabel.text = moviesSlideString;
@@ -564,13 +565,10 @@ float frameH;
         else {
             _firstActorActionView.backgroundColor = [UIColor flatRedColor];
         }
-        // Make sure the actor image and label are on top
-        [self.view bringSubviewToFront:_firstActorScrollView];
-        [_firstActorScrollView bringSubviewToFront:_firstActorButton];
-        [_firstActorScrollView bringSubviewToFront:_firstActorLabel];
     }
     
     else if (scrollView == _secondActorScrollView) {
+        NSLog(@"scrolling second");
         _secondActorActionView.hidden = NO;
         _secondActorDeleteLabel.text = deleteSlideString;
         _secondActorActionLabel.text = moviesSlideString;
@@ -584,9 +582,8 @@ float frameH;
             _secondActorActionView.backgroundColor = [UIColor flatRedColor];
         }
         // Make sure the actor image and label are on top
-        [self.view bringSubviewToFront:_secondActorScrollView];
-        [_secondActorScrollView bringSubviewToFront:_secondActorButton];
-        [_secondActorScrollView bringSubviewToFront:_secondActorLabel];
+        [self.view sendSubviewToBack:_secondActorActionView];
+        [self.view sendSubviewToBack:_curtainView];
     }
     
     if (_firstActorScrollView.contentOffset.x > 0 || _secondActorScrollView.contentOffset.x > 0) {
