@@ -22,7 +22,11 @@
     // get the context for CoreGraphics
     UIGraphicsGetCurrentContext();
     
-    NSArray *separatedNames = [initials componentsSeparatedByString:@" "];
+    // Remove any leading or trailing whitespace, then put each word in an array
+    // From http://nshipster.com/nscharacterset/
+    initials = [initials stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *separatedNames = [initials componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    separatedNames = [separatedNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self <> ''"]];
     
     if ([separatedNames count] > 0) {
         NSMutableString *combinedInitials = [[NSMutableString alloc] initWithString:[separatedNames[0] substringToIndex:1]];

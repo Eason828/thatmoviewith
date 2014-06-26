@@ -50,9 +50,14 @@
     if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.thatmoviewith"]) {
         // App Store Version
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"e62a5cc4f832208f409e4d889fb8ec99"];
-    } else {
+    }
+    else if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.ThatMovieWithbeta"]){
         // Beta Version
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
+    }
+    else {
+        // Alpha Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"b1ab12e2a5c884b5684e9a321f49141d"];
     }
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];

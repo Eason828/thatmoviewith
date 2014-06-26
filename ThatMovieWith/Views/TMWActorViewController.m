@@ -756,8 +756,7 @@ float frameH;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [self.searchBarController.searchResultsTableView setContentOffset:CGPointMake(self.searchBarController.searchResultsTableView.contentOffset.x, 0)
-                             animated:YES];
+    [self.searchBarController.searchResultsTableView setContentOffset:CGPointMake(self.searchBarController.searchResultsTableView.contentOffset.x, 0) animated:YES];
     
     // Delays on making the actor API calls
     if([searchText length] != 0) {
