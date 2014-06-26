@@ -1,9 +1,9 @@
 //
 //  ParallaxFlowLayout.h
-//  ParallaxScrolling
+//  ThatMovieWith
 //
-//  Created by Ole Begemann on 01.05.14.
-//  Copyright (c) 2014 Ole Begemann. All rights reserved.
+//  Created by johnrhickey on 4/24/14.
+//  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
 @import UIKit;

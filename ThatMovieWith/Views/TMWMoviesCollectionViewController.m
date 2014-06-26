@@ -1,9 +1,9 @@
 //
-//  PhotosCollectionViewController.m
-//  ParallaxScrolling
+//  TMWMoviesCollectionViewController.m
+//  ThatMovieWith
 //
-//  Created by Ole Begemann on 01.05.14.
-//  Copyright (c) 2014 Ole Begemann. All rights reserved.
+//  Created by johnrhickey on 4/24/14.
+//  Copyright (c) 2014 Jay Hickey. All rights reserved.
 //
 
 #import "TMWMoviesCollectionViewController.h"
@@ -24,7 +24,6 @@
 
 @property (nonatomic, copy) NSArray *photos;
 @property (nonatomic, copy) UIImageView *backgroundView;
-@property (nonatomic, strong) UIView *noResultsView;
 @property (nonatomic, strong) UILabel *noResultsLabel;
 
 @end
@@ -74,10 +73,6 @@ CGFloat cellWidth;
 {
     [super viewDidLoad];
     
-    _noResultsView = [UIView new];
-    _noResultsView.frame = self.view.frame;
-    [self.view addSubview:_noResultsView];
-    
     _noResultsLabel = [UILabel new];
     _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 30, self.view.frame.origin.y, self.view.frame.size.width - 60, self.view.frame.size.height);
     _noResultsLabel.textAlignment = NSTextAlignmentCenter;
@@ -87,13 +82,14 @@ CGFloat cellWidth;
     
     _noResultsLabel.text = @"No movies";
     
-    [_noResultsView addSubview:_noResultsLabel];
-    _noResultsLabel.hidden = YES;
+    _noResultsLabel.frame = self.view.frame;
+    _noResultsLabel.alpha = 0.0;
     
     if ([[TMWActorContainer actorContainer].actorNames count] > 1) {
         _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@ and %@", [TMWActorContainer actorContainer].actorNames[0], [TMWActorContainer actorContainer].actorNames[1]];
-        _noResultsLabel.hidden = NO;
     }
+    
+    [self.view addSubview:_noResultsLabel];
     
     // Calls perferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
@@ -328,7 +324,6 @@ CGFloat cellWidth;
         notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
         
         [[JLTMDbClient sharedAPIInstance] GET:kJLTMDbPersonCredits withParameters:@{@"id":actor.IDNumber} andResponseBlock:^(id response, NSError *error) {
-            
             if (!error) {
                 actor.movies = [[NSArray alloc] initWithArray:response[@"cast"]];
                 if (i == [[TMWActorContainer actorContainer].allActorObjects count]) {
@@ -336,9 +331,22 @@ CGFloat cellWidth;
                         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                         tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
-                            self.noResultsView.hidden = NO;
-                        } else {
-                            self.noResultsView.hidden = YES;
+                            [UIView animateWithDuration:0.5
+                                                  delay:0
+                                                options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                                             animations:^(void) {
+                                                 self.noResultsLabel.alpha = 1.0;
+                                             }
+                                             completion:nil];
+                        }
+                        else {
+                            [UIView animateWithDuration:0.5
+                                                  delay:0
+                                                options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                                             animations:^(void) {
+                                                 self.noResultsLabel.alpha = 0.0;
+                                             }
+                                             completion:nil];
                         }
                         [self.collectionView reloadData];
                     });

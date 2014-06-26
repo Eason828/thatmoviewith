@@ -552,7 +552,6 @@ float frameH;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == _firstActorScrollView) {
-        NSLog(@"scrolling first");
         _firstActorActionView.hidden = NO;
         _firstActorDeleteLabel.text = deleteSlideString;
         _firstActorActionLabel.text = moviesSlideString;
@@ -568,7 +567,6 @@ float frameH;
     }
     
     else if (scrollView == _secondActorScrollView) {
-        NSLog(@"scrolling second");
         _secondActorActionView.hidden = NO;
         _secondActorDeleteLabel.text = deleteSlideString;
         _secondActorActionLabel.text = moviesSlideString;
