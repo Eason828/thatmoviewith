@@ -59,6 +59,9 @@
         // Alpha Version
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"b1ab12e2a5c884b5684e9a321f49141d"];
     }
+    // Automatically send crash reports
+    [[BITHockeyManager sharedHockeyManager].crashManager setCrashManagerStatus: BITCrashManagerStatusAutoSend];
+    
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
 
