@@ -80,11 +80,11 @@ CGFloat cellWidth;
     _noResultsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _noResultsLabel.numberOfLines = 0;
     
-    _noResultsLabel.text = @"No movies";
-    
-    _noResultsLabel.frame = self.view.frame;
+    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
     _noResultsLabel.alpha = 0.0;
     
+    // Prepare the label in case there are no results
+    _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@", [TMWActorContainer actorContainer].actorNames[0]];
     if ([[TMWActorContainer actorContainer].actorNames count] > 1) {
         _noResultsLabel.text = [NSString stringWithFormat:@"No movies with %@ and %@", [TMWActorContainer actorContainer].actorNames[0], [TMWActorContainer actorContainer].actorNames[1]];
     }
@@ -331,6 +331,8 @@ CGFloat cellWidth;
                         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                         tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
                         if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
+                            
+                            // Animate in the no results label
                             [UIView animateWithDuration:0.5
                                                   delay:0
                                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
