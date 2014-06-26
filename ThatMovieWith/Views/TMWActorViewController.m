@@ -791,6 +791,7 @@ float frameH;
     
     [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
     if (actor1 != nil) [self hideStatusBar];
+    if (actor2 != nil) [self removeInfoButton];
     
     // Play sound
     [[TMWSoundEffects soundEffects] playSound:@"When cancel button is clicked in actor search"];
