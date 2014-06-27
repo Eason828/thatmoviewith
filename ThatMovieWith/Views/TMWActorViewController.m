@@ -1020,7 +1020,7 @@ float frameH;
     
     doneLoadingActorImage = NO;
     
-    [self performSelector:@selector(SVProgressHUDShow) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(SVProgressHUDShow) withObject:nil afterDelay:0.3];
 
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
