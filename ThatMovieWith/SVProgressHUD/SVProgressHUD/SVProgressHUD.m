@@ -28,9 +28,10 @@ static CGFloat SVProgressHUDRingThickness;
 static UIFont *SVProgressHUDFont;
 static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
+static CGFloat SVProgressHUDPosY;
+static CGFloat SVProgressHUDRingNoTextRadius;
 
 static const CGFloat SVProgressHUDRingRadius = 18;
-static const CGFloat SVProgressHUDRingNoTextRadius = 24;
 static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 
 @interface SVProgressHUD ()
@@ -99,6 +100,11 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     SVProgressHUDForegroundColor = color;
 }
 
++ (void)setRingNoTextRadius:(CGFloat)radius {
+    [self sharedView];
+    SVProgressHUDRingNoTextRadius = radius;
+}
+
 + (void)setFont:(UIFont *)font {
     [self sharedView];
     SVProgressHUDFont = font;
@@ -122,6 +128,11 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 #pragma mark - Show Methods
 
 + (void)show {
+    [[self sharedView] showProgress:-1 status:nil maskType:SVProgressHUDMaskTypeNone];
+}
+
++ (void)showAtPosY:(CGFloat)PosY {
+    SVProgressHUDPosY = PosY;
     [[self sharedView] showProgress:-1 status:nil maskType:SVProgressHUDMaskTypeNone];
 }
 
@@ -203,6 +214,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.activityCount = 0;
         
+        SVProgressHUDRingNoTextRadius = 24;
         SVProgressHUDBackgroundColor = [UIColor whiteColor];
         SVProgressHUDForegroundColor = [UIColor blackColor];
         SVProgressHUDFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
@@ -420,7 +432,11 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         activeHeight += statusBarFrame.size.height*2;
     
     activeHeight -= keyboardHeight;
-    CGFloat posY = floor(activeHeight*0.5); // Changed from .45 to .5 to center HUD
+    CGFloat posY;
+    if (!SVProgressHUDPosY) {
+        posY = floor(activeHeight*0.5); // Changed from .45 to .5 to center HUD
+    }
+    else posY = SVProgressHUDPosY;
     CGFloat posX = orientationFrame.size.width/2;
     
     CGPoint newCenter;

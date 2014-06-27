@@ -545,7 +545,18 @@ float frameH;
 
 - (void)SVProgressHUDShow
 {
-    if (!doneLoadingActorImage) [SVProgressHUD show];
+    [SVProgressHUD setBackgroundColor:[UIColor clearColor]];
+    [SVProgressHUD setForegroundColor:[UIColor grayColor]];
+    [SVProgressHUD setRingNoTextRadius:48];
+    if (doneLoadingActorImage) return;
+    if (tappedActor == 1) {
+        [SVProgressHUD showAtPosY:self.view.frame.size.height/4];
+    }
+    else {
+        [SVProgressHUD showAtPosY:3 * (self.view.frame.size.height/4)];
+    }
+    
+    
 }
 
 #pragma mark UIScrollView methods
