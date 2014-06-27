@@ -190,7 +190,7 @@ CGFloat cellWidth;
     
     // If an image exists, fetch it. Else use the generated UIImage
     if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
-        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[6]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
+        NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
         
         
         // Show the network activity icon
@@ -408,7 +408,6 @@ CGFloat cellWidth;
             
             if (![movieInfo[@"imdb_id"]isEqualToString:@""]) {
                 NSString *webURL = [@"http://imdb.com/title/" stringByAppendingString:movieInfo[@"imdb_id"]];
-                NSLog(@"%@", webURL);
                 SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:webURL];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 webViewController.barsTintColor = [UIColor goldColor];
