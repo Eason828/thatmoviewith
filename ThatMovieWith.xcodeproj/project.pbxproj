@@ -56,6 +56,9 @@
 		E5BB14F0192589A500B7A738 /* TMWContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E7192589A500B7A738 /* TMWContainerViewController.m */; };
 		E5BB14F1192589A500B7A738 /* TMWAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5BB14E9192589A500B7A738 /* TMWAboutViewController.m */; };
 		E5BB14F2192589A500B7A738 /* TMWAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */; };
+		E5C00816195D097E0069D720 /* slide-metal.aif in Resources */ = {isa = PBXBuildFile; fileRef = E5C00813195D097E0069D720 /* slide-metal.aif */; };
+		E5C00817195D097E0069D720 /* slide-scissors.aif in Resources */ = {isa = PBXBuildFile; fileRef = E5C00814195D097E0069D720 /* slide-scissors.aif */; };
+		E5C00818195D097E0069D720 /* tap-zipper.aif in Resources */ = {isa = PBXBuildFile; fileRef = E5C00815195D097E0069D720 /* tap-zipper.aif */; };
 		E5C1DEFB19175E900041E31D /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = E5C1DEE119175E900041E31D /* LICENSE.txt */; };
 		E5C1DEFC19175E900041E31D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E5C1DEE219175E900041E31D /* README.md */; };
 		E5C1DEFD19175E900041E31D /* SVModalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C1DEE519175E900041E31D /* SVModalWebViewController.m */; };
@@ -161,6 +164,9 @@
 		E5BB14E8192589A500B7A738 /* TMWAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAboutViewController.h; path = Views/TMWAboutViewController.h; sourceTree = "<group>"; };
 		E5BB14E9192589A500B7A738 /* TMWAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAboutViewController.m; path = Views/TMWAboutViewController.m; sourceTree = "<group>"; };
 		E5BB14EA192589A500B7A738 /* TMWAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TMWAboutViewController.xib; path = Views/TMWAboutViewController.xib; sourceTree = "<group>"; };
+		E5C00813195D097E0069D720 /* slide-metal.aif */ = {isa = PBXFileReference; lastKnownFileType = file; name = "slide-metal.aif"; path = "sounds/slide-metal.aif"; sourceTree = SOURCE_ROOT; };
+		E5C00814195D097E0069D720 /* slide-scissors.aif */ = {isa = PBXFileReference; lastKnownFileType = file; name = "slide-scissors.aif"; path = "sounds/slide-scissors.aif"; sourceTree = SOURCE_ROOT; };
+		E5C00815195D097E0069D720 /* tap-zipper.aif */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tap-zipper.aif"; path = "sounds/tap-zipper.aif"; sourceTree = SOURCE_ROOT; };
 		E5C1DEE119175E900041E31D /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		E5C1DEE219175E900041E31D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E5C1DEE419175E900041E31D /* SVModalWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVModalWebViewController.h; sourceTree = "<group>"; };
@@ -346,6 +352,9 @@
 		E57E87C6195256A400832995 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E5C00813195D097E0069D720 /* slide-metal.aif */,
+				E5C00814195D097E0069D720 /* slide-scissors.aif */,
+				E5C00815195D097E0069D720 /* tap-zipper.aif */,
 				E5760D74195A7417008C6BF5 /* Refresh.m4a */,
 				E5760D6D195A6615008C6BF5 /* Credits.m4a */,
 			);
@@ -622,11 +631,14 @@
 				E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */,
 				E50F8340194EA76900F65728 /* tmdb-logo@2x.png in Resources */,
 				E5C1DF0019175E900041E31D /* SVWebViewControllerActivityChrome-iPad.png in Resources */,
+				E5C00817195D097E0069D720 /* slide-scissors.aif in Resources */,
 				E57B8FD1193156F40086593D /* TMWActorViewController.xib in Resources */,
 				E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */,
 				E5C1DF0319175E900041E31D /* SVWebViewControllerActivityChrome@2x.png in Resources */,
+				E5C00816195D097E0069D720 /* slide-metal.aif in Resources */,
 				E57E87CB195259E500832995 /* Sounds.plist in Resources */,
 				E5C1DF0619175E900041E31D /* SVWebViewControllerActivitySafari-iPad@2x.png in Resources */,
+				E5C00818195D097E0069D720 /* tap-zipper.aif in Resources */,
 				E5994CFC18FDE85100A5B79F /* InfoPlist.strings in Resources */,
 				E57E87C219523B4400832995 /* arrow.png in Resources */,
 				E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */,
