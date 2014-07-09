@@ -1,6 +1,11 @@
 That Movie With
 ===============
 
+That Movie With is an iPhone app for finding common movies among actors.
+
+Find out more at [ThatMovieWith.com](http://thatmoviewith.com)
+
+
 Installation
 ------------
 
@@ -22,5 +27,5 @@ The following steps are required to build the That Movie With:
 License
 -------
 
-That Movie With is released under a MIT License. See LICENSE file for details.
+That Movie With is released under a MIT License. See LICENSE.md file for details.
 
