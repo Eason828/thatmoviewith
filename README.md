@@ -18,3 +18,9 @@ The following steps are required to build the That Movie With:
 
 5. Build and Run!
 
+
+License
+-------
+
+That Movie With is released under a MIT License. See LICENSE file for details.
+
