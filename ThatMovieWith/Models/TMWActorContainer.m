@@ -64,27 +64,27 @@ static TMWActorContainer *actorContainer;
 
 - (NSArray *)actorNames
 {
-    NSMutableArray *mutableActorNames = [[NSMutableArray alloc] init];
+    NSMutableArray *actorNamesMutableArray = [[NSMutableArray alloc] init];
     for (TMWActor *actor in mutableActorContainer) {
         if (actor.name) {
-            [mutableActorNames addObject:actor.name];
+            [actorNamesMutableArray addObject:actor.name];
         }
     }
-    return mutableActorNames;
+    return actorNamesMutableArray;
 }
 
 - (NSArray *)sameMovies
 {
-    NSMutableArray *mutableActorsMovies = [[NSMutableArray alloc] init];
+    NSMutableArray *actorsMoviesMutableArray = [[NSMutableArray alloc] init];
     for (TMWActor *actor in mutableActorContainer) {
         if (actor.movies) {
-            [mutableActorsMovies addObject:actor.movies];
+            [actorsMoviesMutableArray addObject:actor.movies];
         }
     }
     
     // Get a intersection containing the IDs of the same movies
     NSMutableOrderedSet *intersection = [[NSMutableOrderedSet alloc] init];
-    for (NSArray *individualActorMovies in [mutableActorsMovies valueForKey:@"id"]) {
+    for (NSArray *individualActorMovies in [actorsMoviesMutableArray valueForKey:@"id"]) {
         if ([intersection count] != 0) {
             [intersection intersectSet:[NSSet setWithArray:individualActorMovies]];
         }
@@ -126,74 +126,71 @@ static TMWActorContainer *actorContainer;
 - (NSArray *)sameMoviesIDs
 {
     TMWActor *firstActor = mutableActorContainer[0];
-    NSMutableArray *sameMoviesIDsArray = [[NSMutableArray alloc] init];
+    NSMutableArray *sameMoviesIDsMutableArray = [[NSMutableArray alloc] init];
     
     NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
     
     // Get the movie id for all movies in sameMovieIDs
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
         if ([IDArray containsObject:sameMovieID]) {
-            [sameMoviesIDsArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"id"]];
+            [sameMoviesIDsMutableArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"id"]];
         }
     }
-    return sameMoviesIDsArray;
+    return sameMoviesIDsMutableArray;
 }
 
 - (NSArray *)sameMoviesNames
 {
     TMWActor *firstActor = mutableActorContainer[0];
-    NSMutableArray *sameMoviesNamesArray = [[NSMutableArray alloc] init];
+    NSMutableArray *sameMoviesNamesMutableArray = [[NSMutableArray alloc] init];
     
     NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
     
     // Get the movie title for all movies in sameMovieIDs
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
         if ([IDArray containsObject:sameMovieID]) {
-            [sameMoviesNamesArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"original_title"]];
+            [sameMoviesNamesMutableArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"original_title"]];
         }
     }
-    return sameMoviesNamesArray;
+    return sameMoviesNamesMutableArray;
 }
 
 - (NSArray *)sameMoviesPosterUrlEndings
 {
     TMWActor *firstActor = mutableActorContainer[0];
-    NSMutableArray *samePosterArray = [[NSMutableArray alloc] init];
+    NSMutableArray *samePosterMutableArray = [[NSMutableArray alloc] init];
     
     NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
     
     // Get the poster path for all movies in sameMovieIDs
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
         if ([IDArray containsObject:sameMovieID]) {
-            [samePosterArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"poster_path"]];
+            [samePosterMutableArray addObject:[firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"poster_path"]];
         }
     }
 
-    return samePosterArray;
+    return samePosterMutableArray;
 }
 
 - (NSArray *)sameMoviesReleaseYears
 {
-    TMWActor *firstActor = mutableActorContainer[0];
-    NSMutableArray *sameMoviesReleaseDatesArray = [[NSMutableArray alloc] init];
+    NSMutableArray *sameMoviesReleaseDatesMutableArray = [[NSMutableArray alloc] init];
     
-    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
+    NSArray *IDArray = [self.sameMovies valueForKey:@"id"];
     
     // Get the movie title for all movies in sameMovieIDs
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
-        if ([IDArray containsObject:sameMovieID]) {
-            if ([firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
-                NSString* unknownString = @"TBA";
-                [sameMoviesReleaseDatesArray addObject:unknownString];
-            
-            }
-            else {
-                NSString *releaseDateString = [firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"];
-                [sameMoviesReleaseDatesArray addObject:[releaseDateString substringToIndex:4]];
-            }
+        if ([self.sameMovies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
+            NSString* unknownString = @"TBA";
+            [sameMoviesReleaseDatesMutableArray addObject:unknownString];
+        
+        }
+        else {
+            NSString *releaseDateString = [self.sameMovies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"];
+            [sameMoviesReleaseDatesMutableArray addObject:[releaseDateString substringToIndex:4]];
         }
     }
-    return sameMoviesReleaseDatesArray;
+    return sameMoviesReleaseDatesMutableArray;
 }
 
 @end

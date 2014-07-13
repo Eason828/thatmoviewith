@@ -189,6 +189,9 @@ CGFloat cellWidth;
     // grab bound for contentView
     CGRect contentViewBound = cell.imageView.bounds;
     
+    NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+    NSString *movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
+    
     // If an image exists, fetch it. Else use the generated UIImage
     if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:[[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row]];
@@ -205,10 +208,7 @@ CGFloat cellWidth;
         notification.notificationLabelTextColor = [UIColor whiteColor];
         notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
         notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-       
-        
-        NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
-        
+
         [cell.activityIndicator startAnimating];
         
         // Get the image from the URL and set it
@@ -216,8 +216,7 @@ CGFloat cellWidth;
             
             [cell.activityIndicator stopAnimating];
             
-            NSString *movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
-            
+
             // Darken the image
             UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
             [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
@@ -282,10 +281,8 @@ CGFloat cellWidth;
     
     else {
         UIImage *defaultImage = [UIImage imageNamed:@"InitialsBackgroundHiRes"];
-        NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
-        NSString *movieReleaseString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
         
-        cell.secondLabel.text = movieReleaseString;
+        cell.secondLabel.text = movieYearString;
         
         // Darken the image
         UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
@@ -330,8 +327,8 @@ CGFloat cellWidth;
                 if (i == [[TMWActorContainer actorContainer].allActorObjects count]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                        tableViewRows = [[TMWActorContainer actorContainer].sameMoviesNames count];
-                        if([[TMWActorContainer actorContainer].sameMoviesNames count] == 0 ){
+                        tableViewRows = [[TMWActorContainer actorContainer].sameMovies count];
+                        if([[TMWActorContainer actorContainer].sameMovies count] == 0 ){
                             
                             // Animate in the no results label
                             [UIView animateWithDuration:0.5
@@ -438,7 +435,7 @@ CGFloat cellWidth;
     // Cell height must take maximum possible parallax offset into account.
     ParallaxFlowLayout *layout = (ParallaxFlowLayout *)self.collectionViewLayout;
     cellWidth = CGRectGetWidth(self.collectionView.bounds) - layout.sectionInset.left - layout.sectionInset.right;
-    switch ([TMWActorContainer actorContainer].sameMoviesNames.count) {
+    switch ([TMWActorContainer actorContainer].sameMovies.count) {
         case 0:
         case 1:
             return CGSizeMake(cellWidth, TABLE_HEIGHT_ONE);
