@@ -885,12 +885,12 @@ float frameH;
         
         cell = [[TMWCustomActorCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                       reuseIdentifier:CellIdentifier];
-        
         [cell layoutSubviews];
-        
-        // Set the line separator left offset to start after the image
-        [_searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     }
+    
+    // Set the line separator left offset to start after the image
+    [_searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
+    
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];
     
     // Make the actors images circles in the search table view
