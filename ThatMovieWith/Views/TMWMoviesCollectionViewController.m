@@ -123,7 +123,9 @@ CGFloat cellWidth;
     [super viewWillAppear:animated];
     [UIView beginAnimations:@"hideStatusBar" context:nil];
     [UIView setAnimationDuration:0.0];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    if([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:)]) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    }
     [UIView commitAnimations];
 }
 
