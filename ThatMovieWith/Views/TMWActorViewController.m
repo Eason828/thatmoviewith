@@ -12,6 +12,7 @@
 #import <FBShimmeringView.h>
 #import <CWStatusBarNotification.h>
 #import "SVProgressHUD.h"
+#import "DDLog.h"
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -22,6 +23,7 @@
 #import "TMWMoviesCollectionViewController.h"
 #import "TMWCustomActorCellTableViewCell.h"
 #import "TMWAPI.h"
+#import "TMWAppDelegate.h"
 
 #import "UIImage+ImageEffects.h"
 #import "UIColor+customColors.h"
@@ -382,8 +384,10 @@ float frameH;
             if ([self.firstActorActionView isDescendantOfView:self.view]) {
                 [self.firstActorActionView removeFromSuperview];
             }
-            [[TMWActorContainer actorContainer] removeActorObject:actor1];
-            actor1 = nil;
+            if (actor1 != nil) {
+                [[TMWActorContainer actorContainer] removeActorObject:actor1];
+                actor1 = nil;
+            }
             _firstActorButton.hidden = NO;
             [self.view bringSubviewToFront:_firstActorButton];
             [self.view bringSubviewToFront:_firstActorLabel];
@@ -400,8 +404,10 @@ float frameH;
             if ([self.secondActorActionView isDescendantOfView:self.view]) {
                 [self.secondActorActionView removeFromSuperview];
             }
-            [[TMWActorContainer actorContainer] removeActorObject:actor2];
-            actor2 = nil;
+            if (actor2 != nil) {
+                [[TMWActorContainer actorContainer] removeActorObject:actor2];
+                actor2 = nil;
+            }
             _secondActorButton.hidden = NO;
             [self.view bringSubviewToFront:_secondActorButton];
             [self.view bringSubviewToFront:_secondActorLabel];
@@ -948,11 +954,11 @@ float frameH;
     
     TMWActor *chosenActor = [[TMWActor alloc] initWithActor:[searchResults.results objectAtIndex:indexPath.row]];
     
-    // Add the chosen actor to the array of chosen actors
-    [[TMWActorContainer actorContainer] addActorObject:chosenActor];
-    
     // Remove an actor if one was chosen
     [self removeActor];
+    
+    // Add the chosen actor to the array of chosen actors
+    [[TMWActorContainer actorContainer] addActorObject:chosenActor];
     
     // Cancel any previous search requests
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -1027,6 +1033,12 @@ float frameH;
         
         NSString *urlstring = [[[TMWActorContainer actorContainer].imagesBaseURLString stringByReplacingOccurrencesOfString:[TMWActorContainer actorContainer].backdropSizes[1] withString:[TMWActorContainer actorContainer].backdropSizes[5]] stringByAppendingString:actor.hiResImageURLEnding];
         
+        __block CWStatusBarNotification *notification = [CWStatusBarNotification new];
+        notification.notificationLabelBackgroundColor = [UIColor flatRedColor];
+        notification.notificationLabelTextColor = [UIColor whiteColor];
+        notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+        
         __weak typeof(actorImage) weakActorImage = actorImage;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlstring]];
         [actorImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"black"] success:^(NSURLRequest *req, NSHTTPURLResponse *response, UIImage *image) {
@@ -1074,8 +1086,10 @@ float frameH;
             [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
+            if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
+                [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
+            }
             doneLoadingActorImage = YES;
-            NSLog(@"Failed with error: %@", error);
         }];
     }
     else {
@@ -1167,6 +1181,5 @@ float frameH;
         }
     }
 }
-
 
 @end

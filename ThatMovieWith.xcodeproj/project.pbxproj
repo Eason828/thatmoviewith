@@ -13,6 +13,9 @@
 		E5227ADE19088E930094D471 /* InitialsBackgroundHiRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */; };
 		E5227ADF19088E930094D471 /* InitialsBackgroundLowRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */; };
 		E5227AE019088E930094D471 /* InitialsBackgroundLowRes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */; };
+		E54A6B231972E6960094979A /* ColorLog.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A6B121972E6960094979A /* ColorLog.m */; };
+		E54A6B271972E6960094979A /* DDNSLoggerLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A6B1A1972E6960094979A /* DDNSLoggerLogger.m */; };
+		E54A6B2A1972E6960094979A /* PSDDFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E54A6B201972E6960094979A /* PSDDFormatter.m */; };
 		E55FF56018FF9DEE00E2EA43 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */; };
 		E56A042E193C44E700FC6F23 /* TMWAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E56A042D193C44E700FC6F23 /* TMWAPI.m */; };
 		E575954D19493DDB00C35392 /* TMDB_API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = E575954C19493DDB00C35392 /* TMDB_API_KEY */; };
@@ -102,6 +105,12 @@
 		E5227ADA19088E930094D471 /* InitialsBackgroundHiRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundHiRes@2x.png"; sourceTree = "<group>"; };
 		E5227ADB19088E930094D471 /* InitialsBackgroundLowRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InitialsBackgroundLowRes.png; sourceTree = "<group>"; };
 		E5227ADC19088E930094D471 /* InitialsBackgroundLowRes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InitialsBackgroundLowRes@2x.png"; sourceTree = "<group>"; };
+		E54A6B111972E6960094979A /* ColorLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorLog.h; path = Customizations/Lumberjack/ColorLog.h; sourceTree = "<group>"; };
+		E54A6B121972E6960094979A /* ColorLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorLog.m; path = Customizations/Lumberjack/ColorLog.m; sourceTree = "<group>"; };
+		E54A6B191972E6960094979A /* DDNSLoggerLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDNSLoggerLogger.h; path = Customizations/Lumberjack/DDNSLoggerLogger.h; sourceTree = "<group>"; };
+		E54A6B1A1972E6960094979A /* DDNSLoggerLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDNSLoggerLogger.m; path = Customizations/Lumberjack/DDNSLoggerLogger.m; sourceTree = "<group>"; };
+		E54A6B1F1972E6960094979A /* PSDDFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PSDDFormatter.h; path = Customizations/Lumberjack/PSDDFormatter.h; sourceTree = "<group>"; };
+		E54A6B201972E6960094979A /* PSDDFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PSDDFormatter.m; path = Customizations/Lumberjack/PSDDFormatter.m; sourceTree = "<group>"; };
 		E55FF55F18FF9DEE00E2EA43 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E56A042C193C44E700FC6F23 /* TMWAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMWAPI.h; path = Models/TMWAPI.h; sourceTree = "<group>"; };
 		E56A042D193C44E700FC6F23 /* TMWAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMWAPI.m; path = Models/TMWAPI.m; sourceTree = "<group>"; };
@@ -263,9 +272,26 @@
 			path = ../api;
 			sourceTree = "<group>";
 		};
+		E54A6B101972E67A0094979A /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				E54A6B111972E6960094979A /* ColorLog.h */,
+				E54A6B121972E6960094979A /* ColorLog.m */,
+				E54A6B191972E6960094979A /* DDNSLoggerLogger.h */,
+				E54A6B1A1972E6960094979A /* DDNSLoggerLogger.m */,
+				E54A6B1F1972E6960094979A /* PSDDFormatter.h */,
+				E54A6B201972E6960094979A /* PSDDFormatter.m */,
+			);
+			name = Lumberjack;
+			sourceTree = "<group>";
+		};
 		E54C0893190023C60084E687 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */,
+				E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */,
+				E58EB1FF1929CF0B00A254C5 /* UIImage+ImageEffects.h */,
+				E58EB2001929CF0B00A254C5 /* UIImage+ImageEffects.m */,
 				E5C9160D191333FB00A3DEC6 /* UIColor+customColors.h */,
 				E5C9160E191333FB00A3DEC6 /* UIColor+customColors.m */,
 			);
@@ -313,14 +339,11 @@
 		E569FF381902F0B6002928AF /* Customizations */ = {
 			isa = PBXGroup;
 			children = (
+				E54A6B101972E67A0094979A /* Lumberjack */,
 				E5D0F12B1956982C0078BD8D /* TMWAutoScroll.h */,
 				E5D0F12C1956982C0078BD8D /* TMWAutoScroll.m */,
 				E5A1730219562D56006A125E /* TMWSoundEffects.h */,
 				E5A1730319562D56006A125E /* TMWSoundEffects.m */,
-				E5E3FB2B1950F7FA00D8935F /* UIImage+DrawOnImage.h */,
-				E5E3FB2C1950F7FA00D8935F /* UIImage+DrawOnImage.m */,
-				E58EB1FF1929CF0B00A254C5 /* UIImage+ImageEffects.h */,
-				E58EB2001929CF0B00A254C5 /* UIImage+ImageEffects.m */,
 				E58EB1F91929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.h */,
 				E58EB1FA1929CEEE00A254C5 /* TMWCustomActorCellTableViewCell.m */,
 				E58EB1FB1929CEEE00A254C5 /* TMWCustomMovieCellTableViewCell.h */,
@@ -755,11 +778,14 @@
 				E5C1DF0419175E900041E31D /* SVWebViewControllerActivityIMDB.m in Sources */,
 				E5C1DF0919175E900041E31D /* SVWebViewControllerActivity.m in Sources */,
 				E5C916241913341F00A3DEC6 /* TMWActor.m in Sources */,
+				E54A6B231972E6960094979A /* ColorLog.m in Sources */,
 				E58EB20A1929CFFD00A254C5 /* ParallaxPhotoCell.m in Sources */,
+				E54A6B2A1972E6960094979A /* PSDDFormatter.m in Sources */,
 				E5C1DF0219175E900041E31D /* SVWebViewControllerActivityChrome.m in Sources */,
 				E5D0F12D1956982C0078BD8D /* TMWAutoScroll.m in Sources */,
 				E5C916261913341F00A3DEC6 /* TMWActorSearchResults.m in Sources */,
 				E5994D0218FDE85100A5B79F /* TMWAppDelegate.m in Sources */,
+				E54A6B271972E6960094979A /* DDNSLoggerLogger.m in Sources */,
 				E5C91612191333FB00A3DEC6 /* UIColor+customColors.m in Sources */,
 				E5C1DEFD19175E900041E31D /* SVModalWebViewController.m in Sources */,
 				E5E3FB2D1950F7FA00D8935F /* UIImage+DrawOnImage.m in Sources */,
@@ -1103,6 +1129,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",

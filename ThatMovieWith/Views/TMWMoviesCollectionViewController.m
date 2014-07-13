@@ -12,6 +12,7 @@
 #import "ParallaxPhotoCell.h"
 #import "TMWSoundEffects.h"
 #import <CWStatusBarNotification.h>
+#import "DDLog.h"
 
 #import <UIImageView+AFNetworking.h>
 #import <JLTMDbClient.h>
@@ -373,6 +374,9 @@ CGFloat cellWidth;
     [[TMWSoundEffects soundEffects] playSound:@"When a movie is selected"];
     
     selectedMovie = YES;
+    
+    DDLogInfo(@"Selected Movie: %@ (IMDB ID %@)", [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row], [[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]);
+    
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
                               withParameters:@{@"id":[[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]}];

@@ -35,6 +35,7 @@ static TMWActorContainer *actorContainer;
 {
     if (mutableActorContainer) {
         [mutableActorContainer removeObject:actorObject];
+        DDLogInfo(@"Removed actor: %@ (ID %@)", actorObject.name, actorObject.IDNumber);
     }
 }
 
@@ -44,6 +45,7 @@ static TMWActorContainer *actorContainer;
         mutableActorContainer = [[NSMutableArray alloc] init];
     }
     [mutableActorContainer addObject:actorObject];
+    DDLogInfo(@"Added actor: %@ (ID %@)", actorObject.name, actorObject.IDNumber);
 }
 
 - (void)removeAllActorObjects
