@@ -334,12 +334,16 @@ float frameH;
 
 - (void)hideStatusBar
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    if([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:withAnimation:)]) {
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    }
 }
 
 - (void)showStatusBar
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    if([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:)]) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    }
 }
 
 - (void)removeInfoButton
