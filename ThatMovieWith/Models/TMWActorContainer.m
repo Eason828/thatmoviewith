@@ -174,23 +174,27 @@ static TMWActorContainer *actorContainer;
 
 - (NSArray *)sameMoviesReleaseYears
 {
-    NSMutableArray *sameMoviesReleaseDatesMutableArray = [[NSMutableArray alloc] init];
+    NSMutableArray *sameMoviesReleaseDatesArray = [[NSMutableArray alloc] init];
     
-    NSArray *IDArray = [self.sameMovies valueForKey:@"id"];
+    TMWActor *firstActor = mutableActorContainer[0];
+    
+    NSArray *IDArray = [firstActor.movies valueForKey:@"id"];
     
     // Get the movie title for all movies in sameMovieIDs
     for (id sameMovieID in [self.sameMovies valueForKey:@"id"]) {
-        if ([self.sameMovies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
-            NSString* unknownString = @"TBA";
-            [sameMoviesReleaseDatesMutableArray addObject:unknownString];
-        
-        }
-        else {
-            NSString *releaseDateString = [self.sameMovies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"];
-            [sameMoviesReleaseDatesMutableArray addObject:[releaseDateString substringToIndex:4]];
+        if ([IDArray containsObject:sameMovieID]) {
+            if ([firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"] == (id)[NSNull null]) {
+                NSString* unknownString = @"TBA";
+                [sameMoviesReleaseDatesArray addObject:unknownString];
+                
+            }
+            else {
+                NSString *releaseDateString = [firstActor.movies[[IDArray indexOfObject:sameMovieID]] valueForKey:@"release_date"];
+                [sameMoviesReleaseDatesArray addObject:[releaseDateString substringToIndex:4]];
+            }
         }
     }
-    return sameMoviesReleaseDatesMutableArray;
+    return sameMoviesReleaseDatesArray;
 }
 
 @end

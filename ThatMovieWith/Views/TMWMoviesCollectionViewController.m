@@ -191,8 +191,16 @@ CGFloat cellWidth;
     // grab bound for contentView
     CGRect contentViewBound = cell.imageView.bounds;
     
-    NSString *movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
-    NSString *movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
+    // Protection against empty arrays in actor container
+    NSString *movieNameString = @"";
+    if ([TMWActorContainer actorContainer].sameMoviesNames.count) {
+             movieNameString = [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row];
+    }
+    
+    NSString *movieYearString = @"TBA";
+    if ([TMWActorContainer actorContainer].sameMoviesReleaseYears.count) {
+            movieYearString = [[TMWActorContainer actorContainer].sameMoviesReleaseYears objectAtIndex:indexPath.row];
+    }
     
     // If an image exists, fetch it. Else use the generated UIImage
     if ([[TMWActorContainer actorContainer].sameMoviesPosterUrlEndings objectAtIndex:indexPath.row] != (id)[NSNull null]) {
