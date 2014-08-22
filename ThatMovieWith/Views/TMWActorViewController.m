@@ -1082,11 +1082,14 @@ float frameH;
             // Play sound
             [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
+            [SVProgressHUD dismiss];
+            
         } failure:^(NSURLRequest *failreq, NSHTTPURLResponse *response, NSError *error) {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
                 [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
             doneLoadingActorImage = YES;
+            [SVProgressHUD dismiss];
         }];
     }
     else {
