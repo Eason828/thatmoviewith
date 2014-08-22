@@ -1,5 +1,5 @@
 //
-//  TMWMainViewController.m
+//  TMWActorViewController.m
 //  ThatMovieWith
 //
 //  Created by johnrhickey on 5/24/14.
@@ -104,7 +104,7 @@ float frameH;
     [super viewDidLayoutSubviews];
     // Layout only on the first load
     if (!hasSearched) {
-        scrollOffset = (self.view.frame.size.width/2) - 55;
+        scrollOffset = 105;
         _curtainView.frame = self.view.frame;
         _statusBarView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, 20);
         
@@ -241,7 +241,7 @@ float frameH;
     _secondActorButton.tag = 2;
     _thatMovieWithButton.tag = 1;
     _andButton.tag = 2;
-
+    
     [self.view insertSubview:_curtainView atIndex:0];
     [self.view insertSubview:_statusBarView aboveSubview:_curtainView];
     [self.view addSubview:_firstActorScrollView];
@@ -266,8 +266,8 @@ float frameH;
                          self.thatMovieWithButton.alpha = 1.0;
                      }
                      completion:nil];
-
-
+    
+    
     // Get the base TMDB API URL string
     [self loadImageConfiguration];
 }
@@ -284,8 +284,8 @@ float frameH;
     
 	// hide navigation bar
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
-     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
     // Make the keyboard black
     [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     // Make the search bar text white
@@ -302,7 +302,7 @@ float frameH;
      [UIImage imageNamed:@"arrow"]];
     [self.navigationController.navigationBar setBackIndicatorTransitionMaskImage:
      [UIImage imageNamed:@"arrow"]];
-
+    
     
     if (actor2 != nil) {
         [self removeInfoButton];
@@ -474,9 +474,9 @@ float frameH;
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         if (!error) {
             searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-                });
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            });
         }
         else {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
@@ -622,13 +622,13 @@ float frameH;
             [self.view bringSubviewToFront:_firstActorActionView];
             [self.view bringSubviewToFront:_secondActorScrollView];
             [self.view bringSubviewToFront:_firstActorScrollView];
-
+            
             [_secondActorScrollView bringSubviewToFront:_secondActorButton];
             [_secondActorScrollView bringSubviewToFront:_secondActorLabel];
             [_firstActorScrollView bringSubviewToFront:_firstActorButton];
             [_firstActorScrollView bringSubviewToFront:_firstActorLabel];
             _secondActorActionLabel.text = nil;
-
+            
         }
         else {
             _firstActorActionLabel.frame = CGRectMake(self.view.frame.size.width - 100, frameY, 100, frameH/2);
@@ -707,24 +707,24 @@ float frameH;
                                   delay:0
                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                              animations:^(void) {
-                                    self.firstActorButton.alpha = 0.0;
+                                 self.firstActorButton.alpha = 0.0;
                                  self.firstActorScrollView.alpha = 0.0;
                              }
                              completion:^(BOOL finished)
-            {
-                self.firstActorButton.imageView.image = nil;
-                self.firstActorButton.hidden = YES;
-                self.firstActorLabel.text = nil;
-                self.firstActorScrollView.alpha = 1.0;
-                self.firstActorButton.alpha = 1.0;
-                self.firstActorActionView.hidden = YES;
-                [UIView animateWithDuration:0.25
-                                      delay:0
-                                    options:0
-                                 animations:^(void) {
-                                     self.thatMovieWithButton.alpha = 1.0;
-                                 }
-                                 completion:nil];
+             {
+                 self.firstActorButton.imageView.image = nil;
+                 self.firstActorButton.hidden = YES;
+                 self.firstActorLabel.text = nil;
+                 self.firstActorScrollView.alpha = 1.0;
+                 self.firstActorButton.alpha = 1.0;
+                 self.firstActorActionView.hidden = YES;
+                 [UIView animateWithDuration:0.25
+                                       delay:0
+                                     options:0
+                                  animations:^(void) {
+                                      self.thatMovieWithButton.alpha = 1.0;
+                                  }
+                                  completion:nil];
              }];
             
             [self.view bringSubviewToFront:_thatMovieWithButton];
@@ -792,8 +792,8 @@ float frameH;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         
         [self performSelector:@selector(refreshActorResponseWithJLTMDBcall:)
-                       withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
-                       afterDelay:delay];
+                   withObject:@{@"JLTMDBCall":kJLTMDbSearchPerson, @"parameters":@{@"search_type":@"ngram",@"query":searchText}}
+                   afterDelay:delay];
     }
 }
 
@@ -1031,7 +1031,7 @@ float frameH;
     doneLoadingActorImage = NO;
     
     [self performSelector:@selector(SVProgressHUDShow) withObject:nil afterDelay:0.3];
-
+    
     // If NSString, fetch the image, else use the generated UIImage
     if ([actor.hiResImageURLEnding isKindOfClass:[NSString class]]) {
         
@@ -1079,13 +1079,6 @@ float frameH;
                 [self.view insertSubview:self.secondActorActionView belowSubview:self.firstActorActionView];
             }
             
-            self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
-            self.pushBehavior.active = YES;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-            });
-            
             // Play sound
             [[TMWSoundEffects soundEffects] playSound:@"When actor is added and bounce occurs"];
             
@@ -1124,11 +1117,12 @@ float frameH;
         if (self.secondActorLabel.text && ![self.secondActorActionView isDescendantOfView:self.view]) {
             [self.view insertSubview:self.secondActorActionView belowSubview:self.firstActorActionView];
         }
-        self.pushBehavior.pushDirection = CGVectorMake(-35.0f, 0.0f);
-        self.pushBehavior.active = YES;
-        [SVProgressHUD dismiss];
-        
     }
+    self.pushBehavior.pushDirection = CGVectorMake(-(self.view.frame.size.width/55.0f) * (self.view.frame.size.width/55.0f), 0.0f);
+    self.pushBehavior.active = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+    });
 }
 
 #pragma mark UISearchDisplayController methods
