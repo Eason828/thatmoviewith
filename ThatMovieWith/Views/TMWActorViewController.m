@@ -70,6 +70,7 @@ NSString *moviesSlideString = @"Show\nMovies";
 NSString *deleteSlideString = @"Remove\nActor";
 
 TMWActorSearchResults *searchResults;
+TMWActorSearchResults *newSearchResults;
 TMWActor *actor1;
 TMWActor *actor2;
 int tappedActor;
@@ -473,10 +474,13 @@ float frameH;
     
     [[JLTMDbClient sharedAPIInstance] GET:JLTMDBCall withParameters:parameters andResponseBlock:^(id response, NSError *error) {
         if (!error) {
-            searchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
-            dispatch_async(dispatch_get_main_queue(),^{
-                [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            });
+            NSOperationQueue *operationQueue = [NSOperationQueue mainQueue];
+            [operationQueue addOperationWithBlock:^{
+                TMWActorSearchResults *previousSearchResults = [TMWActorSearchResults new];
+                previousSearchResults = searchResults;
+                newSearchResults = [[TMWActorSearchResults alloc] initActorSearchResultsWithResults:response[@"results"]];
+                [self refreshSearchControllerWithOldSearchResults:previousSearchResults.results andNewResults:newSearchResults.results];
+            }];
         }
         else {
             if ([error.localizedDescription rangeOfString:@"NSURLErrorDomain error -999"].location == NSNotFound) {
@@ -484,6 +488,94 @@ float frameH;
             }
         }
     }];
+}
+
+- (void)refreshSearchControllerWithOldSearchResults:(NSArray *)oldResultsArray andNewResults:(NSArray *)newResultsArray
+{
+    if (oldResultsArray == nil) {
+        oldResultsArray = [NSArray new];
+    }
+    
+    // If rows are removed
+    if (newResultsArray.count < oldResultsArray.count && oldResultsArray.count) {
+        NSMutableArray *diferentIndexes = [NSMutableArray new];
+        for (NSUInteger i = 0; i < newResultsArray.count; i++) {
+            if (oldResultsArray[i] != newResultsArray[i]) { //Maybe add "&& newSearchResultsArray.count" here
+                [diferentIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+        
+        NSMutableArray *oldIndexes = [NSMutableArray new];
+        if (newResultsArray.count < oldResultsArray.count) {
+            for (NSUInteger i = newResultsArray.count; i < oldResultsArray.count; i++) {
+                [oldIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+        
+        // Update the table view
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[self.searchBarController searchResultsTableView] beginUpdates];
+            [[self.searchBarController searchResultsTableView] numberOfRowsInSection:newResultsArray.count];
+            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
+            [[self.searchBarController searchResultsTableView] deleteRowsAtIndexPaths:oldIndexes withRowAnimation:UITableViewRowAnimationFade];
+            searchResults = newSearchResults;
+            [[self.searchBarController searchResultsTableView] endUpdates];
+        });
+    }
+    
+    
+    // If rows are added
+    else if (newResultsArray.count > oldResultsArray.count && oldResultsArray.count != 0) {
+        NSMutableArray *diferentIndexes = [NSMutableArray new];
+        for (NSUInteger i = 0; i < oldResultsArray.count; i++) {
+            if (oldResultsArray[i] != newResultsArray[i]) { //Maybe add "&& newSearchResultsArray.count" here
+                [diferentIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+        NSMutableArray *newIndexes = [NSMutableArray new];
+        if (newResultsArray.count > oldResultsArray.count) {
+            NSUInteger index;
+            if (!oldResultsArray.count) index = 0; else index = oldResultsArray.count;
+            for (NSUInteger i = index; i < newResultsArray.count; i++) {
+                [newIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+        
+        // Update the table view
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[self.searchBarController searchResultsTableView] beginUpdates];
+            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
+            [[self.searchBarController searchResultsTableView] insertRowsAtIndexPaths:newIndexes withRowAnimation:UITableViewRowAnimationFade];
+            searchResults = newSearchResults;
+            [[self.searchBarController searchResultsTableView] endUpdates];
+        });
+    }
+    
+    // Rows are just changed
+    else if (newResultsArray.count == oldResultsArray.count && oldResultsArray.count != 0) {
+        NSMutableArray *diferentIndexes = [NSMutableArray new];
+        for (NSUInteger i = 0; i < oldResultsArray.count; i++) {
+            if (oldResultsArray[i] != newResultsArray[i]) { //Maybe add "&& newSearchResultsArray.count" here
+                [diferentIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+        
+        // Update the table view
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[self.searchBarController searchResultsTableView] beginUpdates];
+            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
+            searchResults = newSearchResults;
+            [[self.searchBarController searchResultsTableView] endUpdates];
+        });
+    }
+    
+    // If entire view needs refreshed
+    else if (oldResultsArray.count == 0) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[self.searchBarController searchResultsTableView] reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        });
+        searchResults = newSearchResults;
+    }
 }
 
 - (void)setLabel:(UILabel *)textView
@@ -781,12 +873,12 @@ float frameH;
     
     // Delays on making the actor API calls
     if([searchText length] != 0) {
-        float delay = 0.6;
+        float delay = 0.8;
         
         if (searchText.length > 3) {
-            delay = 0.8;
+            delay = 0.6;
         }
-        [[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
+        //[[JLTMDbClient sharedAPIInstance].operationQueue cancelAllOperations];
         
         // Clear any previously queued text changes
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -891,6 +983,11 @@ float frameH;
     // Set the line separator left offset to start after the image
     [_searchBarController.searchResultsTableView setSeparatorInset:UIEdgeInsetsMake(0, IMAGE_SIZE+IMAGE_TEXT_OFFSET, 0, 0)];
     
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(TMWCustomActorCellTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];
     
     // Make the actors images circles in the search table view
@@ -948,8 +1045,6 @@ float frameH;
         UIImage *defaultImage = [UIImage imageByDrawingInitialsOnImage:[UIImage imageNamed:@"InitialsBackgroundLowRes.png"] withInitials:[searchResults.names objectAtIndex:indexPath.row] withFontSize:16];
         [cell.imageView setImage:defaultImage];
     }
-    
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
