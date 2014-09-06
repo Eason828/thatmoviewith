@@ -12,7 +12,7 @@
 #import <FBShimmeringView.h>
 #import <CWStatusBarNotification.h>
 #import "SVProgressHUD.h"
-#import "DDLog.h"
+
 
 #import "TMWActorViewController.h"
 #import "TMWActor.h"
@@ -516,7 +516,6 @@ float frameH;
         dispatch_async(dispatch_get_main_queue(),^{
             [[self.searchBarController searchResultsTableView] beginUpdates];
             [[self.searchBarController searchResultsTableView] numberOfRowsInSection:newResultsArray.count];
-            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
             [[self.searchBarController searchResultsTableView] deleteRowsAtIndexPaths:oldIndexes withRowAnimation:UITableViewRowAnimationFade];
             searchResults = newSearchResults;
             [[self.searchBarController searchResultsTableView] endUpdates];
@@ -544,7 +543,6 @@ float frameH;
         // Update the table view
         dispatch_async(dispatch_get_main_queue(),^{
             [[self.searchBarController searchResultsTableView] beginUpdates];
-            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
             [[self.searchBarController searchResultsTableView] insertRowsAtIndexPaths:newIndexes withRowAnimation:UITableViewRowAnimationFade];
             searchResults = newSearchResults;
             [[self.searchBarController searchResultsTableView] endUpdates];
