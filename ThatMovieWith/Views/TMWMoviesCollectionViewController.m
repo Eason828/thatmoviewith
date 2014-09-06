@@ -389,7 +389,7 @@ CGFloat cellWidth;
     
     selectedMovie = YES;
     
-    //DDLogInfo(@"Selected Movie: %@ (IMDB ID %@)", [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row], [[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]);
+    DDLogInfo(@"Selected Movie: %@ (IMDB ID %@)", [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row], [[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]);
     
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie

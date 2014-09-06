@@ -55,44 +55,44 @@
     [self.window makeKeyAndVisible];
     
     // initialize before HockeySDK, so the delegate can access the file logger!
-//    _fileLogger = [[DDFileLogger alloc] init];
-//    _fileLogger.maximumFileSize = (1024 * 64); // 64 KByte
-//    _fileLogger.logFileManager.maximumNumberOfLogFiles = 1;
-//    [_fileLogger rollLogFileWithCompletionBlock:nil];
-//    [DDLog addLogger:_fileLogger];
-//    
-//    // Hockey app needs to be the last 3rd party integration in this method
-//    if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.thatmoviewith"]) {
-//        // App Store Version
-//        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"e62a5cc4f832208f409e4d889fb8ec99"];
-//    }
-//    else if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.ThatMovieWithbeta"]){
-//        // Beta Version
-//        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
-//    }
-//    else {
-//        // Alpha Version
-//        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"b1ab12e2a5c884b5684e9a321f49141d"];
-//    }
-//    
-//    // add Xcode console logger if not running in the App Store
-//    if (![[BITHockeyManager sharedHockeyManager] isAppStoreEnvironment]) {
-//        PSDDFormatter *psLogger = [[PSDDFormatter alloc] init];
-//        [[DDTTYLogger sharedInstance] setLogFormatter:psLogger];
-//        
-//        [DDLog addLogger:[DDTTYLogger sharedInstance]];
-//        [DDLog addLogger:[DDNSLoggerLogger sharedInstance]];
-//    }
-//    
-//    // Automatically send crash reports
-//    [[BITHockeyManager sharedHockeyManager].crashManager setCrashManagerStatus:BITCrashManagerStatusAutoSend];
-//    
-//    [[BITHockeyManager sharedHockeyManager].crashManager setDelegate:self];
-//    [[BITHockeyManager sharedHockeyManager] startManager];
-//    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
-//    
-//
-//    
+    _fileLogger = [[DDFileLogger alloc] init];
+    _fileLogger.maximumFileSize = (1024 * 64); // 64 KByte
+    _fileLogger.logFileManager.maximumNumberOfLogFiles = 1;
+    [_fileLogger rollLogFileWithCompletionBlock:nil];
+    [DDLog addLogger:_fileLogger];
+    
+    // Hockey app needs to be the last 3rd party integration in this method
+    if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.thatmoviewith"]) {
+        // App Store Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"e62a5cc4f832208f409e4d889fb8ec99"];
+    }
+    else if ([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.jayhickey.ThatMovieWithbeta"]){
+        // Beta Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"3930bb009663ec2c32cb9a5ca2b8a1a4"];
+    }
+    else {
+        // Alpha Version
+        [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"b1ab12e2a5c884b5684e9a321f49141d"];
+    }
+    
+    // add Xcode console logger if not running in the App Store
+    if (![[BITHockeyManager sharedHockeyManager] isAppStoreEnvironment]) {
+        PSDDFormatter *psLogger = [[PSDDFormatter alloc] init];
+        [[DDTTYLogger sharedInstance] setLogFormatter:psLogger];
+        
+        [DDLog addLogger:[DDTTYLogger sharedInstance]];
+        [DDLog addLogger:[DDNSLoggerLogger sharedInstance]];
+    }
+    
+    // Automatically send crash reports
+    [[BITHockeyManager sharedHockeyManager].crashManager setCrashManagerStatus:BITCrashManagerStatusAutoSend];
+    
+    [[BITHockeyManager sharedHockeyManager].crashManager setDelegate:self];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+    
+
+    
 
     return YES;
 }
