@@ -3,5 +3,5 @@ pod 'HockeySDK'
 pod 'JLTMDbClient'
 pod 'Shimmer'
 pod 'CWStatusBarNotification'
-pod 'CocoaLumberjack'
-pod 'NSLogger'
+pod 'CocoaLumberjack', :inhibit_warnings => true
+pod 'NSLogger', '~> 1.5'
