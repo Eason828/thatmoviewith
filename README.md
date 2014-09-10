@@ -37,5 +37,5 @@ Anyone is welcome to help fix bugs or implement new features! I will consider al
 License
 -------
 
-That Movie With is released under a MIT License. See LICENSE.md file for details.
+That Movie With is released under a MIT License. See [LICENSE.md](https://github.com/jayhickey/thatmoviewith/blob/develop/LICENSE.md) for details.
 
