@@ -133,6 +133,7 @@ float frameH;
         // Buttons
         _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
         _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
+        _secondActorButton.backgroundColor = [UIColor blueColor];
         
         _thatMovieWithButton.frame = self.view.frame;
         _thatMovieShimmeringView.frame = self.view.frame;
