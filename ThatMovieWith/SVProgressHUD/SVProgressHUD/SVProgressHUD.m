@@ -29,9 +29,9 @@ static UIFont *SVProgressHUDFont;
 static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
 static CGFloat SVProgressHUDPosY;
-static CGFloat SVProgressHUDRingNoTextRadius;
 
 static const CGFloat SVProgressHUDRingRadius = 18;
+static const CGFloat SVProgressHUDRingNoTextRadius = 60;
 static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 
 @interface SVProgressHUD ()
@@ -87,7 +87,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 #pragma mark - Setters
 
 + (void)setStatus:(NSString *)string {
-	[[self sharedView] setStatus:string];
+    [[self sharedView] setStatus:string];
 }
 
 + (void)setBackgroundColor:(UIColor *)color {
@@ -98,11 +98,6 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 + (void)setForegroundColor:(UIColor *)color {
     [self sharedView];
     SVProgressHUDForegroundColor = color;
-}
-
-+ (void)setRingNoTextRadius:(CGFloat)radius {
-    [self sharedView];
-    SVProgressHUDRingNoTextRadius = radius;
 }
 
 + (void)setFont:(UIFont *)font {
@@ -206,15 +201,14 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 #pragma mark - Instance Methods
 
 - (id)initWithFrame:(CGRect)frame {
-	
+    
     if ((self = [super initWithFrame:frame])) {
-		self.userInteractionEnabled = NO;
+        self.userInteractionEnabled = NO;
         self.backgroundColor = [UIColor clearColor];
-		self.alpha = 0;
+        self.alpha = 0;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.activityCount = 0;
         
-        SVProgressHUDRingNoTextRadius = 24;
         SVProgressHUDBackgroundColor = [UIColor whiteColor];
         SVProgressHUDForegroundColor = [UIColor blackColor];
         SVProgressHUDFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
@@ -222,7 +216,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         SVProgressHUDErrorImage = [[UIImage imageNamed:@"SVProgressHUD.bundle/error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         SVProgressHUDRingThickness = 4;
     }
-	
+    
     return self;
 }
 
@@ -260,9 +254,9 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 }
 
 - (void)updatePosition {
-	
-    CGFloat hudWidth = 100;
-    CGFloat hudHeight = 100;
+    
+    CGFloat hudWidth = 400;
+    CGFloat hudHeight = 400;
     CGFloat stringHeightBuffer = 20;
     CGFloat stringAndImageHeightBuffer = 80;
     
@@ -301,21 +295,21 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             labelRect = CGRectMake(0, labelRectY, hudWidth, stringHeight);
         }
     }
-	
-	self.hudView.bounds = CGRectMake(0, 0, hudWidth, hudHeight);
+    
+    self.hudView.bounds = CGRectMake(0, 0, hudWidth, hudHeight);
     
     if(string)
         self.imageView.center = CGPointMake(CGRectGetWidth(self.hudView.bounds)/2, 36);
-	else
+    else
        	self.imageView.center = CGPointMake(CGRectGetWidth(self.hudView.bounds)/2, CGRectGetHeight(self.hudView.bounds)/2);
-	
-	self.stringLabel.hidden = NO;
-	self.stringLabel.frame = labelRect;
+    
+    self.stringLabel.hidden = NO;
+    self.stringLabel.frame = labelRect;
     
     [CATransaction begin];
     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-	
-	if(string) {
+    
+    if(string) {
         self.indefiniteAnimatedView.radius = SVProgressHUDRingRadius;
         [self.indefiniteAnimatedView sizeToFit];
         
@@ -324,7 +318,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         
         if(self.progress != -1)
             self.backgroundRingLayer.position = self.ringLayer.position = CGPointMake((CGRectGetWidth(self.hudView.bounds)/2), 36);
-	}
+    }
     else {
         self.indefiniteAnimatedView.radius = SVProgressHUDRingNoTextRadius;
         [self.indefiniteAnimatedView sizeToFit];
@@ -341,7 +335,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 
 - (void)setStatus:(NSString *)string {
     
-	self.stringLabel.text = string;
+    self.stringLabel.text = string;
     [self updatePosition];
     
 }
@@ -391,10 +385,30 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 
 
 - (void)positionHUD:(NSNotification*)notification {
-
+    
+    CGFloat keyboardHeight;
     double animationDuration = 0.0;
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    // no transforms applied to window in iOS 8
+    BOOL ignoreOrientation = [[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)];
+    
+    if(notification) {
+        NSDictionary* keyboardInfo = [notification userInfo];
+        CGRect keyboardFrame = [[keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        
+        if(notification.name == UIKeyboardWillShowNotification || notification.name == UIKeyboardDidShowNotification) {
+            if(ignoreOrientation || UIInterfaceOrientationIsPortrait(orientation))
+                keyboardHeight = keyboardFrame.size.height;
+            else
+                keyboardHeight = keyboardFrame.size.width;
+        } else
+            keyboardHeight = 0;
+    } else {
+        keyboardHeight = self.visibleKeyboardHeight;
+    }
     
     CGRect orientationFrame = [UIScreen mainScreen].bounds;
     CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
@@ -421,23 +435,28 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     CGPoint newCenter;
     CGFloat rotateAngle;
     
-    switch (orientation) {
-        case UIInterfaceOrientationPortraitUpsideDown:
-            rotateAngle = M_PI;
-            newCenter = CGPointMake(posX, orientationFrame.size.height-posY);
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            rotateAngle = -M_PI/2.0f;
-            newCenter = CGPointMake(posY, posX);
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            rotateAngle = M_PI/2.0f;
-            newCenter = CGPointMake(orientationFrame.size.height-posY, posX);
-            break;
-        default: // as UIInterfaceOrientationPortrait
-            rotateAngle = 0.0;
-            newCenter = CGPointMake(posX, posY);
-            break;
+    if (ignoreOrientation) {
+        rotateAngle = 0.0;
+        newCenter = CGPointMake(posX, posY);
+    } else {
+        switch (orientation) {
+            case UIInterfaceOrientationPortraitUpsideDown:
+                rotateAngle = M_PI;
+                newCenter = CGPointMake(posX, orientationFrame.size.height-posY);
+                break;
+            case UIInterfaceOrientationLandscapeLeft:
+                rotateAngle = -M_PI/2.0f;
+                newCenter = CGPointMake(posY, posX);
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+                rotateAngle = M_PI/2.0f;
+                newCenter = CGPointMake(orientationFrame.size.height-posY, posX);
+                break;
+            default: // as UIInterfaceOrientationPortrait
+                rotateAngle = 0.0;
+                newCenter = CGPointMake(posX, posY);
+                break;
+        }
     }
     
     if(notification) {
@@ -767,12 +786,12 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 - (UILabel *)stringLabel {
     if (_stringLabel == nil) {
         _stringLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-		_stringLabel.backgroundColor = [UIColor clearColor];
-		_stringLabel.adjustsFontSizeToFitWidth = YES;
+        _stringLabel.backgroundColor = [UIColor clearColor];
+        _stringLabel.adjustsFontSizeToFitWidth = YES;
         _stringLabel.textAlignment = NSTextAlignmentCenter;
-		_stringLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-		_stringLabel.textColor = SVProgressHUDForegroundColor;
-		_stringLabel.font = SVProgressHUDFont;
+        _stringLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _stringLabel.textColor = SVProgressHUDForegroundColor;
+        _stringLabel.font = SVProgressHUDFont;
         _stringLabel.numberOfLines = 0;
     }
     
