@@ -123,7 +123,7 @@ static bool webButtonPressed;
     NSDictionary *viewsDictionary = @{@"view" : view};
     NSArray *constraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view(topheight)]"
                                                                     options:0
-                                                                    metrics:@{@"topheight": [NSNumber numberWithFloat:self.view.frame.size.height-self.navigationController.navigationBar.frame.size.height]}
+                                                                    metrics:@{@"topheight": [NSNumber numberWithFloat:self.view.frame.size.height-self.navigationController.navigationBar.frame.size.height+25]}
                                                                       views:viewsDictionary];
     [view addConstraints:constraint_H];
 }
