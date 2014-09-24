@@ -19,6 +19,7 @@
 
 @property (nonatomic, retain) IBOutlet UIScrollView *creditsScrollView;
 @property (nonatomic, retain) IBOutlet UIView *endView;
+@property (nonatomic, retain) IBOutlet UIView *startView;
 @property (nonatomic, retain) IBOutlet UILabel *buildLabel;
 
 @end
@@ -42,6 +43,7 @@ static bool webButtonPressed;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(scrollToTop:)
                                                  name:@"scrollToTop"
@@ -55,8 +57,16 @@ static bool webButtonPressed;
     [super viewWillAppear:animated];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self addHeightOfViewConstraintToView:self.startView];
+    [self addHeightOfViewConstraintToView:self.endView];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
+    
     // Get the version info
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
@@ -88,7 +98,7 @@ static bool webButtonPressed;
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseBackgroundMusic" object:self];
     [self addInfoButton];
 }
 
@@ -107,6 +117,16 @@ static bool webButtonPressed;
 }
 
 # pragma mark Private Methods
+
+- (void)addHeightOfViewConstraintToView:(UIView *)view
+{
+    NSDictionary *viewsDictionary = @{@"view" : view};
+    NSArray *constraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view(topheight)]"
+                                                                    options:0
+                                                                    metrics:@{@"topheight": [NSNumber numberWithFloat:self.view.frame.size.height-self.navigationController.navigationBar.frame.size.height]}
+                                                                      views:viewsDictionary];
+    [view addConstraints:constraint_H];
+}
 
 - (void)scrollToTop:(NSNotification *)notification
 {
