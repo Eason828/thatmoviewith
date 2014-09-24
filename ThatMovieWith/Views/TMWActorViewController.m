@@ -1241,11 +1241,11 @@ float frameH;
 }
 
 // Added to fix UITableView bottom bounds in UISearchDisplayController
-- (void) keyboardWillHide
+- (void)keyboardWillHide
 {
     UITableView *tableView = [[self searchDisplayController] searchResultsTableView];
-    [tableView setContentInset:UIEdgeInsetsZero];
-    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+    [tableView setContentInset:UIEdgeInsetsMake(0, 0, self.view.frame.size.height/2-TABLE_HEIGHT, 0)];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, self.view.frame.size.height/2-TABLE_HEIGHT, 0)];
 }
 
 
