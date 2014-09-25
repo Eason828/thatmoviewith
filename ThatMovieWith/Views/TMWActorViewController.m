@@ -114,16 +114,33 @@ float frameH;
         frameW = self.view.frame.size.width;
         frameH = self.view.frame.size.height;
         
-        _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
-        _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+        if (fmodf(self.view.frame.size.height, 2)) {
+            _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY - 1, self.view.frame.size.width + scrollOffset, frameH/2 + 1);
+            _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), floor(frameH/2) + 1).size;
+            _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y - 1, self.view.frame.size.width, floor(frameH/2) + 2);
+            _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, floor(frameH/2) + 1);
+            
+            _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + floor(frameH/2) - 1, self.view.frame.size.width + scrollOffset, floor(frameH/2) + 2);
+            _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY - 1, self.view.frame.size.width + (scrollOffset * 2.0), floor(frameH/2) + 2).size;
+            _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, frameY - 1, self.view.frame.size.width, floor(frameH/2) + 4);
+        }
+        else {
+            _firstActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY, self.view.frame.size.width + scrollOffset, frameH/2);
+            _firstActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+            _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, frameH/2);
+            _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
+            
+            _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
+            _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
+            _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, frameH/2);
+        }
+        
         _firstActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
         _firstActorScrollView.pagingEnabled = YES;
         _firstActorScrollView.showsHorizontalScrollIndicator = NO;
         _firstActorScrollView.bounces = NO;
         _firstActorScrollView.delegate = self;
         
-        _secondActorScrollView.frame = CGRectMake(self.view.frame.origin.x - scrollOffset, frameY + frameH/2, self.view.frame.size.width + scrollOffset, frameH/2);
-        _secondActorScrollView.contentSize = CGRectMake(self.view.frame.origin.x, frameY, self.view.frame.size.width + (scrollOffset * 2.0), frameH/2).size;
         _secondActorScrollView.contentInset = UIEdgeInsetsMake(0, scrollOffset, 0, 0);
         _secondActorScrollView.pagingEnabled = YES;
         _secondActorScrollView.showsHorizontalScrollIndicator = NO;
@@ -131,8 +148,6 @@ float frameH;
         _secondActorScrollView.delegate = self;
         
         // Buttons
-        _firstActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
-        _secondActorButton.frame = CGRectMake(self.view.frame.origin.x + scrollOffset, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height/2);
         _secondActorButton.backgroundColor = [UIColor blueColor];
         
         _thatMovieWithButton.frame = self.view.frame;
@@ -166,7 +181,6 @@ float frameH;
         _secondActorLabel.frame = CGRectMake(self.view.bounds.origin.x + scrollOffset, self.view.bounds.origin.y-5, self.view.bounds.size.width, self.view.bounds.size.height/2);
         
         // Action slide views and labels
-        _firstActorActionView.frame = CGRectMake(frameX, frameY, frameW + scrollOffset, frameH/2);
         _firstActorActionView.backgroundColor = [UIColor grayColor];
         
         _secondActorActionView.frame = CGRectMake(frameX, frameY + frameH/2, frameW + scrollOffset, frameH/2);
@@ -435,6 +449,7 @@ float frameH;
         [self.view bringSubviewToFront:_thatMovieShimmeringView];
     }
     else {
+        
         _thatMovieWithButton.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
         _thatMovieShimmeringView.frame = CGRectMake(frameX, frameY, frameW, frameH/2);
     }
