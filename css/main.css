@@ -1,6 +1,6 @@
 
 
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400);
+@import url(http://fonts.googleapis.com/css?family=Roboto:100);
 
 
 /* ==========================================================================
@@ -27,7 +27,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 
 
 .header-container {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Roboto", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 100;
     background: #9e2236;  /*Adjust Background colour of header */
     background: #000000 url(../img/background.jpg) top center no-repeat;
@@ -47,7 +47,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
    ========================================================================== */
 .header-container h1{
 	/*text-indent: -10000em;*/
-	font-family: "HelveticaNeue-UltraLight", "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-family: "HelveticaNeue-UltraLight", "HelveticaNeue-Light", "Helvetica Neue Light", "Roboto", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    	font-weight: 100;
 	color: #ffffff;
 	position: relative;
@@ -438,7 +438,7 @@ color: #ffffff;
 		/*background: url(../img/logo.png) no-repeat 0 0; /* Logo */*/
 		margin: 0;
 	}
-	.ctaColumn { float: right; width: 52%; padding-bottom: 80px; text-align: left; padding-top: 70px; }
+	.ctaColumn { float: right; width: 53%; padding-bottom: 80px; text-align: left; padding-top: 70px; }
 	.signup:after{ right: 15%; }
 	.fader { float: left; width: 35%; }
 	.header-container { padding-top: 120px; }
