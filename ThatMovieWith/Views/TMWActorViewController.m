@@ -528,14 +528,17 @@ float frameH;
             }
         }
         
-        // Update the table view
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[self.searchBarController searchResultsTableView] beginUpdates];
-            [[self.searchBarController searchResultsTableView] numberOfRowsInSection:newResultsArray.count];
-            [[self.searchBarController searchResultsTableView] deleteRowsAtIndexPaths:oldIndexes withRowAnimation:UITableViewRowAnimationFade];
-            searchResults = newSearchResults;
-            [[self.searchBarController searchResultsTableView] endUpdates];
-        });
+        // http://stackoverflow.com/a/3601170
+        if (oldIndexes.count) {
+            // Update the table view
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] beginUpdates];
+                [[self.searchBarController searchResultsTableView] numberOfRowsInSection:newResultsArray.count];
+                [[self.searchBarController searchResultsTableView] deleteRowsAtIndexPaths:oldIndexes withRowAnimation:UITableViewRowAnimationFade];
+                searchResults = newSearchResults;
+                [[self.searchBarController searchResultsTableView] endUpdates];
+            });
+        }
     }
     
     
@@ -556,31 +559,37 @@ float frameH;
             }
         }
         
-        // Update the table view
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[self.searchBarController searchResultsTableView] beginUpdates];
-            [[self.searchBarController searchResultsTableView] insertRowsAtIndexPaths:newIndexes withRowAnimation:UITableViewRowAnimationFade];
-            searchResults = newSearchResults;
-            [[self.searchBarController searchResultsTableView] endUpdates];
-        });
+        // http://stackoverflow.com/a/3601170
+        if (newIndexes.count) {
+            // Update the table view
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] beginUpdates];
+                [[self.searchBarController searchResultsTableView] insertRowsAtIndexPaths:newIndexes withRowAnimation:UITableViewRowAnimationFade];
+                searchResults = newSearchResults;
+                [[self.searchBarController searchResultsTableView] endUpdates];
+            });
+        }
     }
     
     // Rows are just changed
     else if (newResultsArray.count == oldResultsArray.count && oldResultsArray.count != 0) {
-        NSMutableArray *diferentIndexes = [NSMutableArray new];
+        NSMutableArray *differentIndexes = [NSMutableArray new];
         for (NSUInteger i = 0; i < oldResultsArray.count; i++) {
             if (oldResultsArray[i] != newResultsArray[i]) { //Maybe add "&& newSearchResultsArray.count" here
-                [diferentIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                [differentIndexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
             }
         }
         
-        // Update the table view
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[self.searchBarController searchResultsTableView] beginUpdates];
-            [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:diferentIndexes withRowAnimation:UITableViewRowAnimationFade];
-            searchResults = newSearchResults;
-            [[self.searchBarController searchResultsTableView] endUpdates];
-        });
+        // http://stackoverflow.com/a/3601170
+        if (differentIndexes.count) {
+            // Update the table view
+            dispatch_async(dispatch_get_main_queue(),^{
+                [[self.searchBarController searchResultsTableView] beginUpdates];
+                [[self.searchBarController searchResultsTableView] reloadRowsAtIndexPaths:differentIndexes withRowAnimation:UITableViewRowAnimationFade];
+                searchResults = newSearchResults;
+                [[self.searchBarController searchResultsTableView] endUpdates];
+            });
+        }
     }
     
     // If entire view needs refreshed
