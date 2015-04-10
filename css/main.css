@@ -1,6 +1,6 @@
 
 
-@import url(http://fonts.googleapis.com/css?family=Roboto:100);
+@import url(http://fonts.googleapis.com/css?family=Roboto:100,400,500);
 
 
 /* ==========================================================================
@@ -70,7 +70,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 }
 
 .header-container h2{
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Roboto", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 	font-weight: 100;
 	color: #ffffff;
 	font-size: 2em;
@@ -126,7 +126,7 @@ body { font: 16px/26px Helvetica, Helvetica Neue, Arial;  -webkit-font-smoothing
 	font-size: 1em;
 }
 .available, .available a {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Roboto", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 	font-weight: 500;
 	color: #ffffff; /* Change colour of alt app store links */
 	-webkit-transition: all 300ms ease-in-out;
@@ -317,7 +317,7 @@ color: #ffffff;
    FOOTER LOGO
    ========================================================================== */ 
 .footer-container h1{
-	font-family: "Helvetica Neue", Helvetica, "Source Sans Pro", Arial, "Lucida Grande", sans-serif; 
+	font-family: "Helvetica Neue", Helvetica, "Roboto", Arial, "Lucida Grande", sans-serif; 
    	font-weight: 400;
 	/*text-indent: -10000em;*/
 	font-size: 1em;
@@ -358,7 +358,7 @@ color: #ffffff;
 	margin-left: 0;
 }
 .footer-container a{
-	font-family: "Helvetica Neue", Helvetica, "Source Sans Pro", Arial, "Lucida Grande", sans-serif; 
+	font-family: "Helvetica Neue", Helvetica, "Roboto", Arial, "Lucida Grande", sans-serif; 
    	font-weight: 400;
 	color: #ffffff; /* Change colour of footer links */
 
