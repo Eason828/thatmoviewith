@@ -1,7 +1,9 @@
 That Movie With
 ===============
 
-That Movie With is an iPhone app for finding common movies among actors. Find out more at [thatmoviewith.com](http://thatmoviewith.com)
+That Movie With is an iPhone app for finding common movies among actors. 
+
+Find out more at [thatmoviewith.com](http://thatmoviewith.com)
 
 <img src="https://cloud.githubusercontent.com/assets/1676460/7080281/adadc5ee-defd-11e4-83c7-5fc7aadae7eb.png" width="475" alt="Screenshots"/>
 
