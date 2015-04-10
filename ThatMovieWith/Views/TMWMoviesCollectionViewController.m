@@ -33,11 +33,11 @@
 @implementation TMWMoviesCollectionViewController
 
 // 2 movies: 252    3 movies: 168    4 movies: 126
-NSUInteger TABLE_HEIGHT_FOUR;
-NSUInteger TABLE_HEIGHT_THREE;
-NSUInteger TABLE_HEIGHT_TWO;
-NSUInteger TABLE_HEIGHT_ONE;
-NSUInteger TITLE_FONT_SIZE;
+static const NSUInteger TABLE_HEIGHT_FOUR = 126;
+static const NSUInteger TABLE_HEIGHT_THREE = 168;
+static const NSUInteger TABLE_HEIGHT_TWO = 252;
+static const NSUInteger TABLE_HEIGHT_ONE = 504;
+static const NSUInteger TITLE_FONT_SIZE = 36;
 
 bool selectedMovie;
 
@@ -61,7 +61,7 @@ CGFloat cellWidth;
     NSDictionary *fontDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0], NSFontAttributeName,nil];
     [[UINavigationBar appearance] setTitleTextAttributes: fontDict];
-    
+
     return self;
 }
 
@@ -75,11 +75,13 @@ CGFloat cellWidth;
     [super viewDidLoad];
     
     _noResultsLabel = [UILabel new];
+    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 30, self.view.frame.origin.y, self.view.frame.size.width - 60, self.view.frame.size.height);
     _noResultsLabel.textAlignment = NSTextAlignmentCenter;
     _noResultsLabel.textColor = [UIColor whiteColor];
     _noResultsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:24];
     _noResultsLabel.numberOfLines = 0;
     
+    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
     _noResultsLabel.alpha = 0.0;
     
     // Prepare the label in case there are no results
@@ -99,11 +101,11 @@ CGFloat cellWidth;
     // Special attribute set for title text color
     self.navigationController.navigationBar.tintColor = [UIColor goldColor];
     self.navigationController.navigationBar.backItem.title = @"Actors";
-    
+                                                                                           
     UIImage *productImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"background-blur" ofType:@"jpg"]];
     
     _backgroundView = [[UIImageView alloc] initWithImage:productImage];
-    
+
     self.collectionView.backgroundView = _backgroundView;
     
     tableViewRows = 0;
@@ -125,15 +127,6 @@ CGFloat cellWidth;
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
     }
     [UIView commitAnimations];
-    
-    _noResultsLabel.frame = CGRectMake(self.view.frame.origin.x + 20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
-    
-    TABLE_HEIGHT_ONE = (self.view.frame.size.height) - 64;
-    TABLE_HEIGHT_TWO = TABLE_HEIGHT_ONE/2;
-    TABLE_HEIGHT_THREE = TABLE_HEIGHT_ONE/3;
-    TABLE_HEIGHT_FOUR = TABLE_HEIGHT_ONE/4;
-    
-    TITLE_FONT_SIZE = 36;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -225,7 +218,7 @@ CGFloat cellWidth;
         notification.notificationLabelTextColor = [UIColor whiteColor];
         notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
         notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-        
+
         [cell.activityIndicator startAnimating];
         
         // Get the image from the URL and set it
@@ -233,7 +226,7 @@ CGFloat cellWidth;
             
             [cell.activityIndicator stopAnimating];
             
-            
+
             // Darken the image
             UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.imageView.frame.size.width, cell.imageView.frame.size.height*2)];
             [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
@@ -287,7 +280,7 @@ CGFloat cellWidth;
                 [notification displayNotificationWithMessage:@"Network Error. Check your network connection." forDuration:3.0f];
             }
         }];
-        
+
         CGRect imageViewFrame = cell.imageView.frame;
         // change x position
         imageViewFrame.origin.y = contentViewBound.size.height - imageViewFrame.size.height;
@@ -313,7 +306,7 @@ CGFloat cellWidth;
         // Set the image label properties to center it in the cell
         [self setLabel:cell.label withString:movieNameString inBoundsOfView:cell.imageView];
     }
-    
+
     
     // Pass the maximum parallax offset to the cell.
     // The cell needs this information to configure the constraints for its image view.
@@ -389,7 +382,7 @@ CGFloat cellWidth;
     
     selectedMovie = YES;
     
-    //DDLogInfo(@"Selected Movie: %@ (IMDB ID %@)", [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row], [[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]);
+    DDLogInfo(@"Selected Movie: %@ (IMDB ID %@)", [[TMWActorContainer actorContainer].sameMoviesNames objectAtIndex:indexPath.row], [[TMWActorContainer actorContainer].sameMoviesIDs objectAtIndex:indexPath.row]);
     
     // Get the information about the selected movie
     [self refreshMovieResponseWithJLTMDBcall:kJLTMDbMovie
