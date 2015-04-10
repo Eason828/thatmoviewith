@@ -1,6 +1,8 @@
 That Movie With
 ===============
 
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+
 That Movie With is an iPhone app for finding common movies among actors. 
 
 Find out more at [thatmoviewith.com](http://thatmoviewith.com)
